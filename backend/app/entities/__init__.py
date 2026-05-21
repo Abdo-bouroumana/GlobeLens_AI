@@ -1,0 +1,1 @@
+"""GlobeLens AI — Entities Package"""

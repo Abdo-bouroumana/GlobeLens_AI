@@ -1,0 +1,221 @@
+# =============================================================================
+# GlobeLens AI — Docker Compose Configuration
+# Version: 2.0 | Local Development Environment
+# =============================================================================
+# Services:
+#   backend   — FastAPI application (port 8000) with hot-reload
+#   frontend  — Next.js web client placeholder (port 3000)
+#   db        — PostgreSQL 16 + pgvector extension (port 5432)
+#   cache     — Redis Stack (port 6379)
+#   search    — Elasticsearch 8.x single-node (port 9200)
+# =============================================================================
+
+version: "3.9"
+
+# ---------------------------------------------------------------------------
+# Named Volumes — persistent data across container restarts
+# ---------------------------------------------------------------------------
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+
+# ---------------------------------------------------------------------------
+# Networks — isolated internal network for inter-service communication
+# ---------------------------------------------------------------------------
+networks:
+  globelens_net:
+    driver: bridge
+    name: globelens_network
+
+# ---------------------------------------------------------------------------
+# Services
+# ---------------------------------------------------------------------------
+services:
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # PostgreSQL 16 + pgvector — Primary relational + vector database
+  # ─────────────────────────────────────────────────────────────────────────
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: globelens_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-globelens}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-globelens_secret}
+      POSTGRES_DB: ${POSTGRES_DB:-globelens_db}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Init script auto-creates the pgvector extension on first startup
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/01-init-db.sql:ro
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    networks:
+      - globelens_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-globelens} -d ${POSTGRES_DB:-globelens_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Redis Stack — CacheService + Pub/Sub for NotificationService
+  # ─────────────────────────────────────────────────────────────────────────
+  cache:
+    image: redis/redis-stack:latest
+    container_name: globelens_cache
+    restart: unless-stopped
+    environment:
+      REDIS_ARGS: "--requirepass ${REDIS_PASSWORD:-redis_secret} --save 60 1 --loglevel warning"
+    volumes:
+      - redis_data:/data
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+      # Redis Insight web UI (optional convenience tool)
+      - "8001:8001"
+    networks:
+      - globelens_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-redis_secret}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Elasticsearch 8.x — SearchService / SearchRepository
+  # ─────────────────────────────────────────────────────────────────────────
+  search:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    container_name: globelens_search
+    restart: unless-stopped
+    environment:
+      # Single-node mode — no cluster bootstrap required
+      - discovery.type=single-node
+      # Disable X-Pack security for frictionless local development
+      - xpack.security.enabled=false
+      # Cap JVM heap to prevent OOM kills on dev machines
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - cluster.name=globelens-cluster
+      - node.name=globelens-node-01
+      # Disable ML for reduced memory footprint
+      - xpack.ml.enabled=false
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "${ELASTICSEARCH_PORT:-9200}:9200"
+      - "9300:9300"
+    networks:
+      - globelens_net
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # FastAPI Backend — Core application layer
+  # ─────────────────────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development          # Uses the dev stage for hot-reload
+    container_name: globelens_backend
+    restart: unless-stopped
+    # Mount source code for hot-reload (uvicorn --reload watches this)
+    volumes:
+      - ./backend/app:/app/app:delegated
+      - ./backend/alembic.ini:/app/alembic.ini
+      - ./backend/alembic:/app/alembic
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    environment:
+      # ── Application ──
+      APP_ENV: ${APP_ENV:-development}
+      SECRET_KEY: ${SECRET_KEY:-super_secret_dev_key_change_in_production}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+      ALGORITHM: ${ALGORITHM:-HS256}
+
+      # ── PostgreSQL (pgvector) ──
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-globelens}:${POSTGRES_PASSWORD:-globelens_secret}@db:5432/${POSTGRES_DB:-globelens_db}
+
+      # ── Redis Cache ──
+      REDIS_URL: redis://:${REDIS_PASSWORD:-redis_secret}@cache:6379/0
+
+      # ── Elasticsearch ──
+      ELASTICSEARCH_URL: http://search:9200
+      ELASTICSEARCH_INDEX_EVENTS: ${ELASTICSEARCH_INDEX_EVENTS:-globelens_events}
+
+      # ── LLM Provider (Anthropic Claude / OpenAI) ──
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      LLM_PROVIDER: ${LLM_PROVIDER:-anthropic}
+
+      # ── Embedding Model ──
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-text-embedding-3-small}
+
+      # ── CORS ──
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+    networks:
+      - globelens_net
+    # Backend only starts after all infrastructure services are healthy
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+      search:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8000/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Next.js Frontend Placeholder — Web Client (port 3000)
+  # ─────────────────────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development          # Uses the dev stage with hot-reload
+    container_name: globelens_frontend
+    restart: unless-stopped
+    volumes:
+      # Mount src for hot-reload; node_modules is kept in container
+      - ./frontend/src:/app/src:delegated
+      - ./frontend/public:/app/public:delegated
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+      NEXT_PUBLIC_APP_NAME: GlobeLens AI
+      WATCHPACK_POLLING: "true"    # Required for hot-reload inside Docker on Windows
+    networks:
+      - globelens_net
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:3000 || exit 1"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 45s

@@ -160,9 +160,11 @@ services:
       ELASTICSEARCH_URL: http://search:9200
       ELASTICSEARCH_INDEX_EVENTS: ${ELASTICSEARCH_INDEX_EVENTS:-globelens_events}
 
-      # ── LLM Provider (Anthropic Claude / OpenAI) ──
+      # ── LLM Provider (Anthropic Claude / OpenAI / Gemini / Grok) ──
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      GROK_API_KEY: ${GROK_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
       LLM_PROVIDER: ${LLM_PROVIDER:-anthropic}
 
       # ── Embedding Model ──

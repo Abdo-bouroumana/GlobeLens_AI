@@ -2,10 +2,16 @@
 GlobeLens AI — ArticleController
 GET  /articles/{id} | /events/{id}/articles | /articles/{id}/audio
 POST /articles | PUT /articles/{id} | DELETE /articles/{id}
+POST /articles/sync
 """
-from fastapi import APIRouter, Path, status
+import uuid
+from typing import Optional, List
+from fastapi import APIRouter, Path, status, Depends, BackgroundTasks, HTTPException
 from pydantic import BaseModel
-from typing import Optional
+
+from app.controllers.auth_controller import get_current_user
+from app.entities.models import User, UserRole
+from app.services.scraper_service import ScraperService
 
 router = APIRouter()
 
@@ -45,3 +51,23 @@ async def delete_article(article_id: str = Path(...)):
 async def get_article_audio(article_id: str = Path(...)):
     # TODO: IAudioService.textToSpeech(article_id)
     return {"message": "Audio generation placeholder", "article_id": article_id}
+
+
+@router.post("/sync", status_code=status.HTTP_202_ACCEPTED, summary="Trigger RSS & Playwright scraping sync pipeline (Admin/Journalist)")
+async def sync_articles(
+    background_tasks: BackgroundTasks,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Trigger the asynchronous data ingestion pipeline.
+    Authorized for Admin and Journalist roles only.
+    """
+    if current_user.role not in (UserRole.ADMIN, UserRole.JOURNALIST):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only journalists and administrators can sync articles"
+        )
+        
+    scraper_service = ScraperService()
+    background_tasks.add_task(scraper_service.run_pipeline)
+    return {"status": "sync_initiated"}

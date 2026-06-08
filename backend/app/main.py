@@ -32,18 +32,42 @@ from app.controllers.admin_controller import router as admin_router
 async def lifespan(app: FastAPI):
     """
     Manage application lifecycle events.
-    - Startup : configure logging, warm the DB connection pool.
-    - Shutdown: dispose the connection pool gracefully.
+    - Startup : configure logging, warm the DB connection pool, init Elasticsearch and create index mappings.
+    - Shutdown: dispose connection pools gracefully.
     """
     configure_logging()
     print("🚀 GlobeLens AI backend starting up...")
+    
     # Warm-up: establish the first connection to verify DB reachability
     async with engine.begin() as conn:
         await conn.execute(text("SELECT 1"))
     print("✅ Database connection pool initialized.")
+    
+    # Initialize Elasticsearch connection with retry logic
+    from app.core.elasticsearch import init_elasticsearch
+    await init_elasticsearch()
+    
+    # Initialize Elasticsearch index mappings
+    try:
+        from app.services.search_service import SearchService
+        search_service = SearchService()
+        await search_service.create_events_index()
+    except Exception as exc:
+        print(f"❌ Failed to create Elasticsearch index: {exc}")
+        
     yield
+    
     # Dispose releases all pooled connections back to PostgreSQL
     await engine.dispose()
+    
+    # Close global Elasticsearch client
+    try:
+        from app.core.elasticsearch import es_client
+        await es_client.close()
+        print("✅ Elasticsearch connection closed.")
+    except Exception as exc:
+        print(f"❌ Error closing Elasticsearch connection: {exc}")
+        
     print("🛑 GlobeLens AI backend shutting down.")
 
 
@@ -90,22 +114,47 @@ app.include_router(admin_router,      prefix=f"{API_PREFIX}/admin",       tags=[
 async def health_check(db: AsyncSession = Depends(get_db)):
     """
     Docker and load-balancer health probe.
-    Performs a live SELECT 1 against PostgreSQL.
-    Returns 200 OK when all dependencies are reachable.
+    Performs a live SELECT 1 against PostgreSQL, pings Redis and Elasticsearch.
     """
+    # 1. Test PostgreSQL
     try:
         await db.execute(text("SELECT 1"))
         db_status = "ok"
     except Exception as exc:
         db_status = f"error: {exc}"
 
+    # 2. Test Redis Cache
+    try:
+        from app.services.cache_service import cache_service
+        redis_client = await cache_service._get_client()
+        await redis_client.ping()
+        redis_status = "ok"
+    except Exception as exc:
+        redis_status = f"error: {exc}"
+
+    # 3. Test Elasticsearch
+    try:
+        from app.repositories.search_repository import SearchRepository
+        search_repo = SearchRepository()
+        ping_ok = await search_repo._client.ping()
+        elasticsearch_status = "ok" if ping_ok else "degraded"
+        await search_repo.close()
+    except Exception as exc:
+        elasticsearch_status = f"error: {exc}"
+
+    overall_healthy = (
+        db_status == "ok" and redis_status == "ok" and elasticsearch_status == "ok"
+    )
+
     return JSONResponse(
         content={
-            "status": "healthy" if db_status == "ok" else "degraded",
+            "status": "healthy" if overall_healthy else "degraded",
             "service": "GlobeLens AI Backend",
             "version": "2.0.0",
             "environment": settings.APP_ENV,
             "database": db_status,
+            "redis": redis_status,
+            "elasticsearch": elasticsearch_status,
         }
     )
 

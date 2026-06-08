@@ -96,6 +96,8 @@ class Event(Base):
     longitude: Mapped[Optional[float]] = mapped_column(Float)
     importance_score: Mapped[float]  = mapped_column(Float, default=0.0)
     is_promoted: Mapped[bool]        = mapped_column(Boolean, default=False)
+    bias_lean: Mapped[Optional[BiasLean]] = mapped_column(Enum(BiasLean), nullable=True)
+    status: Mapped[str]              = mapped_column(String(50), default="DRAFT", index=True)
     created_at: Mapped[datetime]     = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime]     = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
@@ -132,8 +134,8 @@ class Embedding(Base):
     __tablename__ = "embeddings"
 
     id: Mapped[uuid.UUID]      = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    # 1536 dimensions for text-embedding-3-small (OpenAI)
-    vector: Mapped[list]       = mapped_column(Vector(1536))
+    # 768 dimensions for Gemini's text-embedding-004
+    vector: Mapped[list]       = mapped_column(Vector(768))
     model: Mapped[str]         = mapped_column(String(100), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     article_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("articles.id"), unique=True, index=True)

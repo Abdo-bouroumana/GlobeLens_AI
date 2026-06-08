@@ -7,6 +7,7 @@ from typing import List, Optional
 
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
 from app.entities.models import Article, ProcessingStatus
 
@@ -55,3 +56,62 @@ class ArticleRepository:
             .values(processing_status=status)
         )
         await self._session.commit()
+
+    async def create_scraped_article(
+        self, article_data: dict
+    ) -> Optional[Article]:
+        """
+        Create and persist a scraped article.
+        Checks for URL uniqueness; returns None if it's a duplicate.
+        """
+        # Idempotency check against URL
+        result = await self._session.execute(
+            select(Article).where(Article.url == article_data["url"])
+        )
+        existing = result.scalars().first()
+        if existing:
+            # Skip transaction safely without committing to prevent duplicates
+            return None
+
+        # Resolve published_at if present
+        published_at = article_data.get("published_at")
+
+        # Check source_id if present
+        source_id = article_data.get("source_id")
+        if isinstance(source_id, str):
+            source_id = uuid.UUID(source_id)
+
+        article = Article(
+            title=article_data["title"],
+            content=article_data.get("content"),
+            url=article_data["url"],
+            published_at=published_at,
+            processing_status=ProcessingStatus.SCRAPED,
+            source_id=source_id,
+            is_hidden=False
+        )
+
+        self._session.add(article)
+        await self._session.commit()
+        await self._session.refresh(article)
+        return article
+
+    async def get_unprocessed_articles(self, limit: int = 50) -> List[Article]:
+        """Fetch articles with status SCRAPED up to a specified limit."""
+        result = await self._session.execute(
+            select(Article)
+            .where(Article.processing_status == ProcessingStatus.SCRAPED)
+            .limit(limit)
+        )
+        return list(result.scalars().all())
+
+    async def get_embedded_unclustered_articles(self, limit: int = 100) -> List[Article]:
+        """Fetch articles with status EMBEDDED, eagerly loading their embeddings, up to a specified limit."""
+        result = await self._session.execute(
+            select(Article)
+            .options(joinedload(Article.embedding))
+            .where(Article.processing_status == ProcessingStatus.EMBEDDED)
+            .limit(limit)
+        )
+        return list(result.scalars().all())
+

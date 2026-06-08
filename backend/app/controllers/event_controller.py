@@ -4,8 +4,10 @@ GET  /events | /events/{id} | /events/trending | /events/latest
 GET  /events/country/{country} | /events/topic/{topic} | /events/map
 POST /events/{id}/follow
 """
-from fastapi import APIRouter, Path, Query
+from fastapi import APIRouter, Path, Query, Depends
 from typing import List, Optional
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.core.database import get_db
 
 router = APIRouter()
 
@@ -32,9 +34,37 @@ async def get_latest():
 
 
 @router.get("/map", summary="Get events with geolocation data for map view")
-async def get_map_events():
-    # TODO: Returns lat/lon + metadata for the dual-view map interface
-    return {"events": []}
+async def get_map_events(db: AsyncSession = Depends(get_db)):
+    """Returns lat/lon + metadata for the map interface."""
+    from sqlalchemy import select
+    from sqlalchemy.orm import selectinload
+    from app.entities.models import Event
+    
+    result = await db.execute(
+        select(Event)
+        .where(
+            Event.latitude.isnot(None),
+            Event.longitude.isnot(None)
+        )
+        .options(selectinload(Event.articles))
+    )
+    events = result.scalars().all()
+    
+    event_list = []
+    for evt in events:
+        event_list.append({
+            "id": str(evt.id),
+            "title": evt.title,
+            "summary": evt.summary or "",
+            "topic": evt.topic or "WORLD",
+            "country": evt.country or "Unknown",
+            "latitude": evt.latitude,
+            "longitude": evt.longitude,
+            "importance_score": evt.importance_score,
+            "source_count": len(evt.articles)
+        })
+        
+    return {"events": event_list}
 
 
 @router.get("/country/{country}", summary="Filter events by country")

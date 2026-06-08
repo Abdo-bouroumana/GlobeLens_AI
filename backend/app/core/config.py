@@ -3,7 +3,7 @@ GlobeLens AI — Application Configuration
 Reads all settings from environment variables (or .env file via pydantic-settings).
 """
 from functools import lru_cache
-from typing import Any, List
+from typing import Any, List, Optional
 
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -39,9 +39,11 @@ class Settings(BaseSettings):
     ELASTICSEARCH_INDEX_EVENTS: str = "globelens_events"
 
     # ── LLM Providers ─────────────────────────────────────────────────────────
-    LLM_PROVIDER: str = "anthropic"          # "anthropic" | "openai"
+    LLM_PROVIDER: str = "anthropic"          # "anthropic" | "openai" | "grok" | "gemini"
     ANTHROPIC_API_KEY: str = ""
     OPENAI_API_KEY: str = ""
+    GROK_API_KEY: Optional[str] = None
+    GEMINI_API_KEY: Optional[str] = None
 
     # ── Embedding ─────────────────────────────────────────────────────────────
     EMBEDDING_MODEL: str = "text-embedding-3-small"

@@ -1,24 +1,24 @@
 """
 GlobeLens AI — SearchRepository
-Elasticsearch client wrapper for event indexing and full-text search.
+===============================
+Elasticsearch wrapper for event indexing, full-text search, and prefix autocomplete.
 """
 from typing import Any, Dict, List
 
-from elasticsearch import AsyncElasticsearch
-
 from app.core.config import settings
+from app.core.elasticsearch import es_client
 
 
 class SearchRepository:
     """
     Elasticsearch data access layer for the SearchService.
-    Handles event document indexing and full-text search queries.
+    Handles event document indexing, full-text search queries, and prefix autocomplete.
     """
 
     INDEX = settings.ELASTICSEARCH_INDEX_EVENTS
 
     def __init__(self) -> None:
-        self._client = AsyncElasticsearch(hosts=[settings.ELASTICSEARCH_URL])
+        self._client = es_client
 
     async def index(self, event_id: str, document: Dict[str, Any]) -> None:
         """Index or update an Event document in Elasticsearch."""
@@ -30,7 +30,7 @@ class SearchRepository:
 
     async def search(self, query: str, size: int = 20) -> List[Dict[str, Any]]:
         """
-        Execute a multi-match full-text search across title, summary, topic.
+        Execute a multi-match full-text search across title and summary.
         Returns a list of matching event documents.
         """
         response = await self._client.search(
@@ -39,7 +39,7 @@ class SearchRepository:
                 "query": {
                     "multi_match": {
                         "query": query,
-                        "fields": ["title^3", "summary^2", "topic", "country"],
+                        "fields": ["title^3", "summary^2"],
                         "fuzziness": "AUTO",
                     }
                 },
@@ -48,21 +48,28 @@ class SearchRepository:
         )
         return [hit["_source"] for hit in response["hits"]["hits"]]
 
-    async def get_suggestions(self, prefix: str) -> List[str]:
-        """Autocomplete suggestions using Elasticsearch suggest API."""
+    async def autocomplete(self, prefix: str, size: int = 10) -> List[Dict[str, Any]]:
+        """
+        Autocomplete query against title.autocomplete (edge_ngram field).
+        Returns matching event documents for quick headline suggestions.
+        """
         response = await self._client.search(
             index=self.INDEX,
             body={
-                "suggest": {
-                    "title_suggest": {
-                        "prefix": prefix,
-                        "completion": {"field": "title.suggest"},
+                "query": {
+                    "match": {
+                        "title.autocomplete": {
+                            "query": prefix,
+                            "operator": "and"
+                        }
                     }
-                }
+                },
+                "size": size,
             },
         )
-        options = response.get("suggest", {}).get("title_suggest", [{}])
-        return [opt["text"] for opt in options[0].get("options", [])]
+        return [hit["_source"] for hit in response["hits"]["hits"]]
 
     async def close(self) -> None:
-        await self._client.close()
+        """Close connection pool. (Handled globally in lifespan, but kept for compatibility)"""
+        # Global client is managed by the application lifespan context
+        pass

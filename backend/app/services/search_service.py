@@ -83,6 +83,8 @@ class SearchService:
                         },
                         "topic": {"type": "keyword"},
                         "location_country": {"type": "keyword"},
+                        "latitude": {"type": "float"},
+                        "longitude": {"type": "float"},
                         "importance_score": {"type": "float"}
                     }
                 }
@@ -110,6 +112,8 @@ class SearchService:
             "summary": event_data.get("summary"),
             "topic": event_data.get("topic"),
             "location_country": location_country,
+            "latitude": event_data.get("latitude"),
+            "longitude": event_data.get("longitude"),
             "importance_score": float(event_data.get("importance_score", 0.0))
         }
         
@@ -152,6 +156,8 @@ class SearchService:
                             "summary": event.summary,
                             "topic": event.topic,
                             "location_country": event.country,
+                            "latitude": event.latitude,
+                            "longitude": event.longitude,
                             "importance_score": float(event.importance_score or 0.0)
                         }
                     })

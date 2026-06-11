@@ -1,40 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* GlobeLens AI — Global Styles */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@layer base {
+  body {
+    @apply bg-background text-on-background font-body-md;
+  }
 }
 
-:root {
-  --color-bg: #0f0c29;
-  --color-surface: rgba(255, 255, 255, 0.06);
-  --color-border: rgba(255, 255, 255, 0.12);
-  --color-primary: #7c3aed;
-  --color-secondary: #3b82f6;
-  --color-accent: #a78bfa;
-  --color-text: #f0f4f8;
-  --color-muted: #a0aec0;
-  --font-sans: "Inter", system-ui, sans-serif;
+@layer utilities {
+  .glass-dossier {
+    @apply bg-surface-container/90 backdrop-blur-md border border-outline-variant shadow-lg;
+  }
+  .glass-panel {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid #334155;
+  }
+  .editorial-border {
+    border: 1px solid #334155;
+  }
+  .sharp-shadow {
+    box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.4);
+  }
 }
 
-html {
-  font-family: var(--font-sans);
-  color: var(--color-text);
-  background-color: var(--color-bg);
-  -webkit-font-smoothing: antialiased;
+/* Hide scrollbar for clean aesthetic */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-body {
-  min-height: 100vh;
+/* Leaflet dark theme customizations */
+.leaflet-container {
+  background-color: #010f1f !important;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* Glitch effect styles */
+.glitch-wrapper {
+  position: relative;
+}
+.glitch-text::before, .glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+.glitch-text::before {
+  left: 2px;
+  text-shadow: -1px 0 rgba(255, 180, 171, 0.7);
+  clip: rect(24px, 550px, 90px, 0);
+  animation: glitch-anim-2 3s infinite linear alternate-reverse;
+}
+.glitch-text::after {
+  left: -2px;
+  text-shadow: -1px 0 rgba(190, 198, 224, 0.7);
+  clip: rect(85px, 550px, 140px, 0);
+  animation: glitch-anim 2.5s infinite linear alternate-reverse;
+}
+@keyframes glitch-anim {
+  0% { clip: rect(10px, 9999px, 44px, 0); }
+  20% { clip: rect(62px, 9999px, 98px, 0); }
+  40% { clip: rect(12px, 9999px, 59px, 0); }
+  60% { clip: rect(89px, 9999px, 14px, 0); }
+  80% { clip: rect(22px, 9999px, 102px, 0); }
+  100% { clip: rect(74px, 9999px, 33px, 0); }
+}
+@keyframes glitch-anim-2 {
+  0% { clip: rect(65px, 9999px, 100px, 0); }
+  20% { clip: rect(15px, 9999px, 88px, 0); }
+  40% { clip: rect(93px, 9999px, 20px, 0); }
+  60% { clip: rect(34px, 9999px, 75px, 0); }
+  80% { clip: rect(81px, 9999px, 42px, 0); }
+  100% { clip: rect(11px, 9999px, 99px, 0); }
 }

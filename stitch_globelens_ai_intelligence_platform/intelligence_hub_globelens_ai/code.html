@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Profile &amp; Notifications Hub - GlobeLens AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&amp;family=Geist:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#231500",
+                        "secondary-container": "#3e495d",
+                        "on-surface-variant": "#c6c6cd",
+                        "on-tertiary-fixed": "#271901",
+                        "surface-tint": "#bec6e0",
+                        "on-primary-fixed": "#131b2e",
+                        "inverse-surface": "#d4e4fa",
+                        "primary": "#bec6e0",
+                        "secondary": "#bcc7de",
+                        "on-surface": "#d4e4fa",
+                        "on-tertiary-container": "#957d5a",
+                        "primary-fixed": "#dae2fd",
+                        "surface-container-low": "#0d1c2d",
+                        "on-secondary": "#263143",
+                        "secondary-fixed-dim": "#bcc7de",
+                        "inverse-primary": "#565e74",
+                        "surface-container-high": "#1c2b3c",
+                        "error": "#ffb4ab",
+                        "primary-container": "#0f172a",
+                        "on-primary-container": "#798098",
+                        "on-error": "#690005",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#dec29a",
+                        "outline-variant": "#45464d",
+                        "surface": "#051424",
+                        "primary-fixed-dim": "#bec6e0",
+                        "tertiary": "#dec29a",
+                        "surface-bright": "#2c3a4c",
+                        "on-tertiary-fixed-variant": "#574425",
+                        "inverse-on-surface": "#233143",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "surface-container-highest": "#273647",
+                        "surface-container-lowest": "#010f1f",
+                        "secondary-fixed": "#d8e3fb",
+                        "tertiary-fixed": "#fcdeb5",
+                        "surface-variant": "#273647",
+                        "surface-dim": "#051424",
+                        "surface-container": "#122131",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-secondary-fixed": "#111c2d",
+                        "outline": "#909097",
+                        "background": "#051424",
+                        "on-tertiary": "#3e2d11",
+                        "error-container": "#93000a",
+                        "on-secondary-container": "#aeb9d0",
+                        "on-background": "#d4e4fa",
+                        "on-primary": "#283044"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "container-max-width": "1440px",
+                        "unit": "4px",
+                        "margin-desktop": "40px",
+                        "gutter": "24px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "stack-lg": "32px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "mono-data": ["Geist"],
+                        "headline-xl": ["Source Serif 4"],
+                        "display-lg": ["Source Serif 4"],
+                        "headline-lg-mobile": ["Source Serif 4"],
+                        "headline-lg": ["Source Serif 4"],
+                        "label-caps": ["Geist"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                        "headline-xl": ["36px", { "lineHeight": "44px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid #334155;
+        }
+        .editorial-border {
+            border: 1px solid #334155;
+        }
+        .sharp-shadow {
+            box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.4);
+        }
+        /* Hide scrollbar for clean aesthetic */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md selection:bg-primary-container selection:text-primary">
+<!-- TopNavBar (Shared Component JSON) -->
+<nav class="flex justify-between items-center px-margin-mobile md:px-margin-desktop w-full h-16 sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant dark:border-outline-variant flat no shadows font-body-md text-body-md">
+<div class="flex items-center gap-gutter">
+<span class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-bold text-primary dark:text-primary tracking-tight">GlobeLens AI</span>
+<div class="hidden md:flex gap-stack-md ml-stack-lg">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Standard</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Map</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Topics</a>
+</div>
+</div>
+<div class="flex items-center gap-stack-md">
+<div class="hidden md:flex items-center bg-surface-container rounded-full px-4 py-2 border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px] mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm p-0 w-48 text-on-surface placeholder-on-surface-variant focus:outline-none" placeholder="Search intelligence..." type="text"/>
+</div>
+<button class="relative p-2 text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center text-primary font-bold border-b-2 border-primary pb-1 Active: opacity-80 transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="notifications" style="font-variation-settings: 'FILL' 1;">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant hover:border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a serious individual in a dark tailored suit, set against a deep navy blue background. The lighting is dramatic and cinematic, reminiscent of modern corporate thrillers, highlighting strong facial features. The overall mood is authoritative and analytical, fitting perfectly within a high-fidelity intelligence platform UI. The image uses a cool, slate-toned color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlu8kEj47fu2xQ6gLi-1SX-cgTtcDLJQAqyBjoBysm-55_4O5PS_PZHO_juHibsSOqaaBkenRAKGFS4t_aks-vdb2HMsxI-i-SWtFOqnY9PPLp-wqrHvPPtLjmWlX9XxhyHHEmqRNHFbR-edALXsjNBL-KBCFV52zT7peY60oLmfhdQ8z-aX8-cFay79DC-PItc7J6Aejk0ne0LU5JsGt9a81GMwLvbQyVv8EX_eNgtlH8go3fFKjie6XtrffvX7MN22aA3UPKYBIc"/>
+</button>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-container-max-width mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Profile & Settings (4 cols) -->
+<aside class="lg:col-span-4 flex flex-col gap-stack-lg">
+<!-- User Profile Header Card -->
+<div class="editorial-border bg-surface-container rounded-lg p-stack-md sharp-shadow hover:border-primary transition-colors duration-300">
+<div class="flex items-center gap-stack-md mb-stack-md">
+<img alt="Profile Large" class="w-16 h-16 rounded-full border border-outline-variant object-cover" data-alt="A professional headshot of a serious individual in a dark tailored suit, set against a deep navy blue background. The lighting is dramatic and cinematic, reminiscent of modern corporate thrillers, highlighting strong facial features. The overall mood is authoritative and analytical, fitting perfectly within a high-fidelity intelligence platform UI. The image uses a cool, slate-toned color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDt7aJVy4tr4o3ubFZUUhz7-y6HNmYYffws_Nk5ZGiZn60tA8Pck1zRL9KMGCJtUnjQZEndDmlYBvLOM-mqcFZau0ZSvuluLxk_7yEo5zcVlwcUYCsQfLQM-Zf_h7zDvFCBCI32nOqr3C5QQBQ7WiJmKSm-QgpWpX8KHpXYuNfz02bm6t5O4S-WqupHDA1U0qNmrzsniEChuQmryZlDIMIV8CECKvOQ10a4XKaKiu32L2So3TrQXIxnNQ24OYnGwKJXSykBzR6h3Xdg"/>
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-semibold text-on-surface m-0">E. Vance</h2>
+<p class="font-mono-data text-mono-data text-on-surface-variant">Senior Analyst</p>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-stack-md line-clamp-2">
+                    Specializing in geopolitical shifts in Eastern Europe and emerging market economic indicators.
+                </p>
+<button class="w-full bg-transparent border border-outline-variant text-on-surface hover:text-primary hover:border-primary font-label-caps text-label-caps py-2 rounded uppercase tracking-wider transition-colors duration-200">
+                    Edit Profile
+                </button>
+</div>
+<!-- Followed Topics Bento Box -->
+<div class="editorial-border bg-surface-container rounded-lg p-stack-md sharp-shadow">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-stack-sm uppercase tracking-widest border-b border-outline-variant pb-2">Followed Intelligence Themes</h3>
+<div class="flex flex-wrap gap-2 mt-stack-md">
+<span class="inline-flex items-center gap-1 bg-surface-bright border border-outline-variant px-3 py-1 rounded-full font-mono-data text-mono-data text-on-surface hover:border-primary cursor-pointer transition-colors">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Geopolitics
+                    </span>
+<span class="inline-flex items-center gap-1 bg-surface-bright border border-outline-variant px-3 py-1 rounded-full font-mono-data text-mono-data text-on-surface hover:border-primary cursor-pointer transition-colors">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span> Energy Markets
+                    </span>
+<span class="inline-flex items-center gap-1 bg-surface-bright border border-outline-variant px-3 py-1 rounded-full font-mono-data text-mono-data text-on-surface hover:border-primary cursor-pointer transition-colors">
+<span class="w-2 h-2 rounded-full bg-rose-500"></span> Cyber Threats
+                    </span>
+<span class="inline-flex items-center gap-1 bg-surface-bright border border-outline-variant px-3 py-1 rounded-full font-mono-data text-mono-data text-on-surface hover:border-primary cursor-pointer transition-colors">
+<span class="w-2 h-2 rounded-full bg-blue-500"></span> AI Regulation
+                    </span>
+<button class="inline-flex items-center justify-center bg-transparent border border-dashed border-outline-variant px-3 py-1 rounded-full font-mono-data text-mono-data text-on-surface-variant hover:text-primary hover:border-primary cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-[14px]" data-icon="add">add</span> Add Topic
+                    </button>
+</div>
+</div>
+<!-- Notification Preferences Checklist -->
+<div class="editorial-border bg-surface-container rounded-lg p-stack-md sharp-shadow">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-stack-sm uppercase tracking-widest border-b border-outline-variant pb-2">Alert Preferences</h3>
+<div class="space-y-4 mt-stack-md">
+<label class="flex items-start gap-3 cursor-pointer group">
+<div class="relative flex items-center mt-1">
+<input checked="" class="peer sr-only" type="checkbox"/>
+<div class="w-4 h-4 border border-outline-variant rounded bg-surface peer-checked:bg-primary peer-checked:border-primary transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px] text-primary-container opacity-0 peer-checked:opacity-100 font-bold" data-icon="check">check</span>
+</div>
+</div>
+<div>
+<p class="font-body-sm text-body-sm font-medium text-on-surface group-hover:text-primary transition-colors">Critical Breaking News</p>
+<p class="font-mono-data text-[11px] text-on-surface-variant leading-tight">Push notifications for tier-1 global events.</p>
+</div>
+</label>
+<label class="flex items-start gap-3 cursor-pointer group">
+<div class="relative flex items-center mt-1">
+<input checked="" class="peer sr-only" type="checkbox"/>
+<div class="w-4 h-4 border border-outline-variant rounded bg-surface peer-checked:bg-primary peer-checked:border-primary transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px] text-primary-container opacity-0 peer-checked:opacity-100 font-bold" data-icon="check">check</span>
+</div>
+</div>
+<div>
+<p class="font-body-sm text-body-sm font-medium text-on-surface group-hover:text-primary transition-colors">Daily Dossier Summary</p>
+<p class="font-mono-data text-[11px] text-on-surface-variant leading-tight">Morning email synthesis of followed topics.</p>
+</div>
+</label>
+<label class="flex items-start gap-3 cursor-pointer group">
+<div class="relative flex items-center mt-1">
+<input class="peer sr-only" type="checkbox"/>
+<div class="w-4 h-4 border border-outline-variant rounded bg-surface peer-checked:bg-primary peer-checked:border-primary transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px] text-primary-container opacity-0 peer-checked:opacity-100 font-bold" data-icon="check">check</span>
+</div>
+</div>
+<div>
+<p class="font-body-sm text-body-sm font-medium text-on-surface group-hover:text-primary transition-colors">Market Volatility Alerts</p>
+<p class="font-mono-data text-[11px] text-on-surface-variant leading-tight">Real-time pings for &gt;5% shifts in tracked indices.</p>
+</div>
+</label>
+</div>
+</div>
+</aside>
+<!-- Right Column: Notification Center (8 cols) -->
+<section class="lg:col-span-8 flex flex-col h-full min-h-[600px]">
+<div class="flex justify-between items-end mb-stack-md border-b border-outline-variant pb-2">
+<h1 class="font-headline-xl text-headline-xl font-semibold text-on-surface m-0">Intelligence Feed</h1>
+<div class="flex gap-4">
+<button class="font-mono-data text-mono-data text-primary hover:text-inverse-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="done_all">done_all</span> Mark all read
+                    </button>
+<button class="font-mono-data text-mono-data text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="filter_list">filter_list</span> Filter
+                    </button>
+</div>
+</div>
+<!-- Feed Container -->
+<div class="flex-grow flex flex-col gap-stack-sm overflow-y-auto pr-2 pb-stack-lg">
+<!-- Notification Item: Critical -->
+<article class="group relative bg-surface-container hover:bg-surface-bright editorial-border rounded-lg p-stack-md transition-all duration-300 cursor-pointer pl-6">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-error rounded-l-lg"></div>
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-[18px]" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-label-caps text-label-caps text-error tracking-wider uppercase">Critical Alert</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant ml-2">10m ago</span>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="more_horiz">more_horiz</span>
+</button>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-semibold mb-1 group-hover:text-primary transition-colors">Unprecedented Disruption in Strait of Hormuz Maritime Traffic</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-3 line-clamp-2">
+                        Satellite imagery indicates a complete halt of commercial vessel movement in the Strait. Early reports suggest uncoordinated naval exercises. Energy markets responding immediately.
+                    </p>
+<div class="flex items-center justify-between">
+<div class="flex gap-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono-data bg-surface border border-outline-variant text-on-surface-variant">Energy Markets</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono-data bg-surface border border-outline-variant text-on-surface-variant">Geopolitics</span>
+</div>
+<a class="font-mono-data text-mono-data text-primary hover:underline flex items-center gap-1" href="#">Read Analysis <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span></a>
+</div>
+</article>
+<!-- Notification Item: Standard Update -->
+<article class="group relative bg-surface-container hover:bg-surface-bright editorial-border rounded-lg p-stack-md transition-all duration-300 cursor-pointer pl-6">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-l-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="article">article</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase">Dossier Update</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant ml-2">2h ago</span>
+</div>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-semibold mb-1 group-hover:text-primary transition-colors">EU Parliament Advances Comprehensive AI Liability Directive</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-3 line-clamp-2">
+                        The drafting committee has agreed on provisions regarding high-risk foundational models. Analysts project significant compliance overhead for tech multinationals operating within the bloc.
+                    </p>
+<div class="flex items-center justify-between">
+<div class="flex gap-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono-data bg-surface border border-outline-variant text-on-surface-variant">AI Regulation</span>
+</div>
+<a class="font-mono-data text-mono-data text-primary hover:underline flex items-center gap-1" href="#">View Directive <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span></a>
+</div>
+</article>
+<!-- Notification Item: Mention/Social Flux -->
+<article class="group relative bg-surface-container hover:bg-surface-bright editorial-border rounded-lg p-stack-md transition-all duration-300 cursor-pointer pl-6">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-amber-500 rounded-l-lg opacity-50"></div>
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-amber-500 text-[18px]" data-icon="dynamic_feed">dynamic_feed</span>
+<span class="font-label-caps text-label-caps text-amber-500 tracking-wider uppercase">Social Flux Trend</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant ml-2">5h ago</span>
+</div>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-semibold mb-1 group-hover:text-primary transition-colors">Anomalous Activity Spike: Central Bank Digital Currencies (CBDC)</h3>
+<div class="glass-panel p-3 rounded mb-3 mt-2 flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-[20px] mt-0.5" data-icon="insights">insights</span>
+<p class="font-mono-data text-mono-data text-on-surface-variant">AI Sentiment Analysis detects a 400% surge in chatter among key financial journalist nodes concerning unannounced pilot programs in Southeast Asia.</p>
+</div>
+<div class="flex items-center justify-between mt-2">
+<div class="flex gap-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono-data bg-surface border border-outline-variant text-on-surface-variant">Emerging Markets</span>
+</div>
+<a class="font-mono-data text-mono-data text-primary hover:underline flex items-center gap-1" href="#">Explore Data <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span></a>
+</div>
+</article>
+<!-- Pagination Controls -->
+<div class="flex justify-between items-center mt-stack-md pt-stack-md border-t border-outline-variant">
+<button class="font-mono-data text-mono-data text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_left">chevron_left</span> Newer
+                    </button>
+<div class="flex gap-1 font-mono-data text-mono-data">
+<span class="w-8 h-8 flex items-center justify-center rounded bg-primary text-primary-container font-bold">1</span>
+<span class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-bright text-on-surface-variant cursor-pointer transition-colors">2</span>
+<span class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-bright text-on-surface-variant cursor-pointer transition-colors">3</span>
+<span class="w-8 h-8 flex items-center justify-center">...</span>
+</div>
+<button class="font-mono-data text-mono-data text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1">
+                        Older <span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+</body></html>

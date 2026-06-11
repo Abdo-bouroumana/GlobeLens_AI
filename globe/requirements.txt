@@ -1,0 +1,29 @@
+# GlobeLens AI — Pipeline Dependencies
+# Install with: pip install -r requirements.txt
+
+# ── Core ML / NLP ─────────────────────────────────────────────────────────────
+torch>=2.1.0                    # PyTorch (CPU or CUDA — install CUDA build separately)
+transformers>=4.40.0            # HuggingFace Transformers (NER, bias, translation, classification)
+sentencepiece>=0.1.99           # Required by NLLB-200 tokenizer
+protobuf>=3.20.0                # Required by sentencepiece
+accelerate>=0.27.0              # Required for device_map / torch_dtype in transformers
+
+# ── Embeddings / Vector Store ──────────────────────────────────────────────────
+FlagEmbedding>=1.2.0            # BGE-M3 wrapper (bge_m3_local)
+qdrant-client>=1.9.0            # Qdrant vector store (local embedded mode)
+
+# ── spaCy (sentence splitting) ─────────────────────────────────────────────────
+spacy>=3.7.0
+# After installing spaCy, download the multilingual model:
+#   python -m spacy download xx_sent_ud_sm
+
+# ── API / Serving ──────────────────────────────────────────────────────────────
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+pydantic>=2.7.0
+
+# ── HTTP client (Ollama calls) ─────────────────────────────────────────────────
+requests>=2.31.0
+
+# ── Utilities ─────────────────────────────────────────────────────────────────
+numpy>=1.26.0

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GlobeLens AI - Search</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;family=Geist:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#111c2d",
+                        "secondary-container": "#3e495d",
+                        "error": "#ffb4ab",
+                        "inverse-surface": "#d4e4fa",
+                        "surface-container": "#122131",
+                        "background": "#051424",
+                        "on-surface-variant": "#c6c6cd",
+                        "on-tertiary-fixed": "#271901",
+                        "surface-container-high": "#1c2b3c",
+                        "surface-container-low": "#0d1c2d",
+                        "on-tertiary-container": "#957d5a",
+                        "tertiary-fixed-dim": "#dec29a",
+                        "on-error": "#690005",
+                        "tertiary": "#dec29a",
+                        "inverse-primary": "#565e74",
+                        "secondary-fixed-dim": "#bcc7de",
+                        "tertiary-container": "#231500",
+                        "primary-fixed": "#dae2fd",
+                        "surface-dim": "#051424",
+                        "on-surface": "#d4e4fa",
+                        "primary": "#bec6e0",
+                        "on-primary-fixed": "#131b2e",
+                        "on-primary": "#283044",
+                        "primary-container": "#0f172a",
+                        "on-primary-container": "#798098",
+                        "on-error-container": "#ffdad6",
+                        "surface-variant": "#273647",
+                        "surface-tint": "#bec6e0",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "surface-container-highest": "#273647",
+                        "on-background": "#d4e4fa",
+                        "secondary": "#bcc7de",
+                        "outline-variant": "#45464d",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-tertiary-fixed-variant": "#574425",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "tertiary-fixed": "#fcdeb5",
+                        "on-tertiary": "#3e2d11",
+                        "secondary-fixed": "#d8e3fb",
+                        "error-container": "#93000a",
+                        "surface-bright": "#2c3a4c",
+                        "surface-container-lowest": "#010f1f",
+                        "on-secondary": "#263143",
+                        "inverse-on-surface": "#233143",
+                        "outline": "#909097",
+                        "surface": "#051424",
+                        "on-secondary-container": "#aeb9d0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-lg": "32px",
+                        "unit": "4px",
+                        "margin-desktop": "40px",
+                        "gutter": "24px",
+                        "container-max-width": "1440px",
+                        "stack-md": "16px",
+                        "margin-mobile": "16px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-xl": ["Source Serif 4"],
+                        "display-lg": ["Source Serif 4"],
+                        "mono-data": ["Geist"],
+                        "headline-lg-mobile": ["Source Serif 4"],
+                        "body-md": ["Inter"],
+                        "label-caps": ["Geist"],
+                        "headline-lg": ["Source Serif 4"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-xl": ["36px", { "lineHeight": "44px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Ambient subtle grid for the empty state background */
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(69, 70, 77, 0.1) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(69, 70, 77, 0.1) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+<!-- TopNavBar -->
+<nav class="flex justify-between items-center px-margin-desktop w-full h-16 sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant dark:border-outline-variant text-primary dark:text-primary font-body-md text-body-md flat no shadows">
+<div class="font-headline-lg text-headline-lg font-bold text-primary dark:text-primary tracking-tight">
+            GlobeLens AI
+        </div>
+<div class="hidden md:flex items-center gap-gutter h-full">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 h-full flex items-center mt-1 opacity-80 transition-all duration-200" href="#">Standard</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors h-full flex items-center" href="#">Map</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors h-full flex items-center" href="#">Topics</a>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full border border-outline-variant overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a corporate analyst with short dark hair, wearing a dark suit jacket against a neutral grey background. The lighting is studio-quality, soft, and focused on the face, fitting a professional platform avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjPNUS3gN0nUOHoISJRVF_OyPQ5E5BX_2lUQa15hMXDqMnISQ1jXI-yymSO_8rnyNhxbbnC07XJESv4vr_qTohgmi0bzhCtOqSyutC0Zr6in45jWVUE4EeVVQ8RSnWoMV9q9VjudCL0qZjI9j_XI9gzvq-hmZdiM8tJLUaFPLrC4Vu4oYMtrHpoM-k-fP80ozz7bjEX6iy8eyiydKWuz94jTgRrXgvZ8HvuwnqQOUC_vQEyAwSuy5v7hp82-6N-bQJIcL9bmgxU5dt"/>
+</div>
+</div>
+</nav>
+<div class="flex flex-1 relative w-full max-w-container-max-width mx-auto">
+<!-- Main Canvas: Empty State -->
+<main class="flex-1 flex flex-col lg:mr-80 relative min-h-[calc(100vh-64px)] overflow-hidden">
+<!-- Decorative Background Pattern -->
+<div class="absolute inset-0 bg-grid-pattern opacity-50 z-0 pointer-events-none"></div>
+<div class="flex-1 flex flex-col items-center justify-center px-margin-mobile md:px-margin-desktop py-stack-lg z-10 relative">
+<!-- Editorial Illustration / Icon Container -->
+<div class="relative mb-stack-lg group">
+<div class="absolute inset-0 bg-primary/10 rounded-full blur-xl group-hover:bg-primary/20 transition-all duration-500"></div>
+<div class="w-32 h-32 rounded-full bg-surface-container-high/80 backdrop-blur-md border border-outline-variant flex items-center justify-center relative shadow-sm">
+<span class="material-symbols-outlined text-6xl text-on-surface-variant opacity-80" style="font-variation-settings: 'wght' 200;">troubleshoot</span>
+<!-- Floating secondary element to make it feel like a component -->
+<div class="absolute -bottom-2 -right-2 bg-surface-container border border-outline-variant rounded-full p-2 shadow-sm">
+<span class="material-symbols-outlined text-sm text-error" style="font-variation-settings: 'FILL' 1;">error</span>
+</div>
+</div>
+</div>
+<!-- Text Content -->
+<div class="max-w-2xl text-center mb-stack-lg">
+<h1 class="font-headline-xl text-headline-xl text-primary mb-stack-sm tracking-tight">Zero Intelligence Recovered</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+                        The current parametric filters did not yield any matches within the active dossier feed. Your query architecture may be overly restrictive relative to the available global dataset.
+                    </p>
+</div>
+<!-- Actionable Suggestions (Bento Grid) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter w-full max-w-4xl mb-stack-lg">
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-stack-md flex flex-col gap-unit hover:border-primary/50 transition-colors cursor-default">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'wght' 300;">date_range</span>
+<span class="font-label-caps text-label-caps text-secondary uppercase tracking-wider">Temporal</span>
+</div>
+<h3 class="font-body-md text-body-md font-medium text-primary">Broaden Horizon</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Expand the date range to encompass historical contexts and archived intelligence reports.</p>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-stack-md flex flex-col gap-unit hover:border-primary/50 transition-colors cursor-default">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'wght' 300;">filter_alt_off</span>
+<span class="font-label-caps text-label-caps text-secondary uppercase tracking-wider">Topical</span>
+</div>
+<h3 class="font-body-md text-body-md font-medium text-primary">Reduce Constraints</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Remove highly specific topic filters to widen the analytical net across adjacent subjects.</p>
+</div>
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-stack-md flex flex-col gap-unit hover:border-primary/50 transition-colors cursor-default">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'wght' 300;">spellcheck</span>
+<span class="font-label-caps text-label-caps text-secondary uppercase tracking-wider">Syntax</span>
+</div>
+<h3 class="font-body-md text-body-md font-medium text-primary">Verify Query</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Ensure precise keyword spelling and check for alternative operational designations.</p>
+</div>
+</div>
+<!-- Primary Action -->
+<button class="bg-primary text-on-primary font-label-caps text-label-caps px-8 py-3 rounded hover:bg-primary-fixed transition-colors shadow-sm tracking-wider uppercase">
+                    Reset All Filters
+                </button>
+</div>
+</main>
+<!-- SideNavBar (Social Flux) -->
+<aside class="fixed right-0 top-16 bottom-0 flex flex-col p-4 overflow-y-auto hidden lg:flex w-80 bg-surface-container dark:bg-surface-container text-primary dark:text-primary font-body-sm text-body-sm border-l border-outline-variant dark:border-outline-variant shadow-sm z-40">
+<div class="mb-stack-lg">
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase tracking-wider">Social Flux Intelligence</div>
+<h2 class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">Social Flux</h2>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-1">Real-time Intelligence</div>
+</div>
+<nav class="flex flex-col gap-2 flex-1">
+<!-- Highlighted intent: User is searching, so they are likely monitoring the flux. -->
+<a class="flex items-center gap-3 px-3 py-2 text-primary font-bold bg-primary-container rounded-lg scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dynamic_feed</span>
+<span>Social Flux</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">trending_up</span>
+<span>Trending</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">history</span>
+<span>Updates</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">edit_note</span>
+<span>Journalists</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">emergency</span>
+<span>Alerts</span>
+</a>
+</nav>
+<div class="mt-auto pt-stack-md">
+<button class="w-full py-2 border border-outline-variant text-on-surface-variant font-label-caps text-label-caps rounded hover:bg-secondary-container/50 hover:text-primary transition-colors uppercase tracking-wider">
+                    Refresh Feed
+                </button>
+</div>
+</aside>
+</div>
+<!-- Footer -->
+<footer class="w-full py-stack-lg px-margin-desktop mt-auto flex flex-col md:flex-row justify-between items-center bg-surface-container-low dark:bg-surface-container-low text-on-surface dark:text-on-surface font-body-sm text-body-sm border-t border-outline-variant flat no shadows relative z-50">
+<div class="text-on-surface-variant mb-4 md:mb-0">
+            © 2024 GlobeLens AI. Authoritative Editorial Intelligence.
+        </div>
+<div class="flex flex-wrap justify-center gap-gutter">
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Institutional</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Privacy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Ethics Policy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">API Documentation</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Contact</a>
+</div>
+</footer>
+</body></html>

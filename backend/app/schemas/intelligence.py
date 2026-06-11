@@ -46,3 +46,28 @@ class EventIntelligenceResponse(BaseModel):
             if len(paragraphs) < 3:
                 raise ValueError("Summary must contain at least 3 paragraphs")
         return v
+
+
+# ── Fact Checker Validation Schemas ───────────────────────────────────────────
+from typing import List
+
+class ClaimAnalysis(BaseModel):
+    text: str = Field(..., description="The claim extracted from the article/text")
+    status: str = Field(..., description="Status of the claim: 'Corroborated', 'Disputed', or 'Unverified'")
+
+
+class HistoricalMatch(BaseModel):
+    title: str = Field(..., description="Title of a matching historical event/topic in the database")
+    last_active: str = Field(..., description="Human readable relative time or date when last active")
+    match_percentage: int = Field(..., ge=0, le=100, description="Semantic match percentage")
+
+
+class FactCheckResponse(BaseModel):
+    """Structured response schema from LLM fact-checking analysis."""
+    credibility_score: int = Field(..., ge=0, le=100, description="Overall credibility score from 0 to 100")
+    trust_risks: List[str] = Field(..., description="Specific credibility risks identified in the text")
+    independent_cross_references: int = Field(..., description="Number of independent cross references found")
+    claims: List[ClaimAnalysis] = Field(..., description="Key extracted claims and their verification status")
+    historical_matches: List[HistoricalMatch] = Field(..., description="Matching historical threads/topics in the system")
+    summary: str = Field(..., description="A brief synthesis report summarizing the analyzed claim or article context")
+

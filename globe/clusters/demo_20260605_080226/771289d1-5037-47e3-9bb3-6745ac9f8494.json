@@ -1,0 +1,55 @@
+{
+  "cluster_id": "771289d1-5037-47e3-9bb3-6745ac9f8494",
+  "fingerprint": {
+    "primary_entities": [
+      "Maison-Blanche",
+      "États-Unis",
+      "ONG",
+      "GENÈVE",
+      "Washington",
+      "Genève",
+      "Jane Smith",
+      "ONU",
+      "Union Européenne",
+      "Greenpeace"
+    ],
+    "event_action": "",
+    "event_date": "2026-06-03",
+    "event_title": "Sommet de Genève : un accord historique sur le climat, mais critiqué par les ONG"
+  },
+  "status": "active",
+  "created_at": "2026-06-05T08:04:32.869153+00:00",
+  "last_updated": "2026-06-05T08:04:32.869153+00:00",
+  "close_threshold_h": 72,
+  "topic_category": "",
+  "source_count": 1,
+  "article_ids": [
+    "9d8e3259-15df-4f30-bd62-1f9750dfca57"
+  ],
+  "outlets": [
+    "Le Monde"
+  ],
+  "sentence_ids": [
+    "9087ce93-0c18-44eb-b628-f0c1cfdfe0f9",
+    "4ac59cc9-8826-437b-94a2-0b64b817d0a1",
+    "bc4d0d76-0a9c-4ff0-bb81-d6e8dfba2707",
+    "9ce388b5-b7c3-453e-ac64-0aef3fea5f0b",
+    "68097ac6-e9b7-4b47-99bf-cd1effa7884f",
+    "4aedfb88-d313-49c4-9800-15d1422835fc",
+    "1f5d620e-5ddd-4ac5-9f36-2d894705d8dd",
+    "e85ce6b4-3fd0-4bfc-a5f9-21f1416b094b",
+    "5c5b2c16-58fb-4f7a-84ee-389d1f92227e",
+    "f1fb5861-796e-4d79-8500-9fb16e3c521e",
+    "6c4de416-b851-47b0-b77f-b6da9526c4b9",
+    "c5325c20-cf6a-46e0-96b9-c347642e362d",
+    "700816fc-1287-483b-833b-4f934dde1e68",
+    "4bff08b9-e96e-42a1-aed6-60e2caa71d0e",
+    "977626d0-1c20-4f94-b597-7dac63d6e6af",
+    "3e73e82b-c08d-435d-bbad-6f06dc475aca"
+  ],
+  "fact_ids": [],
+  "synthesis_ready": false,
+  "synthesis_text": "",
+  "synthesis_version": 0,
+  "follow_up_queue": []
+}

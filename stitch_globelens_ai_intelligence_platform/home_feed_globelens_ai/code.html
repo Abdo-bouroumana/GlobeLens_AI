@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Home Feed - GlobeLens AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&amp;family=Geist:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#231500",
+                    "secondary-container": "#3e495d",
+                    "on-surface-variant": "#c6c6cd",
+                    "on-tertiary-fixed": "#271901",
+                    "surface-tint": "#bec6e0",
+                    "on-primary-fixed": "#131b2e",
+                    "inverse-surface": "#d4e4fa",
+                    "primary": "#bec6e0",
+                    "secondary": "#bcc7de",
+                    "on-surface": "#d4e4fa",
+                    "on-tertiary-container": "#957d5a",
+                    "primary-fixed": "#dae2fd",
+                    "surface-container-low": "#0d1c2d",
+                    "on-secondary": "#263143",
+                    "secondary-fixed-dim": "#bcc7de",
+                    "inverse-primary": "#565e74",
+                    "surface-container-high": "#1c2b3c",
+                    "error": "#ffb4ab",
+                    "primary-container": "#0f172a",
+                    "on-primary-container": "#798098",
+                    "on-error": "#690005",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#dec29a",
+                    "outline-variant": "#45464d",
+                    "surface": "#051424",
+                    "primary-fixed-dim": "#bec6e0",
+                    "tertiary": "#dec29a",
+                    "surface-bright": "#2c3a4c",
+                    "on-tertiary-fixed-variant": "#574425",
+                    "inverse-on-surface": "#233143",
+                    "on-secondary-fixed-variant": "#3c475a",
+                    "surface-container-highest": "#273647",
+                    "surface-container-lowest": "#010f1f",
+                    "secondary-fixed": "#d8e3fb",
+                    "tertiary-fixed": "#fcdeb5",
+                    "surface-variant": "#273647",
+                    "surface-dim": "#051424",
+                    "surface-container": "#122131",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "on-secondary-fixed": "#111c2d",
+                    "outline": "#909097",
+                    "background": "#051424",
+                    "on-tertiary": "#3e2d11",
+                    "error-container": "#93000a",
+                    "on-secondary-container": "#aeb9d0",
+                    "on-background": "#d4e4fa",
+                    "on-primary": "#283044"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "container-max-width": "1440px",
+                    "unit": "4px",
+                    "margin-desktop": "40px",
+                    "gutter": "24px",
+                    "stack-sm": "8px",
+                    "stack-md": "16px",
+                    "stack-lg": "32px"
+            },
+            "fontFamily": {
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "mono-data": [
+                            "Geist"
+                    ],
+                    "headline-xl": [
+                            "Source Serif 4"
+                    ],
+                    "display-lg": [
+                            "Source Serif 4"
+                    ],
+                    "headline-lg-mobile": [
+                            "Source Serif 4"
+                    ],
+                    "headline-lg": [
+                            "Source Serif 4"
+                    ],
+                    "label-caps": [
+                            "Geist"
+                    ],
+                    "body-sm": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "mono-data": [
+                            "13px",
+                            {
+                                    "lineHeight": "18px",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-xl": [
+                            "36px",
+                            {
+                                    "lineHeight": "44px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg": [
+                            "28px",
+                            {
+                                    "lineHeight": "36px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-caps": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-sm": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid #334155;
+        }
+        .dossier-card {
+            background-color: #0F172A; /* Using primary-container loosely, but sticking to design guidelines core color */
+            border: 1px solid #334155;
+            box-shadow: 0 2px 0px 0px rgba(0, 0, 0, 0.4);
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+        .dossier-card:hover {
+            border-color: #bec6e0; /* Electric Blue/Primary hover */
+            transform: translateY(-2px);
+        }
+        .badge-reliable {
+            border-left: 2px solid #34d399; /* Emerald */
+            background-color: rgba(52, 211, 153, 0.1);
+        }
+        .badge-moderate {
+            border-left: 2px solid #fbbf24; /* Amber */
+            background-color: rgba(251, 191, 36, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-surface border-b border-outline-variant dark:border-outline-variant flex justify-between items-center px-margin-desktop w-full h-16 sticky top-0 z-50 bg-surface/80 backdrop-blur-md">
+<div class="flex items-center gap-6">
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary dark:text-primary tracking-tight">GlobeLens AI</h1>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 text-body-md font-body-md hover:text-primary transition-colors opacity-80 transition-all duration-200" href="#">Standard</a>
+<a class="text-on-surface-variant font-medium text-body-md font-body-md hover:text-primary transition-colors" href="#">Map</a>
+<a class="text-on-surface-variant font-medium text-body-md font-body-md hover:text-primary transition-colors" href="#">Topics</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex items-center bg-surface-container border border-outline-variant rounded px-3 py-1 shadow-inner focus-within:border-primary focus-within:shadow-[0_0_0_2px_rgba(190,198,224,0.2)] transition-all">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px] mr-2">search</span>
+<input class="bg-transparent border-none text-body-sm font-body-sm text-on-surface focus:ring-0 w-48 placeholder-on-surface-variant" placeholder="Search Intelligence..." type="text"/>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a person looking directly at the camera. The lighting is soft and even, highlighting their features against a dark, corporate-style background. The mood is serious and authoritative, fitting for an intelligence or news platform. The image uses a cool, desaturated color palette to maintain a high-tech, modern corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7-lzyNHMRSBWVESi4tZjlNV-V9mGrcBgLOO69Fd2o5yV7qa_l8U06JXiLwhhvFyYHnMxoXeGTp8iu7NOR92ryYyzAIAR9-2NxnZG77F_XlYFCtajb65QmiZtujDJOQ5EcJp7jIAgkDhaGUHA9UkqYP__bjz8L-XcdfMTf9u7W95XPh8MWrPRq5Ryvt3bSQOUwzuUkuBXdI5rRxwlgdlq-obAThrVbHGmS86iez4sMGfT2vk0xUwSgMV9UeUKsogAUCz2LiF_z4345"/>
+</div>
+</div>
+</header>
+<!-- Main Layout Grid -->
+<div class="flex-grow flex w-full max-w-container-max-width mx-auto relative">
+<!-- Primary Content Canvas (9 cols on lg, 12 cols below) -->
+<main class="flex-grow w-full lg:w-3/4 p-margin-mobile md:p-gutter lg:p-margin-desktop flex flex-col gap-stack-lg">
+<!-- Topic Onboarding Widget -->
+<section class="glass-panel p-stack-md md:p-gutter rounded-lg relative overflow-hidden group">
+<!-- Subtle background glow -->
+<div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-stack-md">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary font-bold mb-1">Refine Your Intelligence Feed</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Select operational domains to tune AI synthesis.</p>
+</div>
+<div class="flex flex-wrap gap-2">
+<button class="px-3 py-1.5 rounded-full border border-primary bg-primary text-on-primary font-label-caps text-label-caps hover:bg-primary/90 transition-colors">Geopolitics</button>
+<button class="px-3 py-1.5 rounded-full border border-outline-variant bg-surface text-on-surface-variant font-label-caps text-label-caps hover:border-primary hover:text-primary transition-colors">Tech &amp; Cyber</button>
+<button class="px-3 py-1.5 rounded-full border border-outline-variant bg-surface text-on-surface-variant font-label-caps text-label-caps hover:border-primary hover:text-primary transition-colors">Macroeconomics</button>
+<button class="px-3 py-1.5 rounded-full border border-outline-variant bg-surface text-on-surface-variant font-label-caps text-label-caps hover:border-primary hover:text-primary transition-colors">Climate Impact</button>
+</div>
+</div>
+</section>
+<!-- Promoted/Highlighted Article (Bento style span) -->
+<article class="dossier-card rounded-lg overflow-hidden flex flex-col md:flex-row relative border-l-4 border-l-primary group">
+<div class="absolute top-4 right-4 z-20 flex items-center gap-2">
+<span class="px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider bg-primary text-on-primary">Priority Brief</span>
+</div>
+<div class="md:w-2/5 h-48 md:h-auto relative overflow-hidden">
+<img alt="Global Markets" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A high-contrast, moody image depicting abstract financial data visualization. Glowing electric blue lines and nodes crisscross over a dark slate background, simulating a complex global economic network. The style is highly technical, glassmorphic, and cinematic, evoking a sense of modern AI-driven financial analysis. The lighting is low-key, with bright accents illuminating critical data clusters." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq47mdzufqNfNsFFlkKt1R5hX7q-YfoeKOtqEQzw5ip737SQqcLH55bcnhkq-JwBOzy79gcyjEGZoqMKWWnEia32yllpxoN1IgGgtClqkam1wameIzjeqKjUJSkiJL0gkSTrgtQetzW0EclsYkIr1fgx0Cg2rq-4aQT-9Wm5A799viHChhD2GIk88h3-3gVbAuKG1fY9NUY0JVQ-7ZZnjj8TL8Q9lv83zSmu2mmCtAuFGCgJw-9sV1cnbwwlFdJyGJHPjJDMYlXmPR"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-transparent opacity-80 md:hidden"></div>
+</div>
+<div class="md:w-3/5 p-stack-md md:p-gutter flex flex-col justify-between relative z-10 bg-[#0F172A]">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="badge-reliable font-mono-data text-mono-data text-on-surface px-2 py-0.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span> Score: 4.8
+                            </span>
+<span class="font-mono-data text-mono-data text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span> Frankfurt, DE
+                            </span>
+</div>
+<h3 class="font-headline-xl text-headline-xl text-primary font-bold mb-3 leading-tight group-hover:text-inverse-surface transition-colors">Central Banks Signal Coordinated Shift Amidst Eurozone Inflationary Pressures</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Synthesized analysis indicates a high probability of simultaneous rate adjustments across major European economies within the next fiscal quarter, driven by persistent supply chain bottlenecks.</p>
+</div>
+<div class="flex items-center justify-between mt-auto pt-4 border-t border-outline-variant">
+<div class="flex items-center gap-2">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full bg-surface-bright border border-outline-variant flex items-center justify-center text-[10px] font-bold text-on-surface">FT</div>
+<div class="w-6 h-6 rounded-full bg-surface-bright border border-outline-variant flex items-center justify-center text-[10px] font-bold text-on-surface">R</div>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface-variant text-[11px]">3 Sources</span>
+</div>
+<button class="text-primary hover:text-inverse-surface transition-colors flex items-center gap-1 font-label-caps text-label-caps">
+                            Read Full Dossier <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Standard Feed Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-gutter">
+<!-- Article Card 1 -->
+<article class="dossier-card rounded-lg p-stack-md flex flex-col h-full cursor-pointer group">
+<div class="flex justify-between items-start mb-3">
+<span class="badge-moderate font-mono-data text-mono-data text-on-surface px-2 py-0.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">policy</span> Score: 3.2
+                        </span>
+<div class="flex gap-1">
+<span class="px-1.5 py-0.5 rounded border border-outline-variant text-[10px] font-label-caps text-on-surface-variant uppercase">Tech</span>
+<span class="px-1.5 py-0.5 rounded border border-outline-variant text-[10px] font-label-caps text-on-surface-variant uppercase">Policy</span>
+</div>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface mb-2 group-hover:text-primary transition-colors leading-snug">New AI Regulation Framework Proposed in Brussels Council</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4 flex-grow">Draft documents reveal stringent compliance requirements for generative models operating within the EU digital market space.</p>
+<div class="flex items-center justify-between pt-3 border-t border-outline-variant">
+<span class="font-mono-data text-mono-data text-on-surface-variant flex items-center gap-1 text-[11px]">
+<span class="material-symbols-outlined text-[14px]">location_on</span> Brussels, BE
+                         </span>
+<span class="font-mono-data text-mono-data text-on-surface-variant text-[11px]">15m ago</span>
+</div>
+</article>
+<!-- Article Card 2 -->
+<article class="dossier-card rounded-lg p-stack-md flex flex-col h-full cursor-pointer group">
+<div class="flex justify-between items-start mb-3">
+<span class="badge-reliable font-mono-data text-mono-data text-on-surface px-2 py-0.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span> Score: 4.5
+                        </span>
+<div class="flex gap-1">
+<span class="px-1.5 py-0.5 rounded border border-outline-variant text-[10px] font-label-caps text-on-surface-variant uppercase">Climate</span>
+</div>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface mb-2 group-hover:text-primary transition-colors leading-snug">Record Anomalies Detected in North Atlantic Surface Temperatures</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4 flex-grow">Satellite telemetry indicates persistent thermal variations exceeding predicted models, potentially impacting seasonal weather patterns.</p>
+<div class="flex items-center justify-between pt-3 border-t border-outline-variant">
+<span class="font-mono-data text-mono-data text-on-surface-variant flex items-center gap-1 text-[11px]">
+<span class="material-symbols-outlined text-[14px]">satellite_alt</span> Orbital Data
+                         </span>
+<span class="font-mono-data text-mono-data text-on-surface-variant text-[11px]">1h ago</span>
+</div>
+</article>
+<!-- Article Card 3 -->
+<article class="dossier-card rounded-lg p-stack-md flex flex-col h-full cursor-pointer group">
+<div class="flex justify-between items-start mb-3">
+<span class="badge-reliable font-mono-data text-mono-data text-on-surface px-2 py-0.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span> Score: 4.1
+                        </span>
+<div class="flex gap-1">
+<span class="px-1.5 py-0.5 rounded border border-outline-variant text-[10px] font-label-caps text-on-surface-variant uppercase">Energy</span>
+<span class="px-1.5 py-0.5 rounded border border-outline-variant text-[10px] font-label-caps text-on-surface-variant uppercase">Geopolitics</span>
+</div>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface mb-2 group-hover:text-primary transition-colors leading-snug">Strategic Reserve Releases Trigger Market Volatility</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4 flex-grow">Coordinated releases of crude reserves have temporarily depressed spot prices, though long-term supply constraints remain unaddressed.</p>
+<div class="flex items-center justify-between pt-3 border-t border-outline-variant">
+<span class="font-mono-data text-mono-data text-on-surface-variant flex items-center gap-1 text-[11px]">
+<span class="material-symbols-outlined text-[14px]">location_on</span> Global
+                         </span>
+<span class="font-mono-data text-mono-data text-on-surface-variant text-[11px]">3h ago</span>
+</div>
+</article>
+<!-- Article Card 4 -->
+<article class="dossier-card rounded-lg p-stack-md flex flex-col h-full cursor-pointer group">
+<div class="flex justify-between items-start mb-3">
+<span class="badge-moderate font-mono-data text-mono-data text-on-surface px-2 py-0.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">policy</span> Score: 2.8
+                        </span>
+<div class="flex gap-1">
+<span class="px-1.5 py-0.5 rounded border border-outline-variant text-[10px] font-label-caps text-on-surface-variant uppercase">Cyber</span>
+</div>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface mb-2 group-hover:text-primary transition-colors leading-snug">Unconfirmed Reports of Infrastructure Vulnerabilities in Nordic Grid</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4 flex-grow">Chatter across encrypted channels suggests potential exploits targeting legacy SCADA systems in regional power distribution networks.</p>
+<div class="flex items-center justify-between pt-3 border-t border-outline-variant">
+<span class="font-mono-data text-mono-data text-on-surface-variant flex items-center gap-1 text-[11px]">
+<span class="material-symbols-outlined text-[14px]">location_on</span> Stockholm, SE
+                         </span>
+<span class="font-mono-data text-mono-data text-on-surface-variant text-[11px]">4h ago</span>
+</div>
+</article>
+</div>
+<!-- Pagination -->
+<div class="flex justify-center mt-stack-md gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors disabled:opacity-50">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-on-primary font-mono-data font-bold">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-mono-data transition-colors">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-mono-data transition-colors">3</button>
+<span class="w-8 h-8 flex items-center justify-center text-on-surface-variant font-mono-data">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</main>
+<!-- Social Flux SideNavBar -->
+<aside class="bg-surface-container dark:bg-surface-container border-l border-outline-variant dark:border-outline-variant shadow-sm fixed right-0 top-16 bottom-0 flex flex-col p-4 overflow-y-auto hidden lg:flex w-80 z-40">
+<div class="mb-6 flex flex-col border-b border-outline-variant pb-4">
+<h2 class="font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase tracking-wider">Social Flux</h2>
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Real-time Intelligence</span>
+<button class="text-primary hover:text-inverse-surface transition-colors flex items-center text-[12px] uppercase font-bold tracking-wider">
+                        Refresh Feed <span class="material-symbols-outlined text-[14px] ml-1">refresh</span>
+</button>
+</div>
+</div>
+<!-- Tabs -->
+<div class="flex flex-col gap-2 mb-4">
+<!-- Active Tab -->
+<button class="text-primary font-bold bg-primary-container rounded-lg font-body-sm text-body-sm hover:bg-secondary-container/50 Active: scale-95 transition-transform flex items-center gap-3 p-2 text-left w-full transition-colors duration-200">
+<span class="material-symbols-outlined">dynamic_feed</span>
+                    Social Flux
+                </button>
+<!-- Inactive Tabs -->
+<button class="text-on-surface-variant font-body-sm text-body-sm hover:bg-secondary-container/50 flex items-center gap-3 p-2 rounded-lg text-left w-full transition-colors duration-200">
+<span class="material-symbols-outlined">trending_up</span>
+                    Trending
+                </button>
+<button class="text-on-surface-variant font-body-sm text-body-sm hover:bg-secondary-container/50 flex items-center gap-3 p-2 rounded-lg text-left w-full transition-colors duration-200">
+<span class="material-symbols-outlined">history</span>
+                    Updates
+                </button>
+<button class="text-on-surface-variant font-body-sm text-body-sm hover:bg-secondary-container/50 flex items-center gap-3 p-2 rounded-lg text-left w-full transition-colors duration-200">
+<span class="material-symbols-outlined">edit_note</span>
+                    Journalists
+                </button>
+<button class="text-on-surface-variant font-body-sm text-body-sm hover:bg-secondary-container/50 flex items-center gap-3 p-2 rounded-lg text-left w-full transition-colors duration-200">
+<span class="material-symbols-outlined text-error">emergency</span>
+                    Alerts
+                </button>
+</div>
+<!-- Micro-Feed Content -->
+<div class="flex-grow flex flex-col gap-3 overflow-y-auto pr-1 custom-scrollbar">
+<!-- Micro Item -->
+<div class="p-3 bg-surface-container-high rounded border border-outline-variant/50 relative">
+<div class="absolute left-0 top-0 bottom-0 w-0.5 bg-primary rounded-l"></div>
+<div class="flex justify-between items-start mb-1">
+<span class="font-mono-data text-[10px] text-on-surface-variant uppercase tracking-wider">Twitter \ @MacroEconBot</span>
+<span class="font-mono-data text-[10px] text-on-surface-variant">Just now</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface leading-tight text-[13px]">Unusual options activity detected on major European semiconductor equities ahead of earnings calls.</p>
+</div>
+<!-- Micro Item -->
+<div class="p-3 bg-surface-container-high rounded border border-outline-variant/50 relative">
+<div class="absolute left-0 top-0 bottom-0 w-0.5 bg-error rounded-l"></div>
+<div class="flex justify-between items-start mb-1">
+<span class="font-mono-data text-[10px] text-on-surface-variant uppercase tracking-wider">Telegram \ #Geopol</span>
+<span class="font-mono-data text-[10px] text-on-surface-variant">2m ago</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface leading-tight text-[13px]">Spike in sentiment analysis indicating localized unrest in primary lithium mining districts.</p>
+</div>
+<!-- Micro Item -->
+<div class="p-3 bg-surface-container-high rounded border border-outline-variant/50 relative">
+<div class="absolute left-0 top-0 bottom-0 w-0.5 bg-tertiary rounded-l"></div>
+<div class="flex justify-between items-start mb-1">
+<span class="font-mono-data text-[10px] text-on-surface-variant uppercase tracking-wider">Reuters RSS</span>
+<span class="font-mono-data text-[10px] text-on-surface-variant">5m ago</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface leading-tight text-[13px]">Flash: Initial draft of comprehensive AI regulatory framework circulates among EU ministers.</p>
+</div>
+</div>
+</aside>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-low dark:bg-surface-container-low border-t border-outline-variant w-full py-stack-lg px-margin-desktop mt-auto flex flex-col md:flex-row justify-between items-center z-10 relative">
+<div class="mb-4 md:mb-0">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface block mb-2">GlobeLens AI</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">© 2024 GlobeLens AI. Authoritative Editorial Intelligence.</p>
+</div>
+<nav class="flex flex-wrap gap-4 md:gap-6 items-center justify-center">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Institutional</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Privacy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Ethics Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">API Documentation</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Contact</a>
+</nav>
+</footer>
+<style>
+        /* Custom scrollbar for dense areas */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(18, 33, 49, 0.5); /* surface-container */
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #45464d; /* outline-variant */
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #909097; /* outline */
+        }
+    </style>
+</body></html>

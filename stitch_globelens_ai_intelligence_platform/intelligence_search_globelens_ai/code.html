@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Advanced Search &amp; Filters - GlobeLens AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&amp;family=Geist:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#231500",
+                      "secondary-container": "#3e495d",
+                      "on-surface-variant": "#c6c6cd",
+                      "on-tertiary-fixed": "#271901",
+                      "surface-tint": "#bec6e0",
+                      "on-primary-fixed": "#131b2e",
+                      "inverse-surface": "#d4e4fa",
+                      "primary": "#bec6e0",
+                      "secondary": "#bcc7de",
+                      "on-surface": "#d4e4fa",
+                      "on-tertiary-container": "#957d5a",
+                      "primary-fixed": "#dae2fd",
+                      "surface-container-low": "#0d1c2d",
+                      "on-secondary": "#263143",
+                      "secondary-fixed-dim": "#bcc7de",
+                      "inverse-primary": "#565e74",
+                      "surface-container-high": "#1c2b3c",
+                      "error": "#ffb4ab",
+                      "primary-container": "#0f172a",
+                      "on-primary-container": "#798098",
+                      "on-error": "#690005",
+                      "on-error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#dec29a",
+                      "outline-variant": "#45464d",
+                      "surface": "#051424",
+                      "primary-fixed-dim": "#bec6e0",
+                      "tertiary": "#dec29a",
+                      "surface-bright": "#2c3a4c",
+                      "on-tertiary-fixed-variant": "#574425",
+                      "inverse-on-surface": "#233143",
+                      "on-secondary-fixed-variant": "#3c475a",
+                      "surface-container-highest": "#273647",
+                      "surface-container-lowest": "#010f1f",
+                      "secondary-fixed": "#d8e3fb",
+                      "tertiary-fixed": "#fcdeb5",
+                      "surface-variant": "#273647",
+                      "surface-dim": "#051424",
+                      "surface-container": "#122131",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "on-secondary-fixed": "#111c2d",
+                      "outline": "#909097",
+                      "background": "#051424",
+                      "on-tertiary": "#3e2d11",
+                      "error-container": "#93000a",
+                      "on-secondary-container": "#aeb9d0",
+                      "on-background": "#d4e4fa",
+                      "on-primary": "#283044"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-mobile": "16px",
+                      "container-max-width": "1440px",
+                      "unit": "4px",
+                      "margin-desktop": "40px",
+                      "gutter": "24px",
+                      "stack-sm": "8px",
+                      "stack-md": "16px",
+                      "stack-lg": "32px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "mono-data": [
+                              "Geist"
+                      ],
+                      "headline-xl": [
+                              "Source Serif 4"
+                      ],
+                      "display-lg": [
+                              "Source Serif 4"
+                      ],
+                      "headline-lg-mobile": [
+                              "Source Serif 4"
+                      ],
+                      "headline-lg": [
+                              "Source Serif 4"
+                      ],
+                      "label-caps": [
+                              "Geist"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "mono-data": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-xl": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+            },
+          }
+        }
+      </script>
+<style>
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+      </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md overflow-x-hidden">
+<!-- TopNavBar Component -->
+<header class="flex justify-between items-center px-margin-desktop w-full h-16 sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant dark:border-outline-variant">
+<div class="flex items-center gap-stack-lg">
+<span class="font-headline-lg text-headline-lg font-bold text-primary dark:text-primary tracking-tight">GlobeLens AI</span>
+<nav class="hidden md:flex items-center gap-stack-lg h-full pt-1">
+<a class="font-body-md text-body-md text-on-surface-variant font-medium hover:text-primary transition-colors h-full flex items-center" href="#">Standard</a>
+<a class="font-body-md text-body-md text-on-surface-variant font-medium hover:text-primary transition-colors h-full flex items-center" href="#">Map</a>
+<a class="font-body-md text-body-md text-primary font-bold border-b-2 border-primary pb-1 h-full flex items-center opacity-80 transition-all duration-200" href="#">Topics</a>
+</nav>
+</div>
+<div class="flex items-center gap-stack-md">
+<!-- Search placeholder on right if needed by design, but here it's main content -->
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden flex-shrink-0 cursor-pointer">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjWEHBMCCgYAwmFJTGbmqUKXW5Sy6MDXAZ_IrHauCj-zAvqmLz1rNWs3oqb42W3qi7MMYg0er3sjKrqskJVLOIUUDRMApvrLaONw6E9yYNNKnARpPlMk5r2WF4awFPt9RiZ48_zRTxSRzQsJB0Jl9Tic2HmdfO5i70mIFU-IAI_79GijOMVb5CWoaLE7LGsr_fWQ0_HJia3nPFUjRoLfVNxilXS5xmeHfQPhnt0FPwQtBYBv3pJiT186xO72t1VcC2OnBdB9tNEAeg"/>
+</div>
+</div>
+</header>
+<div class="flex flex-1 w-full max-w-container-max-width mx-auto relative">
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col p-margin-mobile md:p-margin-desktop gap-stack-lg lg:mr-80">
+<!-- Search Header & Input -->
+<section class="w-full max-w-4xl mx-auto flex flex-col gap-stack-md">
+<h1 class="font-headline-xl text-headline-xl text-primary font-bold">Advanced Search</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Query the global intelligence database across millions of real-time sources.</p>
+<div class="relative w-full mt-stack-sm">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">search</span>
+</div>
+<input class="w-full bg-primary-container border border-outline-variant text-on-background font-body-lg text-body-lg rounded-lg pl-12 pr-4 py-4 shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 outline-none placeholder-outline" placeholder="Enter keywords, boolean logic, or natural language..." type="text" value="Geopolitical implications of semiconductor supply chains"/>
+<button class="absolute inset-y-2 right-2 bg-primary text-primary-container px-4 rounded font-label-caps text-label-caps hover:bg-surface-tint transition-colors">
+                        ANALYZE
+                    </button>
+</div>
+<!-- Auto-suggest / Quick Pills -->
+<div class="flex flex-wrap gap-2 mt-2">
+<span class="text-on-surface-variant font-label-caps text-label-caps opacity-70 flex items-center">Suggested:</span>
+<button class="px-3 py-1 bg-surface-container border border-outline-variant rounded-full font-body-sm text-body-sm text-on-surface hover:border-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">trending_up</span> TSMC expansion
+                    </button>
+<button class="px-3 py-1 bg-surface-container border border-outline-variant rounded-full font-body-sm text-body-sm text-on-surface hover:border-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">public</span> Rare earth metals
+                    </button>
+<button class="px-3 py-1 bg-surface-container border border-outline-variant rounded-full font-body-sm text-body-sm text-on-surface hover:border-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">policy</span> Export controls 2024
+                    </button>
+</div>
+</section>
+<!-- Layout: Filters Left, Results Right -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter w-full max-w-4xl mx-auto mt-stack-md">
+<!-- Filters Panel -->
+<aside class="md:col-span-4 flex flex-col gap-stack-lg">
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-4 flex flex-col gap-stack-md sticky top-24 shadow-[0_2px_0_0_rgba(0,0,0,0.4)]">
+<div class="flex justify-between items-center border-b border-outline-variant pb-2">
+<h2 class="font-body-md text-body-md font-semibold text-primary">Filters</h2>
+<button class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors">RESET</button>
+</div>
+<!-- Date Range -->
+<div class="flex flex-col gap-stack-sm">
+<label class="font-label-caps text-label-caps text-on-surface-variant">TIME FRAME</label>
+<select class="w-full bg-primary-container border border-outline-variant text-body-sm font-body-sm rounded p-2 text-on-surface focus:ring-1 focus:ring-primary outline-none">
+<option>Past 24 Hours</option>
+<option>Past 7 Days</option>
+<option selected="">Past 30 Days</option>
+<option>Custom Range...</option>
+</select>
+</div>
+<!-- Geography -->
+<div class="flex flex-col gap-stack-sm">
+<label class="font-label-caps text-label-caps text-on-surface-variant">GEOGRAPHY</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2 top-2 text-outline text-[18px]">location_on</span>
+<input class="w-full bg-primary-container border border-outline-variant text-body-sm font-body-sm rounded pl-8 pr-2 py-2 text-on-surface focus:ring-1 focus:ring-primary outline-none" placeholder="Filter by region..." type="text" value="East Asia"/>
+</div>
+</div>
+<!-- Topics -->
+<div class="flex flex-col gap-stack-sm">
+<label class="font-label-caps text-label-caps text-on-surface-variant">TOPICS</label>
+<div class="flex flex-wrap gap-2">
+<span class="bg-primary/20 text-primary border border-primary/50 px-2 py-1 rounded font-mono-data text-mono-data flex items-center gap-1 cursor-pointer">
+                                    Technology <span class="material-symbols-outlined text-[14px]">close</span>
+</span>
+<span class="bg-primary/20 text-primary border border-primary/50 px-2 py-1 rounded font-mono-data text-mono-data flex items-center gap-1 cursor-pointer">
+                                    Trade <span class="material-symbols-outlined text-[14px]">close</span>
+</span>
+<span class="bg-surface-container text-on-surface-variant border border-outline-variant px-2 py-1 rounded font-mono-data text-mono-data cursor-pointer hover:border-primary transition-colors">
+                                    + Add Topic
+                                </span>
+</div>
+</div>
+<!-- Media Source -->
+<div class="flex flex-col gap-stack-sm">
+<label class="font-label-caps text-label-caps text-on-surface-variant">SOURCE RELIABILITY</label>
+<div class="flex flex-col gap-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input checked="" class="rounded border-outline-variant bg-primary-container text-primary focus:ring-primary focus:ring-offset-background" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface group-hover:text-primary transition-colors">Tier 1 Editorial</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input checked="" class="rounded border-outline-variant bg-primary-container text-primary focus:ring-primary focus:ring-offset-background" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface group-hover:text-primary transition-colors">Government Dispatches</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="rounded border-outline-variant bg-primary-container text-primary focus:ring-primary focus:ring-offset-background" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface-variant group-hover:text-primary transition-colors">Social Sentiment</span>
+</label>
+</div>
+</div>
+</div>
+</aside>
+<!-- Results Listing -->
+<div class="md:col-span-8 flex flex-col gap-stack-md">
+<div class="flex justify-between items-center mb-2">
+<span class="font-mono-data text-mono-data text-on-surface-variant">1,204 results found in 0.4s</span>
+<div class="flex items-center gap-2">
+<span class="font-label-caps text-label-caps text-outline">SORT BY:</span>
+<select class="bg-transparent text-primary font-body-sm text-body-sm outline-none cursor-pointer border-b border-outline-variant pb-1">
+<option>Relevance</option>
+<option>Date (Newest)</option>
+<option>Impact Score</option>
+</select>
+</div>
+</div>
+<!-- Result Card 1 -->
+<article class="bg-surface-container-low border border-[#334155] rounded-lg p-5 flex flex-col gap-stack-sm hover:border-primary transition-colors group relative overflow-hidden shadow-[0_2px_0_0_rgba(0,0,0,0.4)]">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-16 -mt-16 pointer-events-none"></div>
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 rounded-full border-l-2 border-primary bg-primary/10 font-label-caps text-label-caps text-primary">HIGH IMPACT</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant">Reuters • 2h ago</span>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+</button>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-background font-semibold leading-tight group-hover:text-primary transition-colors cursor-pointer">New Export Controls Target Next-Gen Logic Chips</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mt-1">The commerce department has finalized a new sweep of restrictions aimed at preventing the transfer of sub-5nm manufacturing equipment to restricted entities, citing national security concerns amidst rising geopolitical friction.</p>
+<div class="flex items-center gap-4 mt-3">
+<span class="font-mono-data text-mono-data text-outline flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">flag</span> Washington D.C.</span>
+<span class="font-mono-data text-mono-data text-outline flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">category</span> Policy</span>
+</div>
+<!-- Glassmorphic Tooltip / Insight -->
+<div class="mt-2 p-3 glass-panel border border-outline-variant/50 rounded flex gap-3 items-start">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5">auto_awesome</span>
+<p class="font-body-sm text-body-sm text-on-surface"><strong class="text-secondary">AI Insight:</strong> This policy effectively blocks key suppliers (ASML, Applied Materials) from servicing existing contracts in the region, likely accelerating domestic fab investments by 40%.</p>
+</div>
+</article>
+<!-- Result Card 2 -->
+<article class="bg-surface-container-low border border-[#334155] rounded-lg p-5 flex flex-col gap-stack-sm hover:border-primary transition-colors group relative shadow-[0_2px_0_0_rgba(0,0,0,0.4)]">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 rounded-full border-l-2 border-outline bg-surface-container font-label-caps text-label-caps text-on-surface">STANDARD</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant">Financial Times • 5h ago</span>
+</div>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-background font-semibold leading-tight group-hover:text-primary transition-colors cursor-pointer">Foundry Utilization Rates Drop as Supply Chain Rebalances</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mt-1">Major foundries report a 15% dip in utilization for mature nodes in Q3. Analysts suggest an inventory correction phase combined with cautious procurement strategies from major fabless clients.</p>
+<div class="flex items-center gap-4 mt-3">
+<span class="font-mono-data text-mono-data text-outline flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">flag</span> Taipei</span>
+<span class="font-mono-data text-mono-data text-outline flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">category</span> Markets</span>
+</div>
+</article>
+<!-- Result Card 3 -->
+<article class="bg-surface-container-low border border-[#334155] rounded-lg p-5 flex flex-col gap-stack-sm hover:border-primary transition-colors group relative shadow-[0_2px_0_0_rgba(0,0,0,0.4)]">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 rounded-full border-l-2 border-outline bg-surface-container font-label-caps text-label-caps text-on-surface">STANDARD</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant">Bloomberg Data • 12h ago</span>
+</div>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-background font-semibold leading-tight group-hover:text-primary transition-colors cursor-pointer">Silicon Wafer Shipments Forecasted to Rebound in 2025</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mt-1">Despite current sluggishness, industry associations project a strong rebound in silicon wafer shipments by early 2025, driven by AI accelerator demand and automotive sector stabilization.</p>
+<div class="flex items-center gap-4 mt-3">
+<span class="font-mono-data text-mono-data text-outline flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">flag</span> Global</span>
+<span class="font-mono-data text-mono-data text-outline flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">category</span> Data</span>
+</div>
+</article>
+<!-- Pagination -->
+<div class="flex justify-center items-center gap-2 mt-stack-md">
+<button class="p-2 border border-outline-variant rounded hover:border-primary text-on-surface-variant hover:text-primary transition-colors disabled:opacity-50"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="w-8 h-8 rounded bg-primary text-primary-container font-mono-data text-mono-data font-bold">1</button>
+<button class="w-8 h-8 rounded border border-outline-variant hover:border-primary text-on-surface-variant hover:text-primary font-mono-data text-mono-data transition-colors">2</button>
+<button class="w-8 h-8 rounded border border-outline-variant hover:border-primary text-on-surface-variant hover:text-primary font-mono-data text-mono-data transition-colors">3</button>
+<span class="text-on-surface-variant">...</span>
+<button class="w-8 h-8 rounded border border-outline-variant hover:border-primary text-on-surface-variant hover:text-primary font-mono-data text-mono-data transition-colors">24</button>
+<button class="p-2 border border-outline-variant rounded hover:border-primary text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+</div>
+</main>
+<!-- SideNavBar Component (Social Flux) -->
+<aside class="bg-surface-container dark:bg-surface-container text-primary dark:text-primary border-l border-outline-variant dark:border-outline-variant shadow-sm fixed right-0 top-16 bottom-0 flex-col p-4 overflow-y-auto hidden lg:flex w-80 z-40">
+<div class="flex flex-col gap-2 mb-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container border border-outline/50 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">radar</span>
+</div>
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface leading-tight">Social Flux</h2>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Real-time Intelligence</span>
+</div>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex flex-col gap-2 mb-6 font-body-sm text-body-sm">
+<!-- Active Tab -->
+<a class="flex items-center gap-3 p-2 text-primary font-bold bg-primary-container rounded-lg Active: scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dynamic_feed">dynamic_feed</span>
+                    Social Flux
+                </a>
+<a class="flex items-center gap-3 p-2 text-on-surface-variant hover:bg-secondary-container/50 transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+                    Trending
+                </a>
+<a class="flex items-center gap-3 p-2 text-on-surface-variant hover:bg-secondary-container/50 transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+                    Updates
+                </a>
+<a class="flex items-center gap-3 p-2 text-on-surface-variant hover:bg-secondary-container/50 transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+                    Journalists
+                </a>
+<a class="flex items-center gap-3 p-2 text-on-surface-variant hover:bg-secondary-container/50 transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="emergency">emergency</span>
+                    Alerts
+                </a>
+</nav>
+<!-- Feed Content -->
+<div class="flex flex-col gap-4 flex-1">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant">LIVE FEED</span>
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-error"></span>
+</span>
+</div>
+<!-- Feed Items -->
+<div class="flex flex-col gap-2 p-3 bg-surface border border-outline-variant/30 rounded shadow-[0_1px_0_0_rgba(0,0,0,0.2)]">
+<div class="flex justify-between">
+<span class="font-mono-data text-[11px] text-primary">@TechGeopolitics</span>
+<span class="font-mono-data text-[11px] text-outline">Just now</span>
+</div>
+<p class="font-body-sm text-[13px] text-on-surface leading-snug">Unconfirmed reports of new equipment restrictions hitting smaller fabs in mainland region. Awaiting official confirmation. #Semiconductors</p>
+</div>
+<div class="flex flex-col gap-2 p-3 bg-surface border border-outline-variant/30 rounded shadow-[0_1px_0_0_rgba(0,0,0,0.2)]">
+<div class="flex justify-between">
+<span class="font-mono-data text-[11px] text-primary">Market Alert</span>
+<span class="font-mono-data text-[11px] text-outline">2m ago</span>
+</div>
+<p class="font-body-sm text-[13px] text-on-surface leading-snug">SOX index drops 1.2% in early trading amidst rumor of tightening export rules.</p>
+</div>
+<div class="flex flex-col gap-2 p-3 bg-surface border border-outline-variant/30 rounded shadow-[0_1px_0_0_rgba(0,0,0,0.2)]">
+<div class="flex justify-between">
+<span class="font-mono-data text-[11px] text-primary">@PolicyWatchEU</span>
+<span class="font-mono-data text-[11px] text-outline">5m ago</span>
+</div>
+<p class="font-body-sm text-[13px] text-on-surface leading-snug">EU commission drafting response to US chip controls, seeking carve-outs for legacy automotive nodes.</p>
+</div>
+</div>
+<button class="mt-4 w-full py-2 bg-primary/10 border border-primary text-primary font-label-caps text-label-caps rounded hover:bg-primary/20 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[16px]">refresh</span> Refresh Feed
+            </button>
+</aside>
+</div>
+</body></html>

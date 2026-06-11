@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import L from "leaflet";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 
 interface MapEvent {
   id: string;
@@ -14,47 +14,85 @@ interface MapEvent {
   longitude: number;
   importance_score: number;
   source_count: number;
+  bias_lean?: string;
 }
 
 interface MapProps {
   events: MapEvent[];
+  selectedEvent: MapEvent | null;
   onSelectEvent: (event: MapEvent) => void;
 }
 
-// Custom pulsing blue dot markers using Leaflet's divIcon.
+// Controller component to smoothly fly map to coordinates
+function MapController({ selectedEvent }: { selectedEvent: MapEvent | null }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (
+      selectedEvent &&
+      typeof selectedEvent.latitude === "number" &&
+      typeof selectedEvent.longitude === "number"
+    ) {
+      map.flyTo([selectedEvent.latitude, selectedEvent.longitude], 6, {
+        animate: true,
+        duration: 1.5,
+      });
+    }
+  }, [selectedEvent, map]);
+
+  return null;
+}
+
+// Custom Leaflet DivIcon matching mockups (Standard/Warning/Critical)
 const createMarkerIcon = (importanceScore: number) => {
-  const size = Math.max(12, Math.min(24, 10 + importanceScore * 1.5));
+  const size = Math.max(16, Math.min(28, 12 + importanceScore * 1.5));
+  
+  let pingColor = "bg-secondary/30";
+  let dotColor = "bg-secondary";
+  
+  if (importanceScore >= 7.0) {
+    pingColor = "bg-error/45 animate-ping";
+    dotColor = "bg-error border-error-container";
+  } else if (importanceScore >= 4.0) {
+    pingColor = "bg-tertiary/40";
+    dotColor = "bg-tertiary border-tertiary-container";
+  }
+
   return L.divIcon({
     html: `
-      <div class="relative flex items-center justify-center" style="width: ${size}px; height: ${size}px;">
-        <span class="absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-60 animate-ping"></span>
-        <span class="relative inline-flex rounded-full bg-blue-600 border border-slate-900 shadow-md shadow-blue-500/50" style="height: ${size}px; width: ${size}px;"></span>
+      <div class="relative flex items-center justify-center cursor-pointer group" style="width: ${size}px; height: ${size}px;">
+        <div class="absolute inset-0 rounded-full ${pingColor}"></div>
+        <div class="relative w-4 h-4 rounded-full ${dotColor} border border-surface shadow-md shadow-black/50 transition-transform group-hover:scale-110"></div>
       </div>
     `,
-    className: "custom-marker-icon",
+    className: "custom-marker-icon-wrapper",
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
   });
 };
 
-export default function Map({ events, onSelectEvent }: MapProps) {
+export default function Map({ events, selectedEvent, onSelectEvent }: MapProps) {
   // Center coordinates (geographic center, zoomed out)
   const centerPosition: [number, number] = [20, 0];
 
   return (
-    <div className="w-full h-full relative rounded-2xl overflow-hidden border border-zinc-800/80 bg-zinc-950">
+    <div className="w-full h-full relative bg-surface-container-lowest">
       <MapContainer
         center={centerPosition}
         zoom={2}
         minZoom={2}
+        maxZoom={10}
         className="w-full h-full z-10"
         style={{ height: "100%", width: "100%" }}
+        zoomControl={false}
       >
         {/* Sleek CartoDB Dark Matter TileLayer */}
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
         />
+
+        <MapController selectedEvent={selectedEvent} />
 
         {events.map((event) => {
           if (

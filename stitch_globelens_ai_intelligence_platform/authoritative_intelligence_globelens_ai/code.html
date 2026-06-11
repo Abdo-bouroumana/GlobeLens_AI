@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Flagship Article - GlobeLens AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Geist:wght@500;600&amp;family=Source+Serif+4:opsz,wght@8..60,400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#231500",
+                    "secondary-container": "#3e495d",
+                    "on-surface-variant": "#c6c6cd",
+                    "on-tertiary-fixed": "#271901",
+                    "surface-tint": "#bec6e0",
+                    "on-primary-fixed": "#131b2e",
+                    "inverse-surface": "#d4e4fa",
+                    "primary": "#bec6e0",
+                    "secondary": "#bcc7de",
+                    "on-surface": "#d4e4fa",
+                    "on-tertiary-container": "#957d5a",
+                    "primary-fixed": "#dae2fd",
+                    "surface-container-low": "#0d1c2d",
+                    "on-secondary": "#263143",
+                    "secondary-fixed-dim": "#bcc7de",
+                    "inverse-primary": "#565e74",
+                    "surface-container-high": "#1c2b3c",
+                    "error": "#ffb4ab",
+                    "primary-container": "#0f172a",
+                    "on-primary-container": "#798098",
+                    "on-error": "#690005",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#dec29a",
+                    "outline-variant": "#45464d",
+                    "surface": "#051424",
+                    "primary-fixed-dim": "#bec6e0",
+                    "tertiary": "#dec29a",
+                    "surface-bright": "#2c3a4c",
+                    "on-tertiary-fixed-variant": "#574425",
+                    "inverse-on-surface": "#233143",
+                    "on-secondary-fixed-variant": "#3c475a",
+                    "surface-container-highest": "#273647",
+                    "surface-container-lowest": "#010f1f",
+                    "secondary-fixed": "#d8e3fb",
+                    "tertiary-fixed": "#fcdeb5",
+                    "surface-variant": "#273647",
+                    "surface-dim": "#051424",
+                    "surface-container": "#122131",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "on-secondary-fixed": "#111c2d",
+                    "outline": "#909097",
+                    "background": "#051424",
+                    "on-tertiary": "#3e2d11",
+                    "error-container": "#93000a",
+                    "on-secondary-container": "#aeb9d0",
+                    "on-background": "#d4e4fa",
+                    "on-primary": "#283044"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "container-max-width": "1440px",
+                    "unit": "4px",
+                    "margin-desktop": "40px",
+                    "gutter": "24px",
+                    "stack-sm": "8px",
+                    "stack-md": "16px",
+                    "stack-lg": "32px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "mono-data": ["Geist"],
+                    "headline-xl": ["Source Serif 4"],
+                    "display-lg": ["Source Serif 4"],
+                    "headline-lg-mobile": ["Source Serif 4"],
+                    "headline-lg": ["Source Serif 4"],
+                    "label-caps": ["Geist"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "mono-data": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                    "headline-xl": ["36px", {"lineHeight": "44px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { background-color: #051424; color: #d4e4fa; }
+        
+        /* Glassmorphism utilities */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid #334155;
+        }
+        
+        /* Dossier Card Hover */
+        .dossier-card {
+            border: 1px solid #334155;
+            transition: border-color 0.2s ease;
+        }
+        .dossier-card:hover {
+            border-color: #bec6e0; /* Electric Blue / Primary equivalent */
+        }
+        
+        /* Tooltip */
+        .ai-tooltip {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s, visibility 0.2s;
+            position: absolute;
+            z-index: 50;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 8px;
+            width: max-content;
+            max-width: 250px;
+        }
+        .has-tooltip:hover .ai-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Scrollbar for dense areas */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #45464d;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md min-h-screen flex flex-col relative">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-surface text-primary dark:text-primary font-body-md text-body-md border-b border-outline-variant dark:border-outline-variant flex justify-between items-center px-margin-desktop w-full h-16 sticky top-0 z-50 bg-surface/80 backdrop-blur-md">
+<div class="flex items-center gap-6">
+<span class="font-headline-lg text-headline-lg font-bold text-primary dark:text-primary tracking-tight">GlobeLens AI</span>
+<nav class="hidden md:flex items-center gap-6 ml-8">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Standard</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Map</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 opacity-80 transition-all duration-200" href="#">Topics</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<!-- Search Bar: on_right -->
+<div class="hidden lg:flex items-center bg-surface-container border border-outline-variant rounded px-3 py-1.5 focus-within:border-primary focus-within:shadow-[0_0_0_1px_#bec6e0] transition-shadow shadow-sm">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px] mr-2">search</span>
+<input class="bg-transparent border-none text-body-sm font-body-sm text-on-surface focus:ring-0 p-0 w-48 placeholder-on-surface-variant" placeholder="Search intel..." type="text"/>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-outline flex items-center justify-center overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a corporate analyst in a modern office setting. The lighting is crisp and cool, casting subtle shadows that define the subject's features. The background is a soft, blurred slate grey, reflecting an authoritative editorial aesthetic. The mood is serious, focused, and credible, matching a high-end intelligence dashboard context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuANxOhZ8-FbJvXXn4HYkaTyh8hrM9-8ytzLPHBhKvQxe2IOzPky_K7C416GNEOwhDhflMM4_E3hWQcO_k9SOO3m0tnY_BYeQ_2pl_Wdk2E_7gBR_7jgetQI1XFSfI1g7FqJ61YiFOMUFbAApCiYmQAO8i8SFbb9Vxn3mnf7Ze8R2dfaxxpN-CNS5Jg_f6h_KcAnuinwu2atAsA4MnpKPacSCjxEr8F786WeWXUu-waNgNDdCMpICK3jQw5BnwlthBWFqLnzQyUtE6ir"/>
+</div>
+</div>
+</header>
+<div class="flex-1 max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-gutter px-margin-mobile lg:px-margin-desktop py-stack-lg relative">
+<!-- Main Content Canvas (9 Cols) -->
+<main class="col-span-1 lg:col-span-9 flex flex-col gap-stack-lg pb-stack-lg">
+<!-- Article Header Area -->
+<article class="flex flex-col gap-stack-md relative z-10">
+<!-- Meta tags row -->
+<div class="flex items-center justify-between flex-wrap gap-4">
+<div class="flex items-center gap-3">
+<span class="text-secondary font-label-caps text-label-caps uppercase tracking-wider">Geopolitics</span>
+<span class="text-outline-variant">•</span>
+<time class="text-on-surface-variant font-mono-data text-mono-data">Oct 24, 2024 — 14:32 UTC</time>
+<!-- Global Reliability Score Badge -->
+<div class="flex items-center gap-1.5 ml-2 px-2 py-0.5 bg-surface-container rounded-full border border-outline-variant border-l-2 border-l-primary" title="AI Reliability Score">
+<span class="material-symbols-outlined text-[14px] text-primary">verified_user</span>
+<span class="font-mono-data text-mono-data text-primary">94% Reliable</span>
+</div>
+</div>
+<!-- Follow Toggle -->
+<button class="flex items-center gap-2 px-3 py-1.5 bg-surface-container border border-outline-variant text-on-surface font-body-sm text-body-sm rounded hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">bookmark_add</span>
+<span>Follow Topic</span>
+</button>
+</div>
+<!-- Headline & Summary -->
+<h1 class="font-display-lg text-[32px] md:text-display-lg text-on-surface leading-tight font-bold">
+                    Strategic Realignment in the Indo-Pacific: Analyzing the New Trilateral Security Pact
+                </h1>
+<p class="font-body-lg text-body-lg text-secondary leading-relaxed border-l-4 border-surface-variant pl-4">
+                    A comprehensive AI synthesis of emerging defense agreements, indicating a significant shift in maritime security protocols and supply chain resilience measures across the region over the next 18 months.
+                </p>
+<!-- Hero Image -->
+<div class="w-full h-[300px] md:h-[400px] rounded border border-outline-variant bg-surface-container overflow-hidden mt-2 relative">
+<img alt="Hero visualization" class="w-full h-full object-cover opacity-80 mix-blend-luminosity hover:mix-blend-normal transition-all duration-500" data-alt="A dark, cinematic visualization of the Indo-Pacific region showing glowing data lines representing maritime trade routes and security protocols. The scene uses a deep navy blue background with electric blue and subtle emerald green highlights intersecting across a stylized map. The aesthetic is high-tech, modern corporate, and analytical, resembling a sophisticated intelligence interface in a strategic command center." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSP9yo5kG__HrAfn-e8URLtZr9SXssOai6gtJj8UcPd6bcFLngSfhOehWcUFJsd562571h35zQDEGg9iBrz_Os1umIt4AtXTKmCceDgigeBNEb_qxdnSqiTbIbaC38gsHa7aBnqFrHUvif3x2swtmTok1k2gUhlBSh_ZiejcOANdOmaDw2DP8Yxslct6LhTJgAGXrUfqgqEEL3Vze0sHsK2lQTsp_OVa8flFH6e1e9K05HwOHhHse3z1ZPqm2qDhmXSOOWx9hworKq"/>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-background to-transparent h-24 pointer-events-none"></div>
+</div>
+</article>
+<!-- Bias Detection & AI Confidence Panel -->
+<section class="glass-panel p-stack-md rounded flex flex-col md:flex-row gap-6 justify-between items-start md:items-center w-full">
+<div class="flex flex-col gap-1">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">analytics</span>
+                        Synthesis Metrics
+                    </h3>
+<p class="font-body-sm text-body-sm text-on-surface max-w-md">
+                        Aggregated from 42 discrete sources across 12 jurisdictions. High consensus observed on structural details; low consensus on long-term economic impact.
+                    </p>
+</div>
+<div class="flex gap-8">
+<!-- Lean Metric -->
+<div class="flex flex-col gap-2 min-w-[120px]">
+<div class="flex justify-between font-mono-data text-mono-data">
+<span class="text-on-surface-variant">Editorial Lean</span>
+<span class="text-on-surface">Centrist</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden flex">
+<div class="h-full bg-error/50 w-[20%]"></div>
+<div class="h-full bg-primary w-[60%]"></div>
+<div class="h-full bg-tertiary/50 w-[20%]"></div>
+</div>
+</div>
+<!-- Confidence Metric -->
+<div class="flex flex-col gap-2 min-w-[120px]">
+<div class="flex justify-between font-mono-data text-mono-data">
+<span class="text-on-surface-variant">AI Confidence</span>
+<span class="text-primary">High</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[85%] rounded-r-full"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Synthesized Body -->
+<article class="font-body-lg text-body-lg text-on-surface leading-[1.8] flex flex-col gap-6 max-w-3xl">
+<p>
+                    The newly ratified framework establishes a shared maritime domain awareness initiative, leveraging advanced satellite telemetry and autonomous surface vessels. According to initial disclosures, the pact aims to secure critical sea lines of communication (SLOCs) against asymmetric threats. 
+                    
+                    <span class="has-tooltip relative inline-block border-b border-dashed border-primary cursor-help text-secondary">
+                        Early deployments are expected to focus on the South China Sea perimeter
+                        <span class="ai-tooltip glass-panel p-2 rounded text-left text-body-sm font-body-sm text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
+<strong class="block text-primary font-mono-data mb-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">source</span> Reuters (92% trust)</strong>
+                            Verified via maritime tracking logs and official press release cross-referencing.
+                        </span>
+</span>, a region of persistent friction.
+                </p>
+<p>
+                    Economic corollaries to the security arrangement suggest a pivot in supply chain routing. Strategic minerals and semiconductor components are flagged for "priority lane" transit status. 
+                    <span class="has-tooltip relative inline-block bg-surface-container px-1 rounded cursor-help">
+                        Market analysts note a sudden recalibration
+                        <span class="ai-tooltip glass-panel p-2 rounded text-left text-body-sm font-body-sm text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
+<strong class="block text-tertiary font-mono-data mb-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">source</span> Bloomberg (88% trust)</strong>
+                            Synthesized from 4 distinct financial op-eds; moderate bias detected regarding regional equity impacts.
+                        </span>
+</span> 
+                    in regional tech equity valuations immediately following the leaked drafts of the treaty last week.
+                </p>
+</article>
+</main>
+<!-- Social Flux SideNavBar (Right Side, 3 Cols) -->
+<aside class="hidden lg:flex flex-col col-span-3 bg-surface-container dark:bg-surface-container border-l border-outline-variant dark:border-outline-variant shadow-sm sticky top-20 h-[calc(100vh-5rem)] overflow-hidden rounded-l">
+<div class="p-4 border-b border-outline-variant">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-8 h-8 rounded bg-primary-container text-primary flex items-center justify-center font-bold">
+                        SF
+                    </div>
+<div>
+<h2 class="font-body-md text-body-md font-bold text-primary dark:text-primary leading-tight">Social Flux</h2>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Real-time Intelligence</span>
+</div>
+</div>
+<button class="w-full py-1.5 border border-outline-variant text-on-surface font-body-sm rounded hover:bg-secondary-container/50 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[16px]">refresh</span>
+                    Refresh Feed
+                </button>
+</div>
+<!-- Tabs -->
+<div class="flex border-b border-outline-variant px-2 overflow-x-auto hide-scrollbar">
+<button class="flex-shrink-0 px-3 py-2 text-primary font-bold bg-primary-container rounded-t-sm flex items-center gap-1 text-sm border-b-2 border-primary">
+<span class="material-symbols-outlined text-[16px]">dynamic_feed</span>
+<span class="hidden xl:inline font-body-sm">Social Flux</span>
+</button>
+<button class="flex-shrink-0 px-3 py-2 text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 text-sm">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span class="hidden xl:inline font-body-sm">Trending</span>
+</button>
+<button class="flex-shrink-0 px-3 py-2 text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 text-sm">
+<span class="material-symbols-outlined text-[16px]">history</span>
+<span class="hidden xl:inline font-body-sm">Updates</span>
+</button>
+</div>
+<!-- Feed Content -->
+<div class="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
+<!-- Feed Item -->
+<div class="flex flex-col gap-1 border-b border-outline-variant/50 pb-3">
+<div class="flex justify-between items-center">
+<span class="font-mono-data text-[11px] text-primary flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">chat</span> X / Twitter</span>
+<span class="font-mono-data text-[11px] text-on-surface-variant">2m ago</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface leading-snug">Defense attache in Manila refuses comment on draft leaks. #IndoPacific</p>
+</div>
+<!-- Feed Item -->
+<div class="flex flex-col gap-1 border-b border-outline-variant/50 pb-3">
+<div class="flex justify-between items-center">
+<span class="font-mono-data text-[11px] text-tertiary flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">article</span> Global Times</span>
+<span class="font-mono-data text-[11px] text-on-surface-variant">14m ago</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface leading-snug">Editorial condemns new maritime pact as "destabilizing containment strategy".</p>
+</div>
+<!-- Feed Item -->
+<div class="flex flex-col gap-1 border-b border-outline-variant/50 pb-3">
+<div class="flex justify-between items-center">
+<span class="font-mono-data text-[11px] text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">satellite</span> OSINT Alert</span>
+<span class="font-mono-data text-[11px] text-on-surface-variant">1h ago</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface leading-snug">Unusual maritime traffic patterns detected near Scarborough Shoal. 3 major vessels diverting.</p>
+</div>
+</div>
+</aside>
+</div>
+</body></html>

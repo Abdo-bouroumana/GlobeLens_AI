@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fact-Checker Utility - GlobeLens AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Geist:wght@500;600&amp;family=Source+Serif+4:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#231500",
+                    "secondary-container": "#3e495d",
+                    "on-surface-variant": "#c6c6cd",
+                    "on-tertiary-fixed": "#271901",
+                    "surface-tint": "#bec6e0",
+                    "on-primary-fixed": "#131b2e",
+                    "inverse-surface": "#d4e4fa",
+                    "primary": "#bec6e0",
+                    "secondary": "#bcc7de",
+                    "on-surface": "#d4e4fa",
+                    "on-tertiary-container": "#957d5a",
+                    "primary-fixed": "#dae2fd",
+                    "surface-container-low": "#0d1c2d",
+                    "on-secondary": "#263143",
+                    "secondary-fixed-dim": "#bcc7de",
+                    "inverse-primary": "#565e74",
+                    "surface-container-high": "#1c2b3c",
+                    "error": "#ffb4ab",
+                    "primary-container": "#0f172a",
+                    "on-primary-container": "#798098",
+                    "on-error": "#690005",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#dec29a",
+                    "outline-variant": "#45464d",
+                    "surface": "#051424",
+                    "primary-fixed-dim": "#bec6e0",
+                    "tertiary": "#dec29a",
+                    "surface-bright": "#2c3a4c",
+                    "on-tertiary-fixed-variant": "#574425",
+                    "inverse-on-surface": "#233143",
+                    "on-secondary-fixed-variant": "#3c475a",
+                    "surface-container-highest": "#273647",
+                    "surface-container-lowest": "#010f1f",
+                    "secondary-fixed": "#d8e3fb",
+                    "tertiary-fixed": "#fcdeb5",
+                    "surface-variant": "#273647",
+                    "surface-dim": "#051424",
+                    "surface-container": "#122131",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "on-secondary-fixed": "#111c2d",
+                    "outline": "#909097",
+                    "background": "#051424",
+                    "on-tertiary": "#3e2d11",
+                    "error-container": "#93000a",
+                    "on-secondary-container": "#aeb9d0",
+                    "on-background": "#d4e4fa",
+                    "on-primary": "#283044"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "container-max-width": "1440px",
+                    "unit": "4px",
+                    "margin-desktop": "40px",
+                    "gutter": "24px",
+                    "stack-sm": "8px",
+                    "stack-md": "16px",
+                    "stack-lg": "32px"
+            },
+            "fontFamily": {
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "mono-data": [
+                            "Geist"
+                    ],
+                    "headline-xl": [
+                            "Source Serif 4"
+                    ],
+                    "display-lg": [
+                            "Source Serif 4"
+                    ],
+                    "headline-lg-mobile": [
+                            "Source Serif 4"
+                    ],
+                    "headline-lg": [
+                            "Source Serif 4"
+                    ],
+                    "label-caps": [
+                            "Geist"
+                    ],
+                    "body-sm": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "mono-data": [
+                            "13px",
+                            {
+                                    "lineHeight": "18px",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-xl": [
+                            "36px",
+                            {
+                                    "lineHeight": "44px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg": [
+                            "28px",
+                            {
+                                    "lineHeight": "36px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-caps": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-sm": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid #334155;
+        }
+        .dossier-card {
+            border: 1px solid #334155;
+            background-color: #0F172A;
+            box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.4);
+            transition: border-color 0.2s ease;
+        }
+        .dossier-card:hover {
+            border-color: #bec6e0;
+        }
+        .ai-glow:focus-within {
+            box-shadow: 0 0 0 2px rgba(190, 198, 224, 0.5);
+            border-color: #bec6e0;
+        }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="flex justify-between items-center px-margin-desktop w-full h-16 sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant dark:border-outline-variant">
+<div class="flex items-center gap-stack-lg">
+<span class="font-headline-lg text-headline-lg font-bold text-primary dark:text-primary">GlobeLens AI</span>
+<div class="hidden md:flex gap-stack-md">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-body-md text-body-md" href="#">Standard</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors font-body-md text-body-md" href="#">Map</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors font-body-md text-body-md" href="#">Topics</a>
+</div>
+</div>
+<div class="flex items-center gap-stack-md">
+<!-- Search Bar placeholder for 'on_right' -->
+<div class="hidden lg:flex items-center bg-surface-container-high border border-outline-variant rounded-full px-4 py-1.5 focus-within:border-primary transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant mr-2" style="font-size: 18px;">search</span>
+<input class="bg-transparent border-none text-body-sm font-body-sm text-on-surface focus:ring-0 placeholder-on-surface-variant/50 w-48" placeholder="Search Intel..." type="text"/>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-outline-variant overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDylcsQ-NGYfPwRnrwfd3RORD6EVaNrQmY5yWTM4wgb9r90k8WFco0BDeYMUxk4MRSsW8FAAhMhz_ck8dZf2-rquKdGqSFE2Zy-8w1gGfHTwYq07QiBvvRConV7F7q2ku9lJooOixYEZgaXcYMknuJba3aNYa6Q-H543CQfF7aPOEF9W1y0N4BRPC-S3uuAI-2FZ0xgeBtro4masypITVsnD4ka2AStSPPXqnNK6pQZs8IlP1QOc9mO779OEnxkWd_BkemO0k2JVpUT"/>
+</div>
+</div>
+</nav>
+<!-- Main Layout Grid -->
+<div class="flex-1 flex w-full max-w-container-max-width mx-auto relative">
+<!-- Primary Canvas (9 columns on desktop) -->
+<main class="flex-1 w-full lg:w-3/4 p-margin-mobile md:p-margin-desktop lg:pr-[360px] pb-32">
+<header class="mb-stack-lg">
+<h1 class="font-display-lg text-display-lg md:text-display-lg text-headline-xl font-bold mb-stack-sm text-on-surface">Fact-Checker Utility</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl">Analyze cross-reference metrics, trust risks, and matching historical topics for any source URL.</p>
+</header>
+<!-- Input State -->
+<section class="mb-stack-lg">
+<div class="glass-panel rounded-xl p-stack-md flex flex-col md:flex-row gap-stack-md items-start md:items-center">
+<div class="flex-1 w-full ai-glow bg-surface-container-low border border-outline-variant rounded-lg flex items-center px-4 py-3 transition-all duration-200">
+<span class="material-symbols-outlined text-primary mr-3">link</span>
+<input class="w-full bg-transparent border-none text-body-md font-body-md text-on-surface focus:ring-0 placeholder-on-surface-variant/50" id="urlInput" placeholder="Paste URL to analyze..." type="url" value="https://example-news-source.com/article-123"/>
+</div>
+<button class="bg-primary text-on-primary font-label-caps text-label-caps px-6 py-4 rounded-lg hover:bg-primary-fixed transition-colors whitespace-nowrap flex items-center gap-2 w-full md:w-auto justify-center" id="analyzeBtn">
+<span class="material-symbols-outlined" style="font-size: 18px;">analytics</span>
+                        Analyze Link Credibility
+                    </button>
+</div>
+</section>
+<!-- Result State (Initially Hidden, shown via simple JS logic for demo) -->
+<div class="space-y-stack-lg transition-opacity duration-500" id="resultsContainer">
+<!-- High Level Metrics Bento -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Credibility Score -->
+<div class="dossier-card rounded-lg p-stack-md flex flex-col justify-between">
+<div class="flex justify-between items-start mb-stack-md">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Credibility Score</span>
+<span class="material-symbols-outlined text-tertiary">verified_user</span>
+</div>
+<div class="flex items-end gap-stack-sm">
+<span class="font-headline-xl text-headline-xl text-on-surface">78</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mb-1">/ 100</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 mt-stack-sm rounded-full overflow-hidden">
+<div class="bg-tertiary h-full" style="width: 78%"></div>
+</div>
+<p class="font-mono-data text-mono-data text-tertiary mt-stack-sm">High Confidence</p>
+</div>
+<!-- Risk Assessment -->
+<div class="dossier-card rounded-lg p-stack-md flex flex-col justify-between relative overflow-hidden">
+<div class="absolute -right-4 -top-4 opacity-5 pointer-events-none">
+<span class="material-symbols-outlined" style="font-size: 120px;">warning</span>
+</div>
+<div class="flex justify-between items-start mb-stack-md">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Trust Risks</span>
+<div class="px-2 py-0.5 rounded-full bg-error-container/20 border border-error/30 flex items-center gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-error"></div>
+<span class="font-mono-data text-mono-data text-error" style="font-size: 10px;">Medium</span>
+</div>
+</div>
+<div>
+<ul class="space-y-2">
+<li class="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-error" style="font-size: 16px;">close</span>
+                                    Unverified Author Identity
+                                </li>
+<li class="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-tertiary" style="font-size: 16px;">info</span>
+                                    Loaded Language Detected
+                                </li>
+</ul>
+</div>
+</div>
+<!-- Cross References -->
+<div class="dossier-card rounded-lg p-stack-md flex flex-col justify-between">
+<div class="flex justify-between items-start mb-stack-md">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Cross-References</span>
+<span class="material-symbols-outlined text-primary">account_tree</span>
+</div>
+<div class="flex items-end gap-stack-sm">
+<span class="font-headline-xl text-headline-xl text-on-surface">14</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-stack-sm">Independent sources corroborating core claims.</p>
+<div class="mt-stack-sm flex -space-x-2">
+<!-- Placeholder avatars for sources -->
+<div class="w-6 h-6 rounded-full bg-surface-bright border border-outline-variant flex items-center justify-center font-mono-data text-mono-data text-on-surface-variant text-[10px]">AP</div>
+<div class="w-6 h-6 rounded-full bg-surface-bright border border-outline-variant flex items-center justify-center font-mono-data text-mono-data text-on-surface-variant text-[10px]">RTR</div>
+<div class="w-6 h-6 rounded-full bg-surface-bright border border-outline-variant flex items-center justify-center font-mono-data text-mono-data text-on-surface-variant text-[10px]">BBC</div>
+<div class="w-6 h-6 rounded-full bg-surface-container-lowest border border-outline-variant flex items-center justify-center font-mono-data text-mono-data text-on-surface-variant text-[10px]">+11</div>
+</div>
+</div>
+</div>
+<!-- Deep Dive Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- AI Claim Extraction -->
+<div class="glass-panel rounded-xl p-stack-md">
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">Extracted Claims</h3>
+<div class="space-y-stack-sm">
+<div class="bg-surface-container/50 border border-outline-variant rounded p-stack-sm">
+<p class="font-body-md text-body-md text-on-surface mb-2">"Global energy markets face unprecedented volatility in Q3."</p>
+<div class="flex items-center justify-between">
+<span class="font-mono-data text-mono-data text-primary">Status: Corroborated</span>
+<span class="material-symbols-outlined text-primary" style="font-size: 16px;">check_circle</span>
+</div>
+</div>
+<div class="bg-surface-container/50 border border-outline-variant rounded p-stack-sm">
+<p class="font-body-md text-body-md text-on-surface mb-2">"New regulatory frameworks will ban offshore drilling by 2025."</p>
+<div class="flex items-center justify-between">
+<span class="font-mono-data text-mono-data text-error">Status: Disputed</span>
+<span class="material-symbols-outlined text-error" style="font-size: 16px;">cancel</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Historical Topic Matching -->
+<div class="dossier-card rounded-xl p-stack-md">
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-stack-md">Historical Matches</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-stack-md">This URL aligns with following established narrative threads in our database.</p>
+<div class="space-y-stack-sm">
+<div class="flex items-center justify-between border-b border-outline-variant pb-2">
+<div>
+<h4 class="font-body-md text-body-md text-on-surface font-medium">Energy Sector Regulations 2024</h4>
+<p class="font-mono-data text-mono-data text-on-surface-variant">Last active: 2 days ago</p>
+</div>
+<div class="text-right">
+<span class="font-mono-data text-mono-data text-primary">89% Match</span>
+</div>
+</div>
+<div class="flex items-center justify-between border-b border-outline-variant pb-2">
+<div>
+<h4 class="font-body-md text-body-md text-on-surface font-medium">Q3 Market Volatility Index</h4>
+<p class="font-mono-data text-mono-data text-on-surface-variant">Last active: 5 hours ago</p>
+</div>
+<div class="text-right">
+<span class="font-mono-data text-mono-data text-primary">74% Match</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- SideNavBar (Social Flux) -->
+<!-- Responsive behavior: hidden on smaller screens, fixed right on lg -->
+<aside class="fixed right-0 top-16 bottom-0 flex flex-col p-4 overflow-y-auto hidden lg:flex bg-surface-container dark:bg-surface-container text-primary dark:text-primary font-body-sm text-body-sm font-label-caps text-label-caps text-on-surface-variant docked right-0 h-screen w-80 border-l border-outline-variant dark:border-outline-variant shadow-sm z-40">
+<div class="mb-stack-md flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-primary-container border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">radar</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-on-surface font-bold">Social Flux</h2>
+<p class="font-mono-data text-mono-data text-on-surface-variant">Real-time Intelligence</p>
+</div>
+</div>
+<nav class="space-y-1 mb-stack-lg">
+<a class="flex items-center gap-3 px-3 py-2 text-primary font-bold bg-primary-container rounded-lg Active: scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dynamic_feed">dynamic_feed</span>
+                    Social Flux
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-secondary-container/50 Active: scale-95 transition-transform rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+                    Trending
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-secondary-container/50 Active: scale-95 transition-transform rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+                    Updates
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-secondary-container/50 Active: scale-95 transition-transform rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+                    Journalists
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-secondary-container/50 Active: scale-95 transition-transform rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="emergency">emergency</span>
+                    Alerts
+                </a>
+</nav>
+<div class="flex-1 overflow-y-auto no-scrollbar space-y-stack-sm pr-2">
+<!-- Feed Items (Micro-updates) -->
+<div class="border-l-2 border-outline-variant pl-3 py-1 relative">
+<div class="absolute w-2 h-2 rounded-full bg-primary -left-[5px] top-2"></div>
+<p class="font-mono-data text-mono-data text-on-surface-variant mb-1">10:42 AM • Reuters</p>
+<p class="font-body-sm text-body-sm text-on-surface">Energy ministry denies upcoming offshore drilling ban rumors.</p>
+</div>
+<div class="border-l-2 border-outline-variant pl-3 py-1 relative">
+<div class="absolute w-2 h-2 rounded-full bg-outline-variant -left-[5px] top-2"></div>
+<p class="font-mono-data text-mono-data text-on-surface-variant mb-1">09:15 AM • AP</p>
+<p class="font-body-sm text-body-sm text-on-surface">Markets open with high volatility amid geopolitical tensions.</p>
+</div>
+<div class="border-l-2 border-outline-variant pl-3 py-1 relative">
+<div class="absolute w-2 h-2 rounded-full bg-outline-variant -left-[5px] top-2"></div>
+<p class="font-mono-data text-mono-data text-on-surface-variant mb-1">08:30 AM • System</p>
+<p class="font-body-sm text-body-sm text-on-surface">Daily brief generated for Global Energy sector.</p>
+</div>
+</div>
+<button class="mt-stack-md w-full py-2 border border-outline-variant rounded text-on-surface hover:bg-surface-bright transition-colors font-label-caps text-label-caps uppercase flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 16px;">refresh</span>
+                Refresh Feed
+            </button>
+</aside>
+</div>
+<script>
+        // Simple JS for demonstration of input interaction
+        document.getElementById('analyzeBtn').addEventListener('click', function() {
+            const btn = this;
+            const originalText = btn.innerHTML;
+            
+            // Loading state
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin" style="font-size: 18px;">sync</span> Analyzing...';
+            btn.classList.add('opacity-80');
+            
+            // Simulate API call
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.remove('opacity-80');
+                
+                // Show results
+                const results = document.getElementById('resultsContainer');
+                results.classList.remove('opacity-0');
+                // Normally you would populate data here based on the URL
+            }, 1500);
+        });
+    </script>
+</body></html>

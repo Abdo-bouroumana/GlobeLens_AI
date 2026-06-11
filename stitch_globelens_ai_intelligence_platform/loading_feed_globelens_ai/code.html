@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GlobeLens AI - Loading Intelligence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Source+Serif+4:wght@400;600;700&amp;family=Geist:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed": "#111c2d",
+                      "secondary-container": "#3e495d",
+                      "error": "#ffb4ab",
+                      "inverse-surface": "#d4e4fa",
+                      "surface-container": "#122131",
+                      "background": "#051424",
+                      "on-surface-variant": "#c6c6cd",
+                      "on-tertiary-fixed": "#271901",
+                      "surface-container-high": "#1c2b3c",
+                      "surface-container-low": "#0d1c2d",
+                      "on-tertiary-container": "#957d5a",
+                      "tertiary-fixed-dim": "#dec29a",
+                      "on-error": "#690005",
+                      "tertiary": "#dec29a",
+                      "inverse-primary": "#565e74",
+                      "secondary-fixed-dim": "#bcc7de",
+                      "tertiary-container": "#231500",
+                      "primary-fixed": "#dae2fd",
+                      "surface-dim": "#051424",
+                      "on-surface": "#d4e4fa",
+                      "primary": "#bec6e0",
+                      "on-primary-fixed": "#131b2e",
+                      "on-primary": "#283044",
+                      "primary-container": "#0f172a",
+                      "on-primary-container": "#798098",
+                      "on-error-container": "#ffdad6",
+                      "surface-variant": "#273647",
+                      "surface-tint": "#bec6e0",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "surface-container-highest": "#273647",
+                      "on-background": "#d4e4fa",
+                      "secondary": "#bcc7de",
+                      "outline-variant": "#45464d",
+                      "primary-fixed-dim": "#bec6e0",
+                      "on-tertiary-fixed-variant": "#574425",
+                      "on-secondary-fixed-variant": "#3c475a",
+                      "tertiary-fixed": "#fcdeb5",
+                      "on-tertiary": "#3e2d11",
+                      "secondary-fixed": "#d8e3fb",
+                      "error-container": "#93000a",
+                      "surface-bright": "#2c3a4c",
+                      "surface-container-lowest": "#010f1f",
+                      "on-secondary": "#263143",
+                      "inverse-on-surface": "#233143",
+                      "outline": "#909097",
+                      "surface": "#051424",
+                      "on-secondary-container": "#aeb9d0"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "stack-lg": "32px",
+                      "unit": "4px",
+                      "margin-desktop": "40px",
+                      "gutter": "24px",
+                      "container-max-width": "1440px",
+                      "stack-md": "16px",
+                      "margin-mobile": "16px",
+                      "stack-sm": "8px"
+              },
+              "fontFamily": {
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "headline-xl": [
+                              "Source Serif 4"
+                      ],
+                      "display-lg": [
+                              "Source Serif 4"
+                      ],
+                      "mono-data": [
+                              "Geist"
+                      ],
+                      "headline-lg-mobile": [
+                              "Source Serif 4"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "Geist"
+                      ],
+                      "headline-lg": [
+                              "Source Serif 4"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-xl": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "mono-data": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .shimmer {
+            background: linear-gradient(90deg, #1E293B 25%, #273647 50%, #1E293B 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+        .sharp-shadow {
+            box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="flex justify-between items-center px-margin-desktop w-full h-16 sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant">
+<div class="flex items-center gap-stack-lg">
+<span class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">GlobeLens AI</span>
+<div class="hidden md:flex gap-stack-md">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-body-md text-body-md transition-colors opacity-80 duration-200" href="#">Standard</a>
+<a class="text-on-surface-variant font-medium font-body-md text-body-md hover:text-primary transition-colors" href="#">Map</a>
+<a class="text-on-surface-variant font-medium font-body-md text-body-md hover:text-primary transition-colors" href="#">Topics</a>
+</div>
+</div>
+<div class="flex items-center gap-stack-md">
+<!-- Search Skeleton -->
+<div class="hidden md:block w-64 h-10 rounded-lg border border-outline-variant bg-surface-container/50 shimmer"></div>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full shimmer bg-surface-container overflow-hidden border border-outline-variant"></div>
+</div>
+</nav>
+<div class="flex flex-1 w-full max-w-container-max-width mx-auto">
+<!-- Main Feed Canvas -->
+<main class="flex-1 px-margin-mobile md:px-margin-desktop py-stack-lg lg:mr-80 w-full transition-all duration-300">
+<header class="mb-stack-lg flex justify-between items-end border-b border-outline-variant pb-stack-sm">
+<div>
+<h1 class="font-headline-xl text-headline-xl text-primary shimmer bg-surface-container text-transparent rounded w-48 mb-unit">Loading Feed</h1>
+<div class="shimmer bg-surface-container h-5 rounded w-64"></div>
+</div>
+<div class="shimmer bg-surface-container h-8 w-24 rounded"></div>
+</header>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Skeleton Dossier Card 1 (Hero) -->
+<article class="col-span-1 md:col-span-2 bg-surface-container border border-outline-variant rounded-lg p-stack-md sharp-shadow flex flex-col md:flex-row gap-stack-md relative overflow-hidden">
+<div class="w-full md:w-2/5 aspect-video md:aspect-auto shimmer bg-surface-container-high rounded border border-outline-variant/50"></div>
+<div class="flex-1 flex flex-col justify-between py-unit">
+<div class="flex gap-2 mb-stack-sm">
+<div class="shimmer bg-surface-container-high h-5 w-16 rounded-full"></div>
+<div class="shimmer bg-surface-container-high h-5 w-20 rounded-full"></div>
+</div>
+<div class="space-y-unit mb-stack-md">
+<div class="shimmer bg-surface-container-high h-8 w-full rounded"></div>
+<div class="shimmer bg-surface-container-high h-8 w-5/6 rounded"></div>
+</div>
+<div class="space-y-unit mb-stack-lg flex-1">
+<div class="shimmer bg-surface-container-high h-4 w-full rounded"></div>
+<div class="shimmer bg-surface-container-high h-4 w-full rounded"></div>
+<div class="shimmer bg-surface-container-high h-4 w-3/4 rounded"></div>
+</div>
+<div class="flex items-center gap-stack-sm mt-auto pt-stack-sm border-t border-outline-variant/30">
+<div class="shimmer bg-surface-container-high h-4 w-24 rounded"></div>
+<div class="shimmer bg-surface-container-high h-4 w-12 rounded ml-auto"></div>
+</div>
+</div>
+</article>
+<!-- Skeleton Dossier Card 2 -->
+<article class="bg-surface-container border border-outline-variant rounded-lg p-stack-md sharp-shadow flex flex-col relative overflow-hidden">
+<div class="w-full aspect-video shimmer bg-surface-container-high rounded border border-outline-variant/50 mb-stack-sm"></div>
+<div class="flex gap-2 mb-stack-sm">
+<div class="shimmer bg-surface-container-high h-5 w-24 rounded-full"></div>
+</div>
+<div class="space-y-unit mb-stack-md">
+<div class="shimmer bg-surface-container-high h-6 w-full rounded"></div>
+<div class="shimmer bg-surface-container-high h-6 w-4/5 rounded"></div>
+</div>
+<div class="space-y-unit mb-stack-md flex-1">
+<div class="shimmer bg-surface-container-high h-4 w-full rounded"></div>
+<div class="shimmer bg-surface-container-high h-4 w-5/6 rounded"></div>
+</div>
+<div class="flex items-center gap-stack-sm mt-auto pt-stack-sm border-t border-outline-variant/30">
+<div class="shimmer bg-surface-container-high h-4 w-20 rounded"></div>
+</div>
+</article>
+<!-- Skeleton Dossier Card 3 -->
+<article class="bg-surface-container border border-outline-variant rounded-lg p-stack-md sharp-shadow flex flex-col relative overflow-hidden">
+<div class="flex gap-2 mb-stack-sm">
+<div class="shimmer bg-surface-container-high h-5 w-16 rounded-full"></div>
+<div class="shimmer bg-surface-container-high h-5 w-16 rounded-full"></div>
+</div>
+<div class="space-y-unit mb-stack-md">
+<div class="shimmer bg-surface-container-high h-6 w-full rounded"></div>
+<div class="shimmer bg-surface-container-high h-6 w-3/4 rounded"></div>
+</div>
+<div class="space-y-unit mb-stack-md flex-1">
+<div class="shimmer bg-surface-container-high h-4 w-full rounded"></div>
+<div class="shimmer bg-surface-container-high h-4 w-full rounded"></div>
+<div class="shimmer bg-surface-container-high h-4 w-2/3 rounded"></div>
+</div>
+<div class="w-full aspect-video shimmer bg-surface-container-high rounded border border-outline-variant/50 mt-stack-sm mb-stack-sm"></div>
+<div class="flex items-center gap-stack-sm mt-auto pt-stack-sm border-t border-outline-variant/30">
+<div class="shimmer bg-surface-container-high h-4 w-32 rounded"></div>
+</div>
+</article>
+<!-- Skeleton Dossier Card 4 (List Style) -->
+<article class="col-span-1 md:col-span-2 bg-surface-container border border-outline-variant rounded-lg p-stack-md sharp-shadow flex items-start gap-stack-md relative overflow-hidden">
+<div class="w-24 h-24 shrink-0 shimmer bg-surface-container-high rounded border border-outline-variant/50"></div>
+<div class="flex-1 py-unit">
+<div class="flex gap-2 mb-unit">
+<div class="shimmer bg-surface-container-high h-4 w-20 rounded"></div>
+</div>
+<div class="space-y-unit mb-stack-sm">
+<div class="shimmer bg-surface-container-high h-5 w-full rounded"></div>
+<div class="shimmer bg-surface-container-high h-5 w-2/3 rounded"></div>
+</div>
+</div>
+</article>
+</div>
+</main>
+<!-- SideNavBar - Social Flux -->
+<aside class="fixed right-0 top-16 bottom-0 flex flex-col p-4 overflow-y-auto hidden lg:flex bg-surface-container border-l border-outline-variant shadow-sm h-screen w-80 z-40">
+<div class="mb-stack-lg flex items-center justify-between border-b border-outline-variant pb-stack-sm">
+<div>
+<h2 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-1">Social Flux</h2>
+<p class="font-mono-data text-mono-data text-on-surface-variant shimmer bg-surface-container-high h-4 w-32 rounded"></p>
+</div>
+<div class="shimmer bg-surface-container-high w-8 h-8 rounded-full"></div>
+</div>
+<!-- Tabs Skeleton -->
+<div class="flex flex-col gap-unit mb-stack-md">
+<div class="h-10 w-full bg-primary-container rounded-lg shimmer border border-primary/20"></div>
+<div class="h-10 w-full bg-surface-container-high rounded-lg shimmer"></div>
+<div class="h-10 w-full bg-surface-container-high rounded-lg shimmer"></div>
+<div class="h-10 w-full bg-surface-container-high rounded-lg shimmer"></div>
+<div class="h-10 w-full bg-surface-container-high rounded-lg shimmer"></div>
+</div>
+<!-- Flux Feed Skeleton -->
+<div class="flex-1 overflow-y-auto space-y-stack-md pr-2">
+<div class="relative pl-4 border-l border-outline-variant/50">
+<div class="absolute -left-1.5 top-1 w-3 h-3 rounded-full shimmer bg-surface-container-high border border-outline-variant"></div>
+<div class="flex gap-2 mb-unit">
+<div class="shimmer bg-surface-container-high h-3 w-16 rounded"></div>
+<div class="shimmer bg-surface-container-high h-3 w-24 rounded"></div>
+</div>
+<div class="space-y-1">
+<div class="shimmer bg-surface-container-high h-4 w-full rounded"></div>
+<div class="shimmer bg-surface-container-high h-4 w-5/6 rounded"></div>
+</div>
+</div>
+<div class="relative pl-4 border-l border-outline-variant/50">
+<div class="absolute -left-1.5 top-1 w-3 h-3 rounded-full shimmer bg-surface-container-high border border-outline-variant"></div>
+<div class="flex gap-2 mb-unit">
+<div class="shimmer bg-surface-container-high h-3 w-20 rounded"></div>
+</div>
+<div class="space-y-1">
+<div class="shimmer bg-surface-container-high h-4 w-full rounded"></div>
+<div class="shimmer bg-surface-container-high h-4 w-full rounded"></div>
+<div class="shimmer bg-surface-container-high h-4 w-2/3 rounded"></div>
+</div>
+</div>
+<div class="relative pl-4 border-l border-outline-variant/50">
+<div class="absolute -left-1.5 top-1 w-3 h-3 rounded-full shimmer bg-surface-container-high border border-outline-variant"></div>
+<div class="flex gap-2 mb-unit">
+<div class="shimmer bg-surface-container-high h-3 w-12 rounded"></div>
+<div class="shimmer bg-surface-container-high h-3 w-16 rounded"></div>
+</div>
+<div class="space-y-1">
+<div class="shimmer bg-surface-container-high h-4 w-11/12 rounded"></div>
+<div class="shimmer bg-surface-container-high h-4 w-4/5 rounded"></div>
+</div>
+</div>
+<div class="relative pl-4 border-l border-outline-variant/50">
+<div class="absolute -left-1.5 top-1 w-3 h-3 rounded-full shimmer bg-surface-container-high border border-outline-variant"></div>
+<div class="space-y-1 mt-1">
+<div class="shimmer bg-surface-container-high h-4 w-full rounded"></div>
+<div class="shimmer bg-surface-container-high h-4 w-3/4 rounded"></div>
+</div>
+</div>
+</div>
+<button class="mt-stack-md w-full py-2 border border-outline-variant rounded text-on-surface-variant font-mono-data text-mono-data uppercase hover:bg-surface-container-high transition-colors flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[16px]" data-icon="refresh">refresh</span>
+                Refresh Feed
+            </button>
+</aside>
+</div>
+<!-- Footer -->
+<footer class="w-full py-stack-lg px-margin-desktop mt-auto flex flex-col md:flex-row justify-between items-center bg-surface-container-low border-t border-outline-variant relative z-50">
+<div class="mb-stack-md md:mb-0">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface block mb-unit">GlobeLens AI</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">© 2024 GlobeLens AI. Authoritative Editorial Intelligence.</p>
+</div>
+<div class="flex flex-wrap gap-stack-md justify-center font-body-sm text-body-sm">
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Institutional</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Privacy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Ethics Policy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">API Documentation</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Contact</a>
+</div>
+</footer>
+</body></html>

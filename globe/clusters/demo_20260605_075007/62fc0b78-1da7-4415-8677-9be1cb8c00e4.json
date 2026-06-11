@@ -1,0 +1,49 @@
+{
+  "cluster_id": "62fc0b78-1da7-4415-8677-9be1cb8c00e4",
+  "fingerprint": {
+    "primary_entities": [
+      "Europe",
+      "Donbas",
+      "Moscow",
+      "Russia",
+      "Volodymyr Zelenskyy",
+      "Ukraine",
+      "Kyiv",
+      "Vladimir Putin",
+      "Viktor Yanukovych",
+      "Crimean Peninsula"
+    ],
+    "event_action": "",
+    "event_date": "2026-06-03",
+    "event_title": "The Russo-Ukrainian War: A War of Attrition and Innovation"
+  },
+  "status": "active",
+  "created_at": "2026-06-05T07:56:01.371175+00:00",
+  "last_updated": "2026-06-05T07:56:01.371175+00:00",
+  "close_threshold_h": 72,
+  "topic_category": "",
+  "source_count": 1,
+  "article_ids": [
+    "2c4126ff-6030-4b02-9ce3-104f0ac90a12"
+  ],
+  "outlets": [
+    "Reuters"
+  ],
+  "sentence_ids": [
+    "13757d9b-341a-4076-a67e-1258907c0876",
+    "68f93c5a-10d3-4f94-aaf4-5721fdb7e27c",
+    "8ccbe62e-b3f6-49fc-bd94-22014356bfc1",
+    "8ff5b7b1-1b98-4e6e-9313-67b24cf342d7",
+    "0578e407-da31-4080-82ce-e2cfe54aa55c",
+    "30c1d01a-5b28-4158-b6d0-ad85114e052c",
+    "e3d780cb-b305-42b2-a7b4-c357dbe75a06",
+    "78a6de71-4ac2-4f1e-814f-9dcfce7bb4ad",
+    "f243ef72-7951-4d49-87b0-5163bc23fdb3",
+    "bee3aac4-9083-4f7e-8b84-6b6e229e95cf"
+  ],
+  "fact_ids": [],
+  "synthesis_ready": false,
+  "synthesis_text": "",
+  "synthesis_version": 0,
+  "follow_up_queue": []
+}

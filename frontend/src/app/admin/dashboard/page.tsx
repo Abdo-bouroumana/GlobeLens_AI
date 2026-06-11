@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { 
   Shield, 
@@ -8,7 +9,6 @@ import {
   Database, 
   Server, 
   TrendingUp, 
-  CheckCircle2, 
   AlertTriangle, 
   RefreshCw, 
   Play, 
@@ -20,6 +20,18 @@ import {
   UserCheck, 
   LogOut 
 } from "lucide-react";
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip as RechartsTooltip,
+  Legend as RechartsLegend
+} from "recharts";
 
 // Dynamically import the Map component to prevent window undefined SSR issues
 const Map = dynamic(() => import("../../components/Map"), { ssr: false });
@@ -61,11 +73,9 @@ interface SelectedEvent {
 }
 
 export default function AdminDashboardPage() {
+  const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
-  const [authError, setAuthError] = useState<string | null>(null);
-  const [email, setEmail] = useState("admin@globelens.ai"); // Default to admin for testing convenience
-  const [password, setPassword] = useState("adminpassword123");
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   // Dashboard Stats & Health States
   const [health, setHealth] = useState<HealthState>({
@@ -101,70 +111,29 @@ export default function AdminDashboardPage() {
     message: ""
   });
 
-  // Verify token in localStorage on mount
+  // Handle client-side mount check
   useEffect(() => {
+    setIsMounted(true);
     const savedToken = localStorage.getItem("admin_token");
-    if (savedToken) {
+    if (!savedToken) {
+      router.push("/login");
+    } else {
       setToken(savedToken);
     }
-  }, []);
-
-  // Login handler
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoggingIn(true);
-    setAuthError(null);
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || "Authentication failed");
-      }
-
-      const data = await response.json();
-      
-      // We need to verify if the user is an admin
-      const profileResponse = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
-        headers: { "Authorization": `Bearer ${data.access_token}` }
-      });
-
-      if (!profileResponse.ok) {
-        throw new Error("Failed to fetch user profile");
-      }
-
-      const profile = await profileResponse.json();
-      if (profile.role !== "ADMIN") {
-        throw new Error("Access Denied: Only administrators can view this dashboard");
-      }
-
-      localStorage.setItem("admin_token", data.access_token);
-      setToken(data.access_token);
-    } catch (err: any) {
-      setAuthError(err.message || "An error occurred");
-    } finally {
-      setIsLoggingIn(false);
-    }
-  };
+  }, [router]);
 
   const handleLogout = () => {
     localStorage.removeItem("admin_token");
+    // Clear cookies
+    document.cookie = "admin_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     setToken(null);
-    setSelectedEvent(null);
+    router.push("/login");
   };
 
   // Live Checkup Polling
   const checkHealth = useCallback(async () => {
     try {
-      const start = Date.now();
       const response = await fetch(`${API_BASE_URL}/health`);
-      const latency = Date.now() - start;
-
       if (!response.ok) throw new Error("Backend degraded");
 
       const data = await response.json();
@@ -196,13 +165,12 @@ export default function AdminDashboardPage() {
     try {
       // 1. Fetch Stats
       const statsResp = await fetch(`${API_BASE_URL}/api/v1/admin/stats`, {
-        headers: { "Authorization": `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` }
       });
       if (statsResp.ok) {
         const statsData = await statsResp.json();
         setStats(statsData);
-      } else if (statsResp.status === 401) {
-        // Token expired
+      } else if (statsResp.status === 401 || statsResp.status === 403) {
         handleLogout();
         return;
       }
@@ -223,19 +191,19 @@ export default function AdminDashboardPage() {
   // Sync health checks and analytics polling loops
   useEffect(() => {
     checkHealth();
-    const healthInterval = setInterval(checkHealth, 10000); // 10s health check
+    const healthInterval = setInterval(checkHealth, 10000);
     return () => clearInterval(healthInterval);
   }, [checkHealth]);
 
   useEffect(() => {
     if (token) {
       fetchStatsAndMap();
-      const statsInterval = setInterval(fetchStatsAndMap, 15000); // 15s stats poll
+      const statsInterval = setInterval(fetchStatsAndMap, 15000);
       return () => clearInterval(statsInterval);
     }
   }, [token, fetchStatsAndMap]);
 
-  // Administrative Trigger Overrides
+  // Administrative Trigger overrides
   const triggerWorker = async (name: string, endpoint: string) => {
     if (!token || triggerStatus.running) return;
 
@@ -243,7 +211,7 @@ export default function AdminDashboardPage() {
       running: true,
       name,
       progress: 5,
-      message: "Initializing background worker..."
+      message: "Initializing background container worker..."
     });
 
     // Simulate progress bar increase
@@ -253,15 +221,15 @@ export default function AdminDashboardPage() {
         return {
           ...prev,
           progress: prev.progress + Math.floor(Math.random() * 8) + 2,
-          message: prev.progress > 70 ? "Finalizing database modifications..." : "Executing pipeline steps..."
+          message: prev.progress > 70 ? "Synthesizing intelligence feed databases..." : "Executing pipeline steps..."
         };
       });
-    }, 400);
+    }, 450);
 
     try {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: "POST",
-        headers: { "Authorization": `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` }
       });
 
       if (!response.ok) {
@@ -276,10 +244,9 @@ export default function AdminDashboardPage() {
         message: "Worker task initiated successfully (202 Accepted)!"
       }));
 
-      // Small delay before closing progress modal
       setTimeout(() => {
         setTriggerStatus({ running: false, name: "", progress: 0, message: "" });
-        fetchStatsAndMap(); // Refresh counts
+        fetchStatsAndMap();
       }, 1500);
 
     } catch (err: any) {
@@ -343,79 +310,28 @@ export default function AdminDashboardPage() {
       }
     });
 
-    return totalCount > 0 ? totalWeight / totalCount : 3.0; // Default to center (3.0)
+    return totalCount > 0 ? totalWeight / totalCount : 3.0;
   };
 
   const biasScore = calculateBiasScore();
-  // Map biasScore to percentage: 1.0 (0%) to 5.0 (100%)
   const biasPercentage = ((biasScore - 1) / 4) * 100;
 
-  // Unauthenticated view (Admin Auth Gateway)
+  // Render chart data formats
+  const pieData = Object.entries(stats.media_split).map(([name, value]) => ({
+    name,
+    value
+  }));
+  const mediaColors = ["#7c3aed", "#3b82f6", "#10b981", "#dec29a"];
+
+  const barData = Object.entries(stats.topic_distribution).map(([topic, count]) => ({
+    name: topic,
+    count
+  }));
+
   if (!token) {
     return (
-      <main className="min-h-screen bg-slate-950 flex flex-col items-center justify-center font-sans p-4 relative overflow-hidden">
-        {/* Abstract floating shapes */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-        <div className="w-full max-w-md bg-zinc-900/60 backdrop-blur-xl border border-zinc-800 rounded-3xl p-8 relative z-10 shadow-2xl">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-violet-600 to-blue-500 text-white mb-4 shadow-lg shadow-blue-500/20">
-              <Shield className="w-8 h-8" />
-            </div>
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">GlobeLens AI</h1>
-            <p className="text-zinc-400 text-sm mt-1">Admin Monitoring Portal Gateway</p>
-          </div>
-
-          <form onSubmit={handleLogin} className="space-y-5">
-            <div>
-              <label className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
-                Administrator Email
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500 transition-colors"
-                placeholder="admin@globelens.ai"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2">
-                Secure Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500 transition-colors"
-                placeholder="••••••••"
-              />
-            </div>
-
-            {authError && (
-              <div className="flex items-center gap-2 text-red-400 bg-red-950/30 border border-red-900/50 rounded-xl p-3 text-sm">
-                <AlertTriangle className="w-4 h-4 flex-shrink-0" />
-                <span>{authError}</span>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isLoggingIn}
-              className="w-full py-3.5 px-4 bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-500 hover:to-blue-500 disabled:opacity-50 text-white font-semibold rounded-xl text-sm transition-all shadow-lg hover:shadow-blue-500/20 active:scale-98"
-            >
-              {isLoggingIn ? "Authenticating credentials..." : "Authenticate Access"}
-            </button>
-          </form>
-          
-          <div className="mt-8 text-center text-xs text-zinc-600">
-            System Authorization Protocol v2.0 · Authenticated logs are recorded.
-          </div>
-        </div>
+      <main className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
+        <div className="text-center text-zinc-400">Redirecting to clearance gateway...</div>
       </main>
     );
   }
@@ -436,6 +352,13 @@ export default function AdminDashboardPage() {
           <h1 className="text-3xl font-extrabold text-white tracking-tight">System Administrative Dashboard</h1>
         </div>
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => router.push("/")}
+            className="flex items-center gap-2 bg-blue-950/20 border border-blue-900/30 hover:bg-blue-950/40 text-blue-400 text-sm px-4 py-2.5 rounded-xl transition-all"
+          >
+            <Globe className="w-4 h-4" />
+            Operational Console
+          </button>
           <button
             onClick={fetchStatsAndMap}
             className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-sm px-4 py-2.5 rounded-xl transition-all"
@@ -474,19 +397,19 @@ export default function AdminDashboardPage() {
                 </div>
                 <div>
                   <h3 className="text-xs text-zinc-400 font-medium">{srv.name}</h3>
-                  <span className="text-xs font-semibold text-zinc-500 uppercase">Status</span>
+                  <span className="text-[9px] font-semibold text-zinc-500 uppercase">Status</span>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 {srv.status === "UP" ? (
                   <>
-                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-md shadow-emerald-500/50 animate-pulse"></span>
-                    <span className="text-xs text-emerald-400 font-bold">ONLINE</span>
+                    <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-md shadow-emerald-500/50 animate-pulse"></span>
+                    <span className="text-[10px] text-emerald-400 font-bold">ONLINE</span>
                   </>
                 ) : (
                   <>
-                    <span className="h-2.5 w-2.5 rounded-full bg-rose-500 shadow-md shadow-rose-500/50 animate-pulse"></span>
-                    <span className="text-xs text-rose-400 font-bold">DEGRADED</span>
+                    <span className="h-2 w-2 rounded-full bg-rose-500 shadow-md shadow-rose-500/50 animate-pulse"></span>
+                    <span className="text-[10px] text-rose-400 font-bold">DOWN</span>
                   </>
                 )}
               </div>
@@ -546,7 +469,7 @@ export default function AdminDashboardPage() {
               </div>
               {/* Micro-sparkline charts */}
               <div className="flex justify-between items-center mt-3 pt-3 border-t border-zinc-950/80">
-                <span className="text-[10px] text-zinc-500">Ingestion velocity</span>
+                <span className="text-[10px] text-zinc-500 font-mono-data">Ingestion velocity</span>
                 {renderSparkline(gauge.data, gauge.sparkColor)}
               </div>
             </div>
@@ -561,17 +484,17 @@ export default function AdminDashboardPage() {
               <span className="text-white font-semibold">Event Cartography (Processed Events Only)</span>
             </div>
           </div>
-          <Map events={mapEvents} onSelectEvent={setSelectedEvent} />
+          <Map events={mapEvents} selectedEvent={selectedEvent} onSelectEvent={setSelectedEvent} />
         </section>
 
         {/* 4. ACTIVE ADMINISTRATIVE TRIGGER CONSOLE */}
         <section className="lg:col-span-1 bg-zinc-900/30 backdrop-blur-md border border-zinc-800/80 rounded-2xl p-5 flex flex-col justify-between shadow-lg h-[500px]">
           <div>
-            <h2 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
+            <h2 className="text-lg font-bold text-white mb-2 flex items-center gap-2 font-headline-lg-mobile">
               <Cpu className="w-5 h-5 text-blue-500" />
               Administrative Overrides
             </h2>
-            <p className="text-xs text-zinc-400 mb-6">
+            <p className="text-xs text-zinc-400 mb-6 font-body-sm">
               Manually trigger background pipeline services in our container stack. Executions return 202 Accepted instantly.
             </p>
 
@@ -584,7 +507,7 @@ export default function AdminDashboardPage() {
                 },
                 {
                   label: "Run Vector Inversion",
-                  desc: "Compute OpenAI/Grok high-dimensional float embeddings.",
+                  desc: "Compute offline Sentence-Transformer float embeddings.",
                   endpoint: "/api/v1/admin/embed/process"
                 },
                 {
@@ -594,7 +517,7 @@ export default function AdminDashboardPage() {
                 },
                 {
                   label: "Run LLM Enrichment",
-                  desc: "Synthesize clustered articles using investigative journalist agent.",
+                  desc: "Synthesize clustered articles using Gemini and local mDeBERTa.",
                   endpoint: "/api/v1/admin/llm/process"
                 }
               ].map((btn) => (
@@ -616,138 +539,106 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
-          <div className="text-center text-[10px] text-zinc-500 border-t border-zinc-950 pt-4 mt-4">
+          <div className="text-center text-[10px] text-zinc-500 border-t border-zinc-950 pt-4 mt-4 font-mono-data">
             Authorized administrator console override session.
           </div>
         </section>
 
         {/* 5. MEDIA SOURCE & SPECTRUM CLASSIFICATIONS */}
         <section className="lg:col-span-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Chart A: Media Split Pie/Donut Chart */}
-          <div className="bg-zinc-900/30 backdrop-blur-md border border-zinc-800/80 rounded-2xl p-5 shadow-lg flex flex-col justify-between">
+          {/* Chart A: Media Split Donut Chart (via Recharts) */}
+          <div className="bg-zinc-900/30 backdrop-blur-md border border-zinc-800/80 rounded-2xl p-5 shadow-lg flex flex-col justify-between min-h-[320px]">
             <div>
               <h3 className="text-sm font-semibold text-white mb-4">Media Split Breakdown</h3>
-              {/* Custom SVG Donut Chart */}
               <div className="flex items-center justify-center h-44 relative">
-                {(() => {
-                  const bbc = stats.media_split["BBC News"] || 0;
-                  const cnn = stats.media_split["CNN"] || 0;
-                  const alj = stats.media_split["Al Jazeera"] || 0;
-                  const total = bbc + cnn + alj || 1;
-
-                  const bbcPerc = (bbc / total) * 100;
-                  const cnnPerc = (cnn / total) * 100;
-                  const aljPerc = (alj / total) * 100;
-
-                  // Stroke offset helper
-                  const radius = 50;
-                  const circ = 2 * Math.PI * radius;
-
-                  const bbcOffset = circ;
-                  const cnnOffset = circ - (bbcPerc / 100) * circ;
-                  const aljOffset = cnnOffset - (cnnPerc / 100) * circ;
-
-                  return (
-                    <div className="relative flex items-center justify-center">
-                      <svg width="150" height="150" className="transform -rotate-90">
-                        {/* BBC Segment */}
-                        <circle
-                          cx="75"
-                          cy="75"
-                          r={radius}
-                          fill="transparent"
-                          stroke="#7c3aed"
-                          strokeWidth="15"
-                          strokeDasharray={circ}
-                          strokeDashoffset={bbcOffset - (bbcPerc / 100) * circ}
-                          className="transition-all duration-500"
-                        />
-                        {/* CNN Segment */}
-                        <circle
-                          cx="75"
-                          cy="75"
-                          r={radius}
-                          fill="transparent"
-                          stroke="#3b82f6"
-                          strokeWidth="15"
-                          strokeDasharray={circ}
-                          strokeDashoffset={cnnOffset - (cnnPerc / 100) * circ}
-                          className="transition-all duration-500"
-                        />
-                        {/* Al Jazeera Segment */}
-                        <circle
-                          cx="75"
-                          cy="75"
-                          r={radius}
-                          fill="transparent"
-                          stroke="#10b981"
-                          strokeWidth="15"
-                          strokeDasharray={circ}
-                          strokeDashoffset={aljOffset - (aljPerc / 100) * circ}
-                          className="transition-all duration-500"
-                        />
-                      </svg>
-                      <div className="absolute text-center">
-                        <span className="text-[10px] text-zinc-500 block uppercase font-bold tracking-wider">Total</span>
-                        <span className="text-xl font-black text-white">{bbc + cnn + alj}</span>
-                      </div>
-                    </div>
-                  );
-                })()}
+                {isMounted && pieData.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={50}
+                        outerRadius={70}
+                        paddingAngle={3}
+                        dataKey="value"
+                      >
+                        {pieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={mediaColors[index % mediaColors.length]} />
+                        ))}
+                      </Pie>
+                      <RechartsTooltip 
+                        contentStyle={{ background: "#1c2b3c", borderColor: "#45464d", color: "#d4e4fa", fontSize: "11px" }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="text-zinc-500 text-xs">No media data available</div>
+                )}
+                {/* Core Total overlay */}
+                <div className="absolute text-center pointer-events-none">
+                  <span className="text-[9px] text-zinc-500 block uppercase font-bold tracking-wider font-mono-data">Total</span>
+                  <span className="text-xl font-bold text-white">
+                    {pieData.reduce((acc, curr) => acc + curr.value, 0)}
+                  </span>
+                </div>
               </div>
             </div>
 
             {/* Legend */}
-            <div className="grid grid-cols-3 gap-2 text-center text-xs mt-4 pt-4 border-t border-zinc-950">
-              <div className="flex flex-col items-center">
-                <span className="inline-block w-2.5 h-2.5 rounded-full bg-violet-600 mb-1"></span>
-                <span className="text-zinc-400 text-[10px]">BBC News</span>
-                <span className="font-bold text-white">{stats.media_split["BBC News"] || 0}</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="inline-block w-2.5 h-2.5 rounded-full bg-blue-500 mb-1"></span>
-                <span className="text-zinc-400 text-[10px]">CNN</span>
-                <span className="font-bold text-white">{stats.media_split["CNN"] || 0}</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 mb-1"></span>
-                <span className="text-zinc-400 text-[10px]">Al Jazeera</span>
-                <span className="font-bold text-white">{stats.media_split["Al Jazeera"] || 0}</span>
-              </div>
+            <div className="grid grid-cols-3 gap-2 text-center text-xs mt-4 pt-4 border-t border-zinc-950 font-body-sm">
+              {pieData.map((item, index) => (
+                <div key={item.name} className="flex flex-col items-center">
+                  <span 
+                    className="inline-block w-2 h-2 rounded-full mb-1" 
+                    style={{ backgroundColor: mediaColors[index % mediaColors.length] }}
+                  ></span>
+                  <span className="text-zinc-400 text-[9px] truncate max-w-[80px] font-mono-data">{item.name}</span>
+                  <span className="font-bold text-white">{item.value}</span>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Chart B: Topic Distribution Histogram */}
-          <div className="bg-zinc-900/30 backdrop-blur-md border border-zinc-800/80 rounded-2xl p-5 shadow-lg flex flex-col justify-between">
+          {/* Chart B: Topic Distribution Histogram (via Recharts) */}
+          <div className="bg-zinc-900/30 backdrop-blur-md border border-zinc-800/80 rounded-2xl p-5 shadow-lg flex flex-col justify-between min-h-[320px]">
             <div>
               <h3 className="text-sm font-semibold text-white mb-4">Topic Category Distribution</h3>
-              <div className="space-y-3 mt-2 h-44 overflow-y-auto pr-1">
-                {["POLITICS", "ECONOMY", "TECHNOLOGY", "SPORTS", "HEALTH", "WORLD"].map((topic) => {
-                  const count = stats.topic_distribution[topic] || 0;
-                  const maxCount = Math.max(...Object.values(stats.topic_distribution), 1);
-                  const percentage = (count / maxCount) * 100;
-                  return (
-                    <div key={topic} className="flex items-center gap-3 text-xs">
-                      <span className="w-20 text-zinc-400 text-[10px] uppercase font-semibold text-right">{topic}</span>
-                      <div className="flex-1 bg-zinc-950 rounded-full h-3.5 border border-zinc-800/40 relative overflow-hidden">
-                        <div
-                          className="bg-gradient-to-r from-violet-600 to-blue-500 h-full rounded-full transition-all duration-500"
-                          style={{ width: `${percentage}%` }}
-                        ></div>
-                      </div>
-                      <span className="w-6 font-bold text-white text-right">{count}</span>
-                    </div>
-                  );
-                })}
+              <div className="h-44 w-full">
+                {isMounted && barData.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={barData} layout="vertical" margin={{ left: -10, right: 10, top: 0, bottom: 0 }}>
+                      <XAxis type="number" stroke="#909097" fontSize={9} hide />
+                      <YAxis dataKey="name" type="category" stroke="#909097" fontSize={9} width={75} axisLine={false} tickLine={false} />
+                      <RechartsTooltip 
+                        contentStyle={{ background: "#1c2b3c", borderColor: "#45464d", color: "#d4e4fa", fontSize: "11px" }}
+                      />
+                      <Bar dataKey="count" radius={[0, 4, 4, 0]}>
+                        {barData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill="url(#barGradient)" />
+                        ))}
+                      </Bar>
+                      {/* Define gradient colors */}
+                      <defs>
+                        <linearGradient id="barGradient" x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%" stopColor="#7c3aed" />
+                          <stop offset="100%" stopColor="#3b82f6" />
+                        </linearGradient>
+                      </defs>
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="text-zinc-500 text-xs flex items-center justify-center h-full">No topics classified yet</div>
+                )}
               </div>
             </div>
-            <div className="text-center text-[10px] text-zinc-500 border-t border-zinc-950 pt-4 mt-4 uppercase font-semibold">
+            <div className="text-center text-[9px] text-zinc-500 border-t border-zinc-950 pt-4 mt-4 uppercase font-semibold font-mono-data">
               Event Category Frequency breakdown
             </div>
           </div>
 
           {/* Chart C: Collective Ideological Bias Spectrum */}
-          <div className="bg-zinc-900/30 backdrop-blur-md border border-zinc-800/80 rounded-2xl p-5 shadow-lg flex flex-col justify-between">
+          <div className="bg-zinc-900/30 backdrop-blur-md border border-zinc-800/80 rounded-2xl p-5 shadow-lg flex flex-col justify-between min-h-[320px]">
             <div>
               <h3 className="text-sm font-semibold text-white mb-4">Collective Ideological Lean</h3>
               
@@ -767,7 +658,7 @@ export default function AdminDashboardPage() {
                   </div>
                 </div>
 
-                <div className="flex justify-between text-[10px] text-zinc-400 font-bold uppercase px-1">
+                <div className="flex justify-between text-[9px] text-zinc-400 font-bold uppercase px-1 font-mono-data">
                   <span>Left Lean</span>
                   <span>Center</span>
                   <span>Right Lean</span>
@@ -777,13 +668,13 @@ export default function AdminDashboardPage() {
               {/* Summary of lean scores */}
               <div className="bg-zinc-950/60 border border-zinc-800/50 rounded-xl p-3 text-xs flex items-center justify-between">
                 <div>
-                  <span className="text-zinc-500 font-semibold block text-[10px] uppercase">Aggregated Index</span>
+                  <span className="text-zinc-500 font-semibold block text-[9px] uppercase font-mono-data">Aggregated Index</span>
                   <span className="font-extrabold text-white">
                     {biasScore.toFixed(2)} / 5.0
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-zinc-500 font-semibold block text-[10px] uppercase">General Bias</span>
+                  <span className="text-zinc-500 font-semibold block text-[9px] uppercase font-mono-data">General Bias</span>
                   <span className="font-bold text-blue-400">
                     {biasScore < 2.2 ? "LEFT BIAS" : biasScore < 2.8 ? "CENTER-LEFT" : biasScore < 3.2 ? "CENTERED" : biasScore < 3.8 ? "CENTER-RIGHT" : "RIGHT BIAS"}
                   </span>
@@ -791,7 +682,7 @@ export default function AdminDashboardPage() {
               </div>
             </div>
             
-            <div className="text-center text-[10px] text-zinc-500 border-t border-zinc-950 pt-4 mt-4 uppercase font-semibold">
+            <div className="text-center text-[9px] text-zinc-500 border-t border-zinc-950 pt-4 mt-4 uppercase font-semibold font-mono-data">
               Ideological spectrum weighted calculation
             </div>
           </div>
@@ -821,33 +712,33 @@ export default function AdminDashboardPage() {
 
             <div className="space-y-6">
               <div>
-                <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">AI-Generated Intelligence Summary</h4>
-                <div className="text-xs text-zinc-300 space-y-3 leading-relaxed whitespace-pre-line">
+                <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 font-mono-data">AI-Generated Intelligence Summary</h4>
+                <div className="text-xs text-zinc-300 space-y-3 leading-relaxed whitespace-pre-line font-body-sm">
                   {selectedEvent.summary || "No intelligence summary generated yet for this event."}
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 border-t border-zinc-900 pt-6">
+              <div className="grid grid-cols-2 gap-4 border-t border-zinc-900 pt-6 font-body-sm">
                 <div>
-                  <h5 className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Geographic Coordinates</h5>
-                  <span className="text-xs text-white font-semibold">
+                  <h5 className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Geographic Coordinates</h5>
+                  <span className="text-xs text-white font-mono-data font-semibold">
                     {selectedEvent.latitude.toFixed(4)}, {selectedEvent.longitude.toFixed(4)}
                   </span>
                 </div>
                 <div>
-                  <h5 className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Media Source Count</h5>
+                  <h5 className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Media Source Count</h5>
                   <span className="text-xs text-white font-semibold">
                     {selectedEvent.source_count} reporting publishers
                   </span>
                 </div>
                 <div>
-                  <h5 className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Classification Topic</h5>
+                  <h5 className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Classification Topic</h5>
                   <span className="text-xs text-blue-400 font-bold uppercase">
                     {selectedEvent.topic}
                   </span>
                 </div>
                 <div>
-                  <h5 className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Importance Level</h5>
+                  <h5 className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Importance Level</h5>
                   <span className="text-xs text-emerald-400 font-bold">
                     {selectedEvent.importance_score.toFixed(1)} / 10.0
                   </span>
@@ -867,28 +758,64 @@ export default function AdminDashboardPage() {
         </div>
       )}
 
-      {/* 7. PROGRESS BAR POPUP / OVERLAY */}
+      {/* 7. FULL-SCREEN SKELETON SYNTHESIS OVERLAY */}
+      {/* Ports the visuals from synthesizing_intelligence_globelens_ai and loading_feed_globelens_ai */}
       {triggerStatus.running && (
-        <div className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
-            <h3 className="text-sm font-bold text-white mb-2 flex items-center gap-2">
-              <RefreshCw className="w-4 h-4 text-blue-500 animate-spin" />
-              Running Override: {triggerStatus.name}
-            </h3>
-            
-            <p className="text-xs text-zinc-400 mb-4">{triggerStatus.message}</p>
-            
-            {/* Progress bar container */}
-            <div className="w-full bg-zinc-950 rounded-full h-3 border border-zinc-800 overflow-hidden">
-              <div
-                className="bg-gradient-to-r from-violet-600 to-blue-500 h-full rounded-full transition-all duration-300"
-                style={{ width: `${triggerStatus.progress}%` }}
-              ></div>
+        <div className="fixed inset-0 bg-slate-950 z-[10000] flex flex-col antialiased">
+          {/* Top Navbar Skeleton */}
+          <nav className="flex justify-between items-center px-margin-desktop w-full h-16 bg-surface/80 border-b border-outline-variant">
+            <div className="flex items-center gap-8">
+              <span className="font-headline-lg text-headline-lg font-bold text-primary">GlobeLens AI</span>
+              <div className="hidden md:flex items-center gap-6">
+                <span className="text-primary font-bold border-b-2 border-primary pb-1 text-xs uppercase tracking-wider">Dashboard Ingestion</span>
+              </div>
             </div>
-            
-            <div className="flex justify-between text-[9px] text-zinc-500 font-bold mt-2">
-              <span>PROGRESS</span>
-              <span>{triggerStatus.progress}%</span>
+            <div className="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant"></div>
+          </nav>
+
+          {/* Skeleton Content */}
+          <div className="flex-1 flex flex-col justify-center max-w-4xl mx-auto w-full px-6 py-10 relative">
+            <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none"></div>
+
+            <div className="relative z-10 space-y-6">
+              {/* Dynamic Status card (Pulsing and Glassmorphic) */}
+              <div className="glass-panel rounded-2xl p-6 border border-primary/45 shadow-2xl relative overflow-hidden group animate-pulse">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-violet-600 via-primary to-blue-500"></div>
+                <div className="flex items-center gap-3 mb-4">
+                  <Cpu className="w-6 h-6 text-primary animate-spin" />
+                  <h2 className="text-lg font-bold text-white">Active Background worker: {triggerStatus.name}</h2>
+                </div>
+                <p className="text-xs text-zinc-300 font-mono-data mb-4 bg-zinc-950/70 p-3 border border-zinc-800 rounded-lg">
+                  {triggerStatus.message}
+                </p>
+
+                {/* Progress bar container */}
+                <div className="w-full bg-zinc-950 rounded-full h-4 border border-zinc-800 overflow-hidden relative">
+                  <div
+                    className="bg-gradient-to-r from-violet-600 to-blue-500 h-full rounded-full transition-all duration-300"
+                    style={{ width: `${triggerStatus.progress}%` }}
+                  ></div>
+                  <span className="absolute inset-0 flex items-center justify-center text-[9px] font-bold text-white font-mono-data select-none">
+                    {triggerStatus.progress}%
+                  </span>
+                </div>
+              </div>
+
+              {/* Shimmer skeleton lines */}
+              <div className="space-y-3 pt-6 border-t border-zinc-900">
+                <div className="w-full h-4 rounded bg-surface-container-high relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-800/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
+                </div>
+                <div className="w-11/12 h-4 rounded bg-surface-container-high relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-800/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
+                </div>
+                <div className="w-4/5 h-4 rounded bg-surface-container-high relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-800/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
+                </div>
+                <div className="w-5/6 h-4 rounded bg-surface-container-high relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-800/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

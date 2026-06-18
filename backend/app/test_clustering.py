@@ -49,13 +49,13 @@ async def run_tests():
     test_user_email = "cluster.admin@example.com"
     test_source_name = "Cluster Test Source"
     
-    # Vectors: 768 dimensions
+    # Vectors: 1536 dimensions
     # Base vector: direction (1, 0, 0, ...)
-    base_vector = [1.0] + [0.0] * 767
+    base_vector = [1.0] + [0.0] * 1535
     # Very similar vector: direction (0.99, 0.01, 0, ...)
-    similar_vector = [0.99, 0.01] + [0.0] * 766
+    similar_vector = [0.99, 0.01] + [0.0] * 1534
     # Very different vector: direction (0, 1, 0, ...)
-    different_vector = [0.0, 1.0] + [0.0] * 766
+    different_vector = [0.0, 1.0] + [0.0] * 1534
     
     async with AsyncSessionFactory() as session:
         # Clean up any leftover records and isolate EMBEDDED status

@@ -13,7 +13,14 @@ from app.core.config import settings
 from app.core.database import AsyncSessionFactory
 from app.repositories.article_repository import ArticleRepository
 from app.repositories.event_repository import EventRepository
-from app.schemas.intelligence import EventIntelligenceResponse, FactCheckResponse
+from app.schemas.intelligence import (
+    EventIntelligenceResponse,
+    FactCheckResponse,
+    IntelligenceTopic,
+    IntelligenceBiasLean,
+    ClaimAnalysis,
+    HistoricalMatch
+)
 
 logger = structlog.get_logger()
 
@@ -74,6 +81,13 @@ class LLMService:
                 base_url="https://api.x.ai/v1"
             )
             self._model = "grok-beta"
+        elif settings.LLM_PROVIDER == "nvidia":
+            logger.info("Initializing LLMService client with Nvidia NIM config")
+            self._client = AsyncOpenAI(
+                api_key=settings.NVIDIA_API_KEY,
+                base_url=settings.NVIDIA_API_URL
+            )
+            self._model = "mistralai/mistral-medium-3.5-128b"
         else:
             logger.info("Initializing LLMService client with OpenAI config")
             self._client = AsyncOpenAI(
@@ -196,7 +210,6 @@ class LLMService:
             logger.error("LLM event analysis failed, running heuristic fallback", error=str(err))
             
             # Heuristic fallback generator
-            from app.schemas.intelligence import EventIntelligenceResponse, IntelligenceTopic, IntelligenceBiasLean
             
             para1 = "GlobeLens AI automated synthesis of current news wire metadata feeds."
             para2 = "The events described in these intelligence feeds suggest a shift in maritime security protocols and logistics routing across the geographic bounds of the primary region."
@@ -309,7 +322,6 @@ class LLMService:
             
             # Heuristic/mock fallback generator
             text_snippet = text_content[:100].strip() + "..." if len(text_content) > 100 else text_content
-            from app.schemas.intelligence import ClaimAnalysis, HistoricalMatch
             
             score = 85
             risks = ["Heuristic analysis applied (LLM API rate-limited)"]

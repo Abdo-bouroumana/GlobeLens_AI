@@ -39,11 +39,16 @@ class Settings(BaseSettings):
     ELASTICSEARCH_INDEX_EVENTS: str = "globelens_events"
 
     # ── LLM Providers ─────────────────────────────────────────────────────────
-    LLM_PROVIDER: str = "anthropic"          # "anthropic" | "openai" | "grok" | "gemini"
+    LLM_PROVIDER: str = "anthropic"          # "anthropic" | "openai" | "grok" | "gemini" | "nvidia"
+    EMBEDDING_PROVIDER: str = "openai"       # "openai" | "gemini" | "grok" | "azure"
     ANTHROPIC_API_KEY: str = ""
     OPENAI_API_KEY: str = ""
     GROK_API_KEY: Optional[str] = None
     GEMINI_API_KEY: Optional[str] = None
+    AZURE_EMBEDDING_API_KEY: Optional[str] = None
+    AZURE_EMBEDDING_ENDPOINT: Optional[str] = None
+    NVIDIA_API_KEY: Optional[str] = None
+    NVIDIA_API_URL: str = "https://integrate.api.nvidia.com/v1"
 
     # ── Embedding ─────────────────────────────────────────────────────────────
     EMBEDDING_MODEL: str = "text-embedding-3-small"

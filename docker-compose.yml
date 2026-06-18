@@ -160,12 +160,17 @@ services:
       ELASTICSEARCH_URL: http://search:9200
       ELASTICSEARCH_INDEX_EVENTS: ${ELASTICSEARCH_INDEX_EVENTS:-globelens_events}
 
-      # ── LLM Provider (Anthropic Claude / OpenAI / Gemini / Grok) ──
+      # ── LLM Provider (Anthropic Claude / OpenAI / Gemini / Grok / Nvidia / Azure) ──
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       GROK_API_KEY: ${GROK_API_KEY:-}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
       LLM_PROVIDER: ${LLM_PROVIDER:-anthropic}
+      EMBEDDING_PROVIDER: ${EMBEDDING_PROVIDER:-openai}
+      AZURE_EMBEDDING_API_KEY: ${AZURE_EMBEDDING_API_KEY:-}
+      AZURE_EMBEDDING_ENDPOINT: ${AZURE_EMBEDDING_ENDPOINT:-}
+      NVIDIA_API_KEY: ${NVIDIA_API_KEY:-}
+      NVIDIA_API_URL: ${NVIDIA_API_URL:-https://integrate.api.nvidia.com/v1}
 
       # ── Embedding Model ──
       EMBEDDING_MODEL: ${EMBEDDING_MODEL:-text-embedding-3-small}

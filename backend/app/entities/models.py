@@ -134,8 +134,8 @@ class Embedding(Base):
     __tablename__ = "embeddings"
 
     id: Mapped[uuid.UUID]      = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    # 768 dimensions for Gemini's text-embedding-004
-    vector: Mapped[list]       = mapped_column(Vector(768))
+    # 1536 dimensions for text-embedding-3-small
+    vector: Mapped[list]       = mapped_column(Vector(1536))
     model: Mapped[str]         = mapped_column(String(100), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     article_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("articles.id"), unique=True, index=True)

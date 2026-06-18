@@ -85,7 +85,7 @@ async def run_tests():
         
     # 2. Test Embedding Service generate_vector and process_scraped_batch in isolation (Mocking OpenAI API)
     print("\n2. Testing EmbeddingService.process_scraped_batch with mocked API...")
-    mock_vector = [0.1] * 768
+    mock_vector = [0.1] * 1536
     
     with patch.object(EmbeddingService, 'generate_vector', new_callable=AsyncMock) as mock_gen:
         mock_gen.return_value = mock_vector
@@ -110,7 +110,7 @@ async def run_tests():
             embedding_row = embed_res.scalars().first()
             assert embedding_row is not None
             print(f"Saved Embedding dimensions: {len(embedding_row.vector)}")
-            assert len(embedding_row.vector) == 768
+            assert len(embedding_row.vector) == 1536
             assert embedding_row.model == service._model
             
     # 3. Test HTTP Endpoint POST /api/v1/admin/embed/process Security and Flow

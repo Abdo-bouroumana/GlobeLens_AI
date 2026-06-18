@@ -28,7 +28,7 @@ class EmbeddingService:
         self._model = settings.EMBEDDING_MODEL
         
         # Configure client dynamically
-        if settings.LLM_PROVIDER == "gemini":
+        if settings.EMBEDDING_PROVIDER == "gemini":
             logger.info("Initializing EmbeddingService client with Gemini config")
             try:
                 import google.generativeai as genai
@@ -38,7 +38,7 @@ class EmbeddingService:
                 logger.warn("google-generativeai package not installed, client initialization deferred")
                 self._client = None
             self._model = "models/text-embedding-004"
-        elif settings.LLM_PROVIDER == "grok":
+        elif settings.EMBEDDING_PROVIDER == "grok":
             logger.info("Initializing EmbeddingService client with Grok (x.AI) config")
             self._client = AsyncOpenAI(
                 api_key=settings.GROK_API_KEY,
@@ -47,6 +47,23 @@ class EmbeddingService:
             # Use Grok standard embedding fallback if model is default OpenAI
             if self._model == "text-embedding-3-small":
                 self._model = "grok-beta"
+        elif settings.EMBEDDING_PROVIDER == "azure":
+            endpoint = settings.AZURE_EMBEDDING_ENDPOINT or ""
+            # Strip trailing /v1, /models, or slash
+            endpoint = endpoint.rstrip("/")
+            if endpoint.endswith("/v1"):
+                endpoint = endpoint[:-3]
+            if endpoint.endswith("/models"):
+                endpoint = endpoint[:-7]
+            endpoint = endpoint.rstrip("/")
+            
+            logger.info("Initializing EmbeddingService client with Azure AI Foundry config", endpoint=endpoint)
+            self._client = AsyncOpenAI(
+                api_key=settings.AZURE_EMBEDDING_API_KEY,
+                base_url=f"{endpoint}/models",
+                default_query={"api-version": "2024-05-01-preview"},
+                default_headers={"api-key": settings.AZURE_EMBEDDING_API_KEY}
+            )
         else:
             logger.info("Initializing EmbeddingService client with OpenAI config")
             self._client = AsyncOpenAI(
@@ -125,10 +142,15 @@ class EmbeddingService:
                 if not isinstance(vector, list):
                     vector = list(vector)
             else:
-                response = await self._client.embeddings.create(
-                    input=text,
-                    model=self._model
-                )
+                kwargs = {
+                    "input": text,
+                    "model": self._model
+                }
+                # Azure and OpenAI text-embedding-3-small support the dimensions parameter.
+                # The database schema expects 1536 dimensions.
+                if "text-embedding-3-" in self._model or settings.EMBEDDING_PROVIDER == "azure":
+                    kwargs["dimensions"] = 1536
+                response = await self._client.embeddings.create(**kwargs)
                 vector = response.data[0].embedding
             
             # Save to cache

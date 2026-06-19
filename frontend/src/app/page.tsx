@@ -284,11 +284,16 @@ export default function HomePage() {
   }
 
   return (
-    <div className="bg-background text-on-background h-screen w-screen overflow-hidden flex flex-col font-body-md">
+    <div className="bg-[#030712] text-on-background h-screen w-screen overflow-hidden flex flex-col font-body-md">
       {/* TopNavBar */}
-      <header className="flex justify-between items-center px-margin-desktop w-full h-16 sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant flex-shrink-0">
+      <header className="flex justify-between items-center px-margin-desktop w-full h-16 sticky top-0 z-50 bg-[#080c16]/80 backdrop-blur-lg border-b border-indigo-950/40 flex-shrink-0">
         <div className="flex items-center gap-stack-lg">
-          <span className="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">GlobeLens AI</span>
+          <span 
+            className="font-headline-lg text-headline-lg font-extrabold bg-gradient-to-r from-cyber-cyan via-indigo-300 to-cyber-indigo bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(6,182,212,0.25)] tracking-tight cursor-pointer"
+            onClick={() => { setViewMode("map"); setSearchEmpty(false); setSearchActive(false); }}
+          >
+            GlobeLens AI
+          </span>
           <nav className="hidden md:flex items-center gap-stack-lg h-full pt-1">
             <button 
               onClick={() => {
@@ -297,7 +302,7 @@ export default function HomePage() {
                   window.history.pushState(null, "", "?view=standard");
                 }
               }} 
-              className={`font-body-md text-body-md transition-colors pb-1 ${viewMode === "standard" ? "text-primary font-bold border-b-2 border-primary" : "text-on-surface-variant font-medium hover:text-primary"}`}
+              className={`font-body-md text-body-md transition-all pb-1 hover:text-cyber-cyan duration-200 ${viewMode === "standard" ? "text-cyber-cyan font-bold border-b-2 border-cyber-cyan" : "text-on-surface-variant font-medium hover:text-primary"}`}
             >
               Standard
             </button>
@@ -308,12 +313,12 @@ export default function HomePage() {
                   window.history.pushState(null, "", "?view=map");
                 }
               }} 
-              className={`font-body-md text-body-md transition-colors pb-1 ${viewMode === "map" ? "text-primary font-bold border-b-2 border-primary" : "text-on-surface-variant font-medium hover:text-primary"}`}
+              className={`font-body-md text-body-md transition-all pb-1 hover:text-cyber-cyan duration-200 ${viewMode === "map" ? "text-cyber-cyan font-bold border-b-2 border-cyber-cyan" : "text-on-surface-variant font-medium hover:text-primary"}`}
             >
               Map
             </button>
-            <a className="font-body-md text-body-md text-on-surface-variant font-medium hover:text-primary transition-colors pb-1" href="/admin/dashboard">Admin</a>
-            <a className="font-body-md text-body-md text-on-surface-variant font-medium hover:text-primary transition-colors pb-1" href="/fact-checker">Fact Checker</a>
+            <a className="font-body-md text-body-md text-on-surface-variant font-medium hover:text-cyber-cyan transition-all duration-200 pb-1" href="/admin/dashboard">Admin</a>
+            <a className="font-body-md text-body-md text-on-surface-variant font-medium hover:text-cyber-cyan transition-all duration-200 pb-1" href="/fact-checker">Fact Checker</a>
           </nav>
         </div>
         <div className="flex items-center gap-4">
@@ -600,25 +605,25 @@ function renderDossierPanel(
   };
 
   return (
-    <div className="absolute top-4 right-4 bottom-4 w-full sm:w-[480px] z-40 bg-zinc-950/85 backdrop-blur-xl border border-outline-variant/80 rounded-2xl shadow-2xl p-6 flex flex-col justify-between overflow-y-auto no-scrollbar transition-all duration-300 animate-in slide-in-from-right">
+    <div className="absolute top-4 right-4 bottom-4 w-full sm:w-[480px] z-40 bg-[#080c16]/95 backdrop-blur-2xl border border-indigo-500/20 rounded-2xl shadow-[0_0_50px_rgba(6,182,212,0.15)] p-6 flex flex-col justify-between overflow-y-auto no-scrollbar animate-fade-in-up">
       <div>
         {/* Header */}
-        <div className="flex justify-between items-start mb-6 border-b border-outline-variant/40 pb-4">
+        <div className="flex justify-between items-start mb-6 border-b border-indigo-950/40 pb-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-950/40 border border-blue-900/50 text-blue-400 text-[10px] font-bold uppercase">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan text-[10px] font-bold uppercase tracking-wider font-mono-data">
                 <Globe className="w-3 h-3" />
                 {selectedEvent.country || "Global"}
               </span>
-              <span className={`inline-flex border px-2 py-0.5 rounded font-label-caps text-[9px] uppercase tracking-wider ${getTopicBadgeStyle(selectedEvent.topic)}`}>
+              <span className={`inline-flex border px-2.5 py-0.5 rounded-full font-label-caps text-[9px] uppercase tracking-wider ${getTopicBadgeStyle(selectedEvent.topic)}`}>
                 {selectedEvent.topic}
               </span>
             </div>
-            <h3 className="text-xl font-bold text-white leading-snug">{selectedEvent.title}</h3>
+            <h3 className="text-xl font-bold text-white leading-snug drop-shadow-sm">{selectedEvent.title}</h3>
           </div>
           <button
             onClick={() => setSelectedEvent(null)}
-            className="text-zinc-400 hover:text-white bg-zinc-900/80 border border-zinc-800 p-2 rounded-xl transition-all"
+            className="text-zinc-400 hover:text-white bg-zinc-900/40 border border-zinc-800/60 p-2 rounded-xl transition-all hover:scale-105 active:scale-95"
           >
             ✕
           </button>
@@ -627,24 +632,24 @@ function renderDossierPanel(
         {/* Body */}
         <div className="space-y-6">
           <div>
-            <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-3 flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-primary" />
+            <h4 className="text-[10px] font-bold text-cyber-cyan/70 uppercase tracking-widest mb-3 flex items-center gap-1.5 font-mono-data">
+              <FileText className="w-3.5 h-3.5" />
               AI Intelligence synthesis
             </h4>
             <div className="text-xs text-zinc-300 space-y-4 leading-relaxed font-body-sm">
               {selectedEvent.summary ? (
                 selectedEvent.summary.split("\n\n").map((para, i) => (
-                  <p key={i}>{para}</p>
+                  <p key={i} className="text-zinc-300/95">{para}</p>
                 ))
               ) : (
-                <p>Geopolitical analytics are processing. Real-time reports from multiple publisher networks are being aggregated.</p>
+                <p className="text-zinc-400 italic">Geopolitical analytics are processing. Real-time reports from multiple publisher networks are being aggregated.</p>
               )}
             </div>
           </div>
 
           {/* Bias Lean Spectrum */}
-          <div className="border-t border-outline-variant/40 pt-4">
-            <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-3">Geopolitical Bias Spectrum</h4>
+          <div className="border-t border-indigo-950/40 pt-4">
+            <h4 className="text-[10px] font-bold text-cyber-indigo/70 uppercase tracking-widest mb-3 font-mono-data">Geopolitical Bias Spectrum</h4>
             {(() => {
               const lean = (selectedEvent.bias_lean || "CENTER").toUpperCase();
               let percentage = 50;
@@ -667,20 +672,20 @@ function renderDossierPanel(
               return (
                 <div className="space-y-2">
                   <div className="relative pt-2">
-                    <div className="h-3 w-full rounded-full bg-gradient-to-r from-violet-600 via-zinc-400 to-emerald-500 border border-zinc-800"></div>
+                    <div className="h-2.5 w-full rounded-full bg-gradient-to-r from-cyber-rose via-zinc-650 to-cyber-emerald border border-zinc-800/80"></div>
                     <div 
-                      className="absolute top-0.5 flex flex-col items-center transition-all duration-500"
+                      className="absolute top-0 flex flex-col items-center transition-all duration-500"
                       style={{ left: `calc(${percentage}% - 6px)` }}
                     >
-                      <div className="h-6 w-3 bg-white border border-slate-900 rounded shadow-md flex items-center justify-center">
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-600"></div>
+                      <div className="h-5 w-3 bg-white border border-slate-950 rounded shadow-[0_0_8px_rgba(255,255,255,0.4)] flex items-center justify-center">
+                        <div className="w-1.5 h-1.5 rounded-full bg-cyber-indigo"></div>
                       </div>
                     </div>
                   </div>
-                  <div className="flex justify-between text-[9px] text-zinc-500 font-bold uppercase">
-                    <span>Left</span>
-                    <span className="text-blue-400">{label}</span>
-                    <span>Right</span>
+                  <div className="flex justify-between text-[9px] text-zinc-500 font-bold uppercase font-mono-data">
+                    <span className="text-cyber-rose/80">Left Bias</span>
+                    <span className="text-cyber-indigo">{label}</span>
+                    <span className="text-cyber-emerald/80">Right Bias</span>
                   </div>
                 </div>
               );
@@ -688,28 +693,28 @@ function renderDossierPanel(
           </div>
 
           {/* Metadata Grid */}
-          <div className="grid grid-cols-2 gap-4 border-t border-outline-variant/40 pt-4 text-xs">
+          <div className="grid grid-cols-2 gap-4 border-t border-indigo-950/40 pt-4 text-xs font-body-sm">
             <div>
-              <h5 className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider mb-1">Geographic Coordinates</h5>
-              <span className="text-white font-mono-data font-semibold">
+              <h5 className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider mb-1 font-mono-data">Geographic Coordinates</h5>
+              <span className="text-cyber-cyan font-mono-data font-semibold">
                 {selectedEvent.latitude ? selectedEvent.latitude.toFixed(4) : "0.0000"}, {selectedEvent.longitude ? selectedEvent.longitude.toFixed(4) : "0.0000"}
               </span>
             </div>
             <div>
-              <h5 className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider mb-1">Source Coverage</h5>
+              <h5 className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider mb-1 font-mono-data">Source Coverage</h5>
               <span className="text-white font-semibold">
                 {selectedEvent.source_count} publisher wireheads
               </span>
             </div>
             <div>
-              <h5 className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider mb-1">Confidence Score</h5>
-              <span className="text-emerald-400 font-bold">
+              <h5 className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider mb-1 font-mono-data">Confidence Score</h5>
+              <span className="text-cyber-emerald font-bold">
                 {(8.5 + (selectedEvent.importance_score % 1.5)).toFixed(1)}/10.0
               </span>
             </div>
             <div>
-              <h5 className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider mb-1">Geopolitical Importance</h5>
-              <span className="text-primary font-bold">
+              <h5 className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider mb-1 font-mono-data">Geopolitical Importance</h5>
+              <span className="text-cyber-amber font-bold">
                 {selectedEvent.importance_score.toFixed(1)} / 10.0
               </span>
             </div>
@@ -718,16 +723,16 @@ function renderDossierPanel(
       </div>
 
       {/* Actions */}
-      <div className="border-t border-outline-variant/40 pt-4 mt-6 flex gap-3">
+      <div className="border-t border-indigo-950/40 pt-4 mt-6 flex gap-3">
         <button
           onClick={() => setSelectedEvent(null)}
-          className="flex-1 py-3 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 rounded-xl text-xs font-bold transition-all text-center text-zinc-400 hover:text-white"
+          className="flex-1 py-3 bg-zinc-900/60 border border-zinc-800/80 hover:bg-zinc-800 hover:text-white rounded-xl text-xs font-bold transition-all text-center text-zinc-400 active:scale-95"
         >
           Close Dossier
         </button>
         <a
           href={`/events/${selectedEvent.id}`}
-          className="flex-1 py-3 bg-primary hover:bg-primary-fixed text-primary-container font-bold rounded-xl text-xs transition-all text-center flex items-center justify-center gap-1"
+          className="flex-1 py-3 bg-gradient-to-r from-cyber-cyan to-cyber-indigo hover:brightness-110 text-slate-950 font-bold rounded-xl text-xs transition-all text-center flex items-center justify-center gap-1 shadow-[0_0_15px_rgba(6,182,212,0.2)] active:scale-95"
         >
           <BookOpen className="w-3.5 h-3.5" />
           Full Analysis

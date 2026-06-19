@@ -109,62 +109,78 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="bg-surface text-on-surface min-h-screen flex selection:bg-primary-container selection:text-primary relative overflow-hidden font-body-md">
+    <main className="bg-[#030712] text-zinc-150 min-h-screen flex selection:bg-cyber-indigo/30 selection:text-white relative overflow-hidden font-body-md">
+      {/* Ambient Grid overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(99,102,241,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(99,102,241,0.01)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none z-0"></div>
+
       {/* Left Column (Concept Art) - Hidden on Mobile */}
-      <div className="hidden lg:flex flex-1 relative flex-col justify-between p-12 overflow-hidden border-r border-outline-variant">
+      <div className="hidden lg:flex flex-1 relative flex-col justify-between p-12 overflow-hidden border-r border-indigo-950/40">
         {/* Background Asset */}
         <div 
           className="absolute inset-0 bg-cover bg-center z-0" 
           style={{ 
             backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDmZKJlShKNDhogzgHf8kGMTnELrPGIBgtDZDBQIoq4WkZf4e8_Zl1bJB7P0NjWPHN3KFk6T6B6WGVcWCG7qRceARj0TLrBLDf2m1MSCoL5dLhuKhr4blPrcQxDgAGVhpT5XcSOdfTV-z8aWWkeOExUIWwLq2sfeps2Ppykxed2EPcagEIqRTQ6F7u41ZEu80wzslf4EvLWa7vfn3bfjUpKAWmmEAzvkb9nC_ijOspMVkSZX5ygpVN8on-effC0CgBw6vHCYsZ8GPAf')",
-            opacity: 0.3
+            opacity: 0.15
           }}
         ></div>
-        <div className="absolute inset-0 bg-surface/80 backdrop-blur-md z-0"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-surface/40 z-0"></div>
+        <div className="absolute inset-0 bg-[#080c16]/80 backdrop-blur-md z-0"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-[#030712]/40 z-0"></div>
+
+        {/* Ambient Glows */}
+        <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-cyber-cyan/5 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-cyber-indigo/5 rounded-full blur-[100px] pointer-events-none"></div>
 
         {/* Top Branding */}
-        <div className="relative z-10 flex items-center gap-3 text-primary">
-          <Globe className="w-8 h-8 text-primary animate-pulse" />
-          <span className="font-headline-lg text-headline-lg font-bold tracking-tight">GlobeLens AI</span>
+        <div className="relative z-10 flex items-center gap-3 text-white">
+          <Globe className="w-8 h-8 text-cyber-cyan animate-pulse shadow-[0_0_12px_rgba(6,182,212,0.4)]" />
+          <span className="font-headline-lg text-headline-lg font-extrabold tracking-tight bg-gradient-to-r from-cyber-cyan via-indigo-200 to-cyber-indigo bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(6,182,212,0.15)]">
+            GlobeLens AI
+          </span>
         </div>
 
         {/* Bottom Editorial Anchor */}
-        <div className="relative z-10 max-w-xl space-y-stack-md">
-          <div className="w-12 h-1 bg-primary rounded-full mb-stack-lg"></div>
-          <h2 className="font-display-lg text-display-lg text-on-surface leading-tight">The Informed Edge.</h2>
-          <p className="font-body-lg text-body-lg text-on-surface-variant max-w-md">
+        <div className="relative z-10 max-w-xl space-y-4">
+          <div className="w-12 h-1 bg-gradient-to-r from-cyber-cyan to-cyber-indigo rounded-full mb-6"></div>
+          <h2 className="text-3xl font-extrabold text-white leading-tight">The Informed Edge.</h2>
+          <p className="text-zinc-400 text-sm leading-relaxed max-w-md">
             Synthesizing global events into actionable intelligence. Merging traditional newsroom credibility with high-velocity precision data science.
           </p>
         </div>
       </div>
 
       {/* Right Interaction Column */}
-      <div className="flex-1 flex items-center justify-center p-8 sm:p-12 lg:p-24 bg-surface relative overflow-y-auto">
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-12 lg:p-24 bg-[#030712] relative overflow-y-auto z-10">
+        
+        {/* Background Gradients for Right Side */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-cyber-indigo/5 rounded-full blur-[120px] pointer-events-none"></div>
+
         {/* Mobile Logo */}
-        <div className="absolute top-8 left-8 flex lg:hidden items-center gap-2 text-primary">
-          <Globe className="w-6 h-6 text-primary" />
-          <span className="font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-tight">GlobeLens</span>
+        <div className="absolute top-8 left-8 flex lg:hidden items-center gap-2 text-white">
+          <Globe className="w-6 h-6 text-cyber-cyan animate-pulse" />
+          <span className="font-extrabold tracking-tight bg-gradient-to-r from-cyber-cyan to-cyber-indigo bg-clip-text text-transparent">
+            GlobeLens
+          </span>
         </div>
 
-        {/* Interaction Form Container */}
-        <div className="w-full max-w-[400px] relative">
-          
+        {/* Interaction Form Container (Glass panel HUD) */}
+        <div className="w-full max-w-[420px] relative glass-panel rounded-2xl p-6 sm:p-8 border border-indigo-950/60 shadow-2xl transition-all duration-300 hover:border-cyber-indigo/25">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyber-cyan to-cyber-indigo"></div>
+
           {/* 1. LOGIN VIEW */}
           {view === "login" && (
-            <div className="space-y-stack-lg transition-all duration-300 animate-in fade-in">
-              <div className="space-y-stack-sm">
-                <h1 className="font-headline-xl text-headline-xl text-on-surface">Authenticate</h1>
-                <p className="font-body-md text-body-md text-on-surface-variant">Access your intelligence dossier.</p>
+            <div className="space-y-6 transition-all duration-300 animate-in fade-in">
+              <div className="space-y-1">
+                <h1 className="text-2xl font-extrabold text-white tracking-tight">Authenticate</h1>
+                <p className="text-zinc-400 text-xs font-mono-data uppercase tracking-wider">Access secure operational console.</p>
               </div>
 
-              <div className="space-y-stack-md">
+              <div className="space-y-4">
                 {/* OAuth Button */}
                 <button 
                   onClick={() => alert("Google Single Sign-On simulation.")}
-                  className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-outline-variant rounded bg-surface-container-low hover:bg-surface-container transition-colors text-on-surface font-body-md text-body-md font-medium group"
+                  className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-zinc-800/80 rounded-xl bg-zinc-950/40 hover:bg-zinc-900/40 transition-all text-zinc-300 font-semibold text-xs font-mono-data tracking-wider uppercase group"
                 >
-                  <svg className="w-5 h-5 text-on-surface group-hover:text-primary transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4.5 h-4.5 text-on-surface group-hover:scale-105 transition-transform" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
                     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
                     <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
@@ -174,46 +190,46 @@ export default function LoginPage() {
                 </button>
 
                 {/* Divider */}
-                <div className="relative flex items-center py-stack-sm">
-                  <div className="flex-grow border-t border-outline-variant"></div>
-                  <span className="flex-shrink-0 mx-4 text-outline font-label-caps text-[10px] uppercase tracking-widest">Or Secure Login</span>
-                  <div className="flex-grow border-t border-outline-variant"></div>
+                <div className="relative flex items-center py-2">
+                  <div className="flex-grow border-t border-indigo-950/60"></div>
+                  <span className="flex-shrink-0 mx-4 text-zinc-500 font-mono-data text-[9px] uppercase tracking-widest font-bold">Or Secure Uplink</span>
+                  <div className="flex-grow border-t border-indigo-950/60"></div>
                 </div>
 
                 {/* Credentials Form */}
-                <form onSubmit={handleLogin} className="space-y-stack-md">
-                  <div className="space-y-stack-sm">
-                    <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider" htmlFor="email">Corporate Email</label>
+                <form onSubmit={handleLogin} className="space-y-4">
+                  <div className="space-y-1.5">
+                    <label className="block font-mono-data text-[10px] text-zinc-400 uppercase tracking-widest font-bold" htmlFor="email">Clearance Email</label>
                     <div className="relative">
-                      <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
-                        <Mail className="w-5 h-5" />
+                      <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500">
+                        <Mail className="w-4 h-4 text-cyber-cyan" />
                       </span>
                       <input 
                         type="email"
                         id="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="analyst@agency.com"
-                        className="w-full bg-surface-container border border-outline-variant rounded pl-10 pr-4 py-3 text-on-surface font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow placeholder:text-outline/50 shadow-inner"
+                        placeholder="analyst@globelens.ai"
+                        className="w-full bg-zinc-950/60 border border-zinc-850/80 rounded-xl pl-10 pr-4 py-2.5 text-sm text-zinc-200 focus:outline-none focus:border-cyber-cyan focus:shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all placeholder:text-zinc-700"
                         required
                       />
                     </div>
                   </div>
 
-                  <div className="space-y-stack-sm">
+                  <div className="space-y-1.5">
                     <div className="flex justify-between items-center">
-                      <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider" htmlFor="password">Passphrase</label>
+                      <label className="block font-mono-data text-[10px] text-zinc-400 uppercase tracking-widest font-bold" htmlFor="password">Passphrase</label>
                       <button 
                         type="button" 
                         onClick={() => setViewState("forgot")}
-                        className="font-body-sm text-body-sm text-primary hover:text-secondary transition-colors underline-offset-4 hover:underline"
+                        className="font-mono-data text-[9px] text-cyber-indigo hover:text-cyber-cyan transition-colors uppercase font-bold tracking-wider"
                       >
                         Recover Access
                       </button>
                     </div>
                     <div className="relative">
-                      <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
-                        <Key className="w-5 h-5" />
+                      <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500">
+                        <Key className="w-4 h-4 text-cyber-cyan" />
                       </span>
                       <input 
                         type="password"
@@ -221,25 +237,27 @@ export default function LoginPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••••••"
-                        className="w-full bg-surface-container border border-outline-variant rounded pl-10 pr-4 py-3 text-on-surface font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow placeholder:text-outline/50 shadow-inner"
+                        className="w-full bg-zinc-950/60 border border-zinc-850/80 rounded-xl pl-10 pr-4 py-2.5 text-sm text-zinc-200 focus:outline-none focus:border-cyber-cyan focus:shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all placeholder:text-zinc-700"
                         required
                       />
                     </div>
                   </div>
 
-                  <div className="flex items-center pt-2">
+                  <div className="flex items-center pt-2 select-none">
                     <input 
                       type="checkbox"
                       id="remember"
                       checked={remember}
                       onChange={(e) => setRemember(e.target.checked)}
-                      className="w-4 h-4 rounded border-outline-variant bg-surface-container text-primary focus:ring-primary focus:ring-offset-surface cursor-pointer"
+                      className="w-4 h-4 rounded border-zinc-800/80 bg-zinc-950/80 text-cyber-cyan focus:ring-cyber-cyan focus:ring-offset-[#030712] cursor-pointer"
                     />
-                    <label className="ml-3 font-body-sm text-body-sm text-on-surface-variant cursor-pointer select-none" htmlFor="remember">Maintain secure session parameters</label>
+                    <label className="ml-3 font-mono-data text-[10px] text-zinc-400 cursor-pointer" htmlFor="remember">
+                      Maintain secure session parameters
+                    </label>
                   </div>
 
                   {loginError && (
-                    <div className="p-3 bg-error/15 border-l-2 border-error text-error text-xs rounded">
+                    <div className="p-3.5 bg-cyber-rose/10 border border-cyber-rose/30 text-cyber-rose text-xs rounded-xl font-mono-data uppercase tracking-wider">
                       {loginError}
                     </div>
                   )}
@@ -247,22 +265,22 @@ export default function LoginPage() {
                   <button 
                     type="submit"
                     disabled={loginLoading}
-                    className="w-full mt-4 py-3 px-4 bg-primary text-on-primary font-body-md text-body-md font-medium rounded hover:bg-secondary disabled:opacity-50 transition-colors shadow-sm flex items-center justify-center gap-2 group relative overflow-hidden"
+                    className="w-full mt-4 py-3 px-4 bg-cyber-cyan/15 hover:bg-cyber-cyan/25 border border-cyber-cyan/35 text-cyber-cyan font-mono-data text-xs font-bold tracking-widest rounded-xl transition-all shadow-[0_0_15px_rgba(6,182,212,0.1)] hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 group"
                   >
-                    <span className="relative z-10 flex items-center gap-2">
-                      {loginLoading ? "Authenticating clearance..." : "Initialize Uplink"}
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <span>
+                      {loginLoading ? "Uplink active..." : "Initialize Gateway"}
                     </span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </form>
               </div>
 
-              <p className="text-center font-body-sm text-body-sm text-on-surface-variant pt-stack-md border-t border-outline-variant/50">
+              <p className="text-center font-mono-data text-[10px] text-zinc-500 pt-4 border-t border-indigo-950/40 font-semibold uppercase tracking-wider">
                 No active clearance? 
                 <button 
                   type="button" 
                   onClick={() => setViewState("register")}
-                  className="text-primary hover:text-secondary transition-colors font-medium ml-1"
+                  className="text-cyber-cyan hover:text-white transition-colors ml-1 font-bold"
                 >
                   Request Enrollment
                 </button>
@@ -272,76 +290,78 @@ export default function LoginPage() {
 
           {/* 2. REGISTER VIEW */}
           {view === "register" && (
-            <div className="space-y-stack-lg transition-all duration-300 animate-in fade-in">
-              <div className="space-y-stack-sm">
+            <div className="space-y-6 transition-all duration-300 animate-in fade-in">
+              <div className="space-y-1">
                 <button 
                   type="button" 
                   onClick={() => setViewState("login")}
-                  className="flex items-center gap-1 text-outline hover:text-primary transition-colors font-body-sm text-body-sm mb-4"
+                  className="flex items-center gap-1.5 text-zinc-500 hover:text-cyber-cyan transition-colors font-mono-data text-[9px] uppercase tracking-wider font-bold mb-2"
                 >
-                  <ArrowLeft className="w-4 h-4" />
-                  Back to Login
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  Back to Gateway
                 </button>
-                <h1 className="font-headline-xl text-headline-xl text-on-surface">Enrollment</h1>
-                <p className="font-body-md text-body-md text-on-surface-variant">Submit credentials for clearance review.</p>
+                <h1 className="text-2xl font-extrabold text-white tracking-tight">Enrollment</h1>
+                <p className="text-zinc-400 text-xs font-mono-data uppercase tracking-wider">Submit credentials for clearance review.</p>
               </div>
 
-              <form onSubmit={handleRegister} className="space-y-stack-md">
+              <form onSubmit={handleRegister} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-stack-sm">
-                    <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">First Name</label>
+                  <div className="space-y-1.5">
+                    <label className="block font-mono-data text-[10px] text-zinc-400 uppercase tracking-widest font-bold">First Name</label>
                     <input 
                       type="text" 
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
-                      className="w-full bg-surface-container border border-outline-variant rounded px-4 py-3 text-on-surface font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow"
+                      className="w-full bg-zinc-950/60 border border-zinc-850/80 rounded-xl px-4 py-2.5 text-sm text-zinc-200 focus:outline-none focus:border-cyber-cyan focus:shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all"
                       required
                     />
                   </div>
-                  <div className="space-y-stack-sm">
-                    <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Last Name</label>
+                  <div className="space-y-1.5">
+                    <label className="block font-mono-data text-[10px] text-zinc-400 uppercase tracking-widest font-bold">Last Name</label>
                     <input 
                       type="text" 
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
-                      className="w-full bg-surface-container border border-outline-variant rounded px-4 py-3 text-on-surface font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow"
+                      className="w-full bg-zinc-950/60 border border-zinc-850/80 rounded-xl px-4 py-2.5 text-sm text-zinc-200 focus:outline-none focus:border-cyber-cyan focus:shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all"
                       required
                     />
                   </div>
                 </div>
 
-                <div className="space-y-stack-sm">
-                  <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Corporate Email</label>
+                <div className="space-y-1.5">
+                  <label className="block font-mono-data text-[10px] text-zinc-400 uppercase tracking-widest font-bold">Corporate Email</label>
                   <input 
                     type="email" 
                     value={regEmail}
                     onChange={(e) => setRegEmail(e.target.value)}
-                    className="w-full bg-surface-container border border-outline-variant rounded px-4 py-3 text-on-surface font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow"
+                    placeholder="analyst@globelens.ai"
+                    className="w-full bg-zinc-950/60 border border-zinc-850/80 rounded-xl px-4 py-2.5 text-sm text-zinc-200 focus:outline-none focus:border-cyber-cyan focus:shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all placeholder:text-zinc-700"
                     required
                   />
                 </div>
 
-                <div className="space-y-stack-sm">
-                  <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Security Passphrase</label>
+                <div className="space-y-1.5">
+                  <label className="block font-mono-data text-[10px] text-zinc-400 uppercase tracking-widest font-bold">Security Passphrase</label>
                   <input 
                     type="password" 
                     value={regPassword}
                     onChange={(e) => setRegPassword(e.target.value)}
-                    className="w-full bg-surface-container border border-outline-variant rounded px-4 py-3 text-on-surface font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow"
+                    placeholder="••••••••••••"
+                    className="w-full bg-zinc-950/60 border border-zinc-850/80 rounded-xl px-4 py-2.5 text-sm text-zinc-200 focus:outline-none focus:border-cyber-cyan focus:shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all"
                     required
                   />
-                  <p className="font-mono-data text-[10px] text-outline mt-1">Requires 12+ chars, alphanumeric & symbol.</p>
+                  <p className="font-mono-data text-[9px] text-zinc-500 mt-1 uppercase font-bold tracking-wider">Requires 12+ characters, alphanumeric.</p>
                 </div>
 
                 {regStatus && (
-                  <div className="p-3 bg-surface-container-high border-l-2 border-primary text-xs rounded text-primary">
+                  <div className="p-3.5 bg-zinc-950/80 border border-indigo-950/80 text-xs rounded-xl text-cyber-cyan font-mono-data uppercase tracking-wider text-center">
                     {regStatus}
                   </div>
                 )}
 
                 <button 
                   type="submit"
-                  className="w-full mt-6 py-3 px-4 border border-primary text-primary hover:bg-primary hover:text-on-primary font-body-md text-body-md font-medium rounded transition-all shadow-sm flex items-center justify-center gap-2"
+                  className="w-full mt-6 py-3 px-4 bg-cyber-indigo/15 hover:bg-cyber-indigo/25 border border-cyber-indigo/35 text-cyber-indigo font-mono-data text-xs font-bold tracking-widest rounded-xl transition-all shadow-[0_0_15px_rgba(99,102,241,0.1)] hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
                 >
                   Submit Dossier
                   <Send className="w-4 h-4" />
@@ -352,48 +372,50 @@ export default function LoginPage() {
 
           {/* 3. RECOVERY VIEW */}
           {view === "forgot" && (
-            <div className="space-y-stack-lg transition-all duration-300 animate-in fade-in">
-              <div className="space-y-stack-sm">
+            <div className="space-y-6 transition-all duration-300 animate-in fade-in">
+              <div className="space-y-1">
                 <button 
                   type="button" 
                   onClick={() => setViewState("login")}
-                  className="flex items-center gap-1 text-outline hover:text-primary transition-colors font-body-sm text-body-sm mb-4"
+                  className="flex items-center gap-1.5 text-zinc-500 hover:text-cyber-cyan transition-colors font-mono-data text-[9px] uppercase tracking-wider font-bold mb-2"
                 >
-                  <ArrowLeft className="w-4 h-4" />
-                  Back to Login
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  Back to Gateway
                 </button>
-                <h1 className="font-headline-xl text-headline-xl text-on-surface">Recover Access</h1>
-                <p className="font-body-md text-body-md text-on-surface-variant">Enter your registered communication channel to receive secure recovery protocols.</p>
+                <h1 className="text-2xl font-extrabold text-white tracking-tight">Recover Access</h1>
+                <p className="text-zinc-400 text-xs font-mono-data uppercase tracking-wider">Secure recovery protocol dispatch.</p>
               </div>
 
-              <form onSubmit={(e) => { e.preventDefault(); setRecSent(true); }} className="space-y-stack-md">
-                <div className="space-y-stack-sm">
-                  <label className="block font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Corporate Email</label>
+              <form onSubmit={(e) => { e.preventDefault(); setRecSent(true); }} className="space-y-4">
+                <div className="space-y-1.5">
+                  <label className="block font-mono-data text-[10px] text-zinc-400 uppercase tracking-widest font-bold">Clearance Email</label>
                   <input 
                     type="email" 
                     value={recEmail}
                     onChange={(e) => setRecEmail(e.target.value)}
-                    placeholder="analyst@agency.com"
-                    className="w-full bg-surface-container border border-outline-variant rounded px-4 py-3 text-on-surface font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow"
+                    placeholder="analyst@globelens.ai"
+                    className="w-full bg-zinc-950/60 border border-zinc-850/80 rounded-xl px-4 py-2.5 text-sm text-zinc-200 focus:outline-none focus:border-cyber-cyan focus:shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all placeholder:text-zinc-700"
                     required
                   />
                 </div>
 
                 <button 
                   type="submit"
-                  className="w-full mt-4 py-3 px-4 bg-surface-container-high border border-outline text-on-surface hover:border-primary hover:text-primary font-body-md text-body-md font-medium rounded transition-all shadow-sm"
+                  className="w-full mt-4 py-3 px-4 bg-zinc-900/60 border border-zinc-800/80 hover:bg-zinc-850/20 text-zinc-300 font-mono-data text-xs font-bold tracking-widest rounded-xl transition-all shadow-md"
                 >
                   Dispatch Protocol
                 </button>
 
                 {recSent && (
-                  <div className="mt-4 p-4 rounded bg-surface-container-lowest border border-outline-variant flex items-start gap-3 animate-in fade-in">
+                  <div className="mt-4 p-4 rounded-xl bg-zinc-950/80 border border-indigo-950/60 flex items-start gap-3 animate-in fade-in">
                     <div className="mt-0.5">
-                      <Shield className="w-5 h-5 text-primary" />
+                      <Shield className="w-5 h-5 text-cyber-cyan animate-pulse" />
                     </div>
                     <div>
-                      <p className="font-body-md text-body-md font-medium text-on-surface">Protocol Dispatched</p>
-                      <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">If the credentials match active records, encrypted instructions have been sent.</p>
+                      <p className="font-mono-data text-xs font-bold text-white uppercase tracking-wider">Protocol Dispatched</p>
+                      <p className="text-[11px] text-zinc-400 mt-1 leading-relaxed">
+                        If credentials match active records, encrypted recovery instructions have been transmitted.
+                      </p>
                     </div>
                   </div>
                 )}

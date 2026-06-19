@@ -47,15 +47,15 @@ function MapController({ selectedEvent }: { selectedEvent: MapEvent | null }) {
 const createMarkerIcon = (importanceScore: number) => {
   const size = Math.max(16, Math.min(28, 12 + importanceScore * 1.5));
   
-  let pingColor = "bg-secondary/30";
-  let dotColor = "bg-secondary";
+  let pingColor = "bg-cyber-cyan/35 animate-pulse";
+  let dotColor = "bg-cyber-cyan border-cyan-300";
   
   if (importanceScore >= 7.0) {
-    pingColor = "bg-error/45 animate-ping";
-    dotColor = "bg-error border-error-container";
+    pingColor = "bg-cyber-rose/50 animate-ping";
+    dotColor = "bg-cyber-rose border-rose-300";
   } else if (importanceScore >= 4.0) {
-    pingColor = "bg-tertiary/40";
-    dotColor = "bg-tertiary border-tertiary-container";
+    pingColor = "bg-cyber-amber/40 animate-pulse";
+    dotColor = "bg-cyber-amber border-amber-300";
   }
 
   return L.divIcon({

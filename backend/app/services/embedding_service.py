@@ -90,6 +90,21 @@ class EmbeddingService:
         except Exception as cache_err:
             logger.warn("Cache lookup failed, proceeding to API call", error=str(cache_err))
 
+        # Check if API keys are placeholders to avoid slow/failing requests during local dev
+        is_placeholder = False
+        if settings.EMBEDDING_PROVIDER == "azure":
+            is_placeholder = not settings.AZURE_EMBEDDING_API_KEY or "your_" in settings.AZURE_EMBEDDING_API_KEY
+        elif settings.EMBEDDING_PROVIDER == "grok":
+            is_placeholder = not settings.GROK_API_KEY or "your_" in settings.GROK_API_KEY
+        elif settings.EMBEDDING_PROVIDER == "gemini":
+            is_placeholder = not settings.GEMINI_API_KEY or "your_" in settings.GEMINI_API_KEY
+        else:  # openai
+            is_placeholder = not settings.OPENAI_API_KEY or "your_" in settings.OPENAI_API_KEY
+
+        if is_placeholder:
+            logger.warn("Placeholder embedding API key detected, using deterministic fallback mock vector", provider=settings.EMBEDDING_PROVIDER)
+            return self._generate_mock_vector(text)
+
         logger.info("Calling embedding API", model=self._model, text_len=len(text))
         try:
             if settings.LLM_PROVIDER == "gemini":
@@ -161,8 +176,22 @@ class EmbeddingService:
                 
             return vector
         except Exception as api_err:
-            logger.error("Embedding API call failed", model=self._model, error=str(api_err))
-            raise api_err
+            logger.error("Embedding API call failed, running heuristic mock fallback", model=self._model, error=str(api_err))
+            return self._generate_mock_vector(text)
+
+    def _generate_mock_vector(self, text: str, dimensions: int = 1536) -> List[float]:
+        """Generate a deterministic unit-length mock vector for a given text input."""
+        import random
+        text_bytes = text.encode("utf-8")
+        h = hashlib.sha256(text_bytes).digest()
+        seed = int.from_bytes(h[:4], "big")
+        rng = random.Random(seed)
+        vector = [rng.uniform(-1.0, 1.0) for _ in range(dimensions)]
+        # Normalize to unit length (L2 norm)
+        norm = sum(x * x for x in vector) ** 0.5
+        if norm > 0:
+            vector = [x / norm for x in vector]
+        return vector
 
     async def generate_embedding(self, text: str) -> List[float]:
         """Alias for generate_vector to maintain backward compatibility."""

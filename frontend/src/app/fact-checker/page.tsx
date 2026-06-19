@@ -40,6 +40,7 @@ interface FactCheckResult {
     independent_cross_references: number;
     claims: ClaimItem[];
     historical_matches: HistoricalMatchItem[];
+    summary?: string;
   };
 }
 

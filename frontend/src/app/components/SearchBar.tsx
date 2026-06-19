@@ -115,13 +115,13 @@ export default function SearchBar({ onSelectEvent, onSearchResults, onClearSearc
           onFocus={() => {
             if (suggestions.length > 0) setShowDropdown(true);
           }}
-          className="w-full bg-primary-container border border-outline-variant text-on-background font-body-md text-body-md rounded-lg pl-12 pr-12 py-3.5 shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 outline-none placeholder:text-outline/60"
-          placeholder="Search intelligence, topics, or geo-locations..."
+          className="w-full bg-primary-container border border-outline-variant text-on-background font-body-md text-body-md rounded-lg pl-12 pr-[144px] py-3.5 shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 outline-none placeholder:text-outline/60"
+          placeholder="Search intelligence, topics..."
         />
         {query && (
           <button
             onClick={handleClear}
-            className="absolute inset-y-0 right-14 px-3 flex items-center text-outline hover:text-primary transition-colors"
+            className="absolute inset-y-0 right-24 px-3 flex items-center text-outline hover:text-primary transition-colors"
           >
             <X className="w-5 h-5" />
           </button>

@@ -21,8 +21,9 @@ import {
   BookOpen,
   CheckCircle,
   ExternalLink,
-  MessageSquare
+  Newspaper
 } from "lucide-react";
+import PillNav from "../../components/PillNav";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -65,8 +66,7 @@ export default function EventDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
   
-  // Real-time Social Flux sidebar items
-  const [fluxTab, setFluxTab] = useState<"flux" | "trending" | "updates">("flux");
+
   
   const fetchEventDetails = async () => {
     setLoading(true);
@@ -127,34 +127,34 @@ export default function EventDetailPage() {
     const paragraphs = summaryText.split("\n\n").filter(p => p.trim().length > 0);
     
     return paragraphs.map((para, pIdx) => {
-      // Split paragraph into sentences roughly by ". " (to avoid abbreviations, but simple is fine)
+      // Only add one citation per paragraph — on the last sentence — to avoid flooding the text
       const sentences = para.split(/(?<=\. )/g);
-      
+      const lastSentenceIdx = sentences.length - 1;
+      // Pick a different article for each paragraph
+      const articleIndex = pIdx % (articlesList.length || 1);
+      const associatedArticle = articlesList.length > 0 ? articlesList[articleIndex] : null;
+
       return (
         <p key={pIdx} className="mb-6 text-on-surface leading-[1.8] text-body-lg font-body-lg">
           {sentences.map((sentence, sIdx) => {
-            // Distribute articles across paragraph sentences for tooltips
-            const articleIndex = (pIdx * 2 + sIdx) % (articlesList.length || 1);
-            const associatedArticle = articlesList[articleIndex];
-            
-            // Check if we want to add a citation to this sentence (e.g. if we have articles and it meets criteria)
-            const shouldCite = articlesList.length > 0 && sentence.length > 25 && (sIdx % 2 === 1 || paragraphs.length === 1);
-            
+            // Only cite on the last sentence of each paragraph
+            const shouldCite = associatedArticle && sIdx === lastSentenceIdx;
+
             if (shouldCite && associatedArticle) {
               const trustPercent = Math.round((associatedArticle.source.credibility_score || 0.85) * 100);
               
               return (
                 <span 
                   key={sIdx}
-                  className="has-tooltip relative inline border-b border-dashed border-primary cursor-help text-on-surface hover:text-white transition-colors duration-150"
+                  className="has-tooltip inline border-b border-dashed border-primary/50 cursor-help text-on-surface hover:text-white transition-colors duration-150"
                 >
                   {sentence}
-                  <span className="ai-tooltip glass-panel p-3 rounded text-left text-body-sm font-body-sm text-on-surface shadow-[0_8px_24px_rgba(0,0,0,0.6)] w-72 pointer-events-none">
+                  <span className="ai-tooltip glass-panel p-3 rounded text-left shadow-[0_8px_24px_rgba(0,0,0,0.6)]">
                     <strong className="block text-primary font-mono-data mb-1.5 flex items-center gap-1.5 text-xs">
                       <span className="material-symbols-outlined text-[14px]">source</span> 
                       {associatedArticle.source.name} ({trustPercent}% trust)
                     </strong>
-                    <span className="block text-xs font-semibold text-white mb-2 leading-tight">
+                    <span className="block text-xs font-semibold text-white mb-1 leading-tight">
                       {associatedArticle.title}
                     </span>
                     <span className="block text-[10px] text-zinc-400">
@@ -200,15 +200,37 @@ export default function EventDetailPage() {
   if (error || !event) {
     return (
       <div className="bg-background text-on-background min-h-screen flex flex-col font-body-md relative overflow-hidden">
-        <header className="flex justify-between items-center px-margin-desktop w-full h-16 bg-surface/80 backdrop-blur-md border-b border-outline-variant z-50">
-          <span className="font-headline-lg text-headline-lg font-bold text-primary tracking-tight cursor-pointer" onClick={() => router.push("/")}>
-            GlobeLens AI
-          </span>
-          <nav className="hidden md:flex items-center gap-stack-lg">
-            <a className="font-body-md text-body-md text-on-surface-variant font-medium hover:text-primary transition-colors" href="/?view=standard">Standard</a>
-            <a className="font-body-md text-body-md text-on-surface-variant font-medium hover:text-primary transition-colors" href="/?view=map">Map</a>
-            <a className="font-body-md text-body-md text-on-surface-variant font-medium hover:text-primary transition-colors" href="/fact-checker">Fact Checker</a>
-          </nav>
+        <header className="flex justify-between items-center px-margin-desktop w-full h-16 sticky top-0 z-50 bg-[#080c16]/80 backdrop-blur-lg border-b border-indigo-950/40 flex-shrink-0">
+          <PillNav
+            logo="/logo.svg"
+            logoAlt="GlobeLens AI Logo"
+            items={[
+              { 
+                label: 'Standard', 
+                href: '/?view=standard',
+                onClick: (e) => {
+                  e.preventDefault();
+                  router.push('/?view=standard');
+                }
+              },
+              { 
+                label: 'Map', 
+                href: '/?view=map',
+                onClick: (e) => {
+                  e.preventDefault();
+                  router.push('/?view=map');
+                }
+              },
+              { label: 'Admin', href: '/admin/dashboard' },
+              { label: 'Fact Checker', href: '/fact-checker' }
+            ]}
+            activeHref=""
+            baseColor="#080c16"
+            pillColor="#0c101b"
+            hoveredPillTextColor="#22d3ee"
+            pillTextColor="#94a3b8"
+            initialLoadAnimation={false}
+          />
         </header>
 
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(69,70,77,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(69,70,77,0.06)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none z-0"></div>
@@ -260,27 +282,32 @@ export default function EventDetailPage() {
 
   return (
     <div className="bg-background text-on-background min-h-screen flex flex-col font-body-md relative overflow-x-hidden">
-      {/* TopNavBar */}
-      <header className="bg-surface text-primary border-b border-outline-variant flex justify-between items-center px-margin-desktop w-full h-16 sticky top-0 z-50 bg-surface/80 backdrop-blur-md flex-shrink-0">
-        <div className="flex items-center gap-6">
-          <span className="font-headline-lg text-headline-lg font-bold text-primary tracking-tight cursor-pointer" onClick={() => router.push("/")}>
-            GlobeLens AI
-          </span>
-          <nav className="hidden md:flex items-center gap-6 ml-8">
-            <a className="text-on-surface-variant font-medium hover:text-primary transition-colors" href="/?view=standard">Standard</a>
-            <a className="text-on-surface-variant font-medium hover:text-primary transition-colors" href="/?view=map">Map</a>
-            <a className="text-on-surface-variant font-medium hover:text-primary transition-colors" href="/fact-checker">Fact Checker</a>
-          </nav>
-        </div>
-        <div className="flex items-center gap-4">
-          <button 
-            onClick={() => router.push("/")}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-surface-container border border-outline-variant text-on-surface font-body-sm text-body-sm rounded hover:border-primary transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Operational Console</span>
-          </button>
-        </div>
+      {/* TopNavBar — PillNav */}
+      <header className="flex justify-between items-center px-margin-desktop w-full h-16 sticky top-0 z-50 bg-[#080c16]/80 backdrop-blur-lg border-b border-indigo-950/40 flex-shrink-0">
+        <PillNav
+          logo="/logo.svg"
+          logoAlt="GlobeLens AI Logo"
+          items={[
+            {
+              label: 'Standard',
+              href: '/?view=standard',
+              onClick: (e) => { e.preventDefault(); router.push('/?view=standard'); }
+            },
+            {
+              label: 'Map',
+              href: '/?view=map',
+              onClick: (e) => { e.preventDefault(); router.push('/?view=map'); }
+            },
+            { label: 'Admin', href: '/admin/dashboard' },
+            { label: 'Fact Checker', href: '/fact-checker' }
+          ]}
+          activeHref=""
+          baseColor="#080c16"
+          pillColor="#0c101b"
+          hoveredPillTextColor="#22d3ee"
+          pillTextColor="#94a3b8"
+          initialLoadAnimation={false}
+        />
       </header>
 
       {/* Main Container */}
@@ -444,100 +471,88 @@ export default function EventDetailPage() {
 
         </main>
 
-        {/* Social Flux SideNavBar (Right Side, 3 Cols) */}
+        {/* Source Intel Sidebar (Right Side, 3 Cols) */}
         <aside className="hidden lg:flex flex-col col-span-3 bg-zinc-950/40 border border-outline-variant/60 shadow-sm sticky top-20 h-[calc(100vh-8rem)] overflow-hidden rounded-lg backdrop-blur-md p-4">
-          <div className="border-b border-outline-variant/40 pb-4 mb-4">
+          {/* Header */}
+          <div className="border-b border-outline-variant/40 pb-4 mb-4 flex-shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded bg-primary-container text-primary flex items-center justify-center font-bold text-sm">
-                SF
+              <div className="w-8 h-8 rounded bg-primary/10 text-primary flex items-center justify-center">
+                <Newspaper className="w-4 h-4" />
               </div>
               <div>
-                <h2 className="font-body-md text-body-md font-bold text-primary leading-tight">Social Flux</h2>
-                <span className="font-label-caps text-label-caps text-on-surface-variant text-[10px]">Real-time Intelligence</span>
+                <h2 className="font-body-md text-body-md font-bold text-primary leading-tight">Source Intel</h2>
+                <span className="font-label-caps text-label-caps text-on-surface-variant text-[10px]">
+                  {event.articles.length} Wire{event.articles.length !== 1 ? 's' : ''} Corroborated
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Tabs */}
-          <div className="flex border-b border-outline-variant/40 px-1 mb-4">
-            <button 
-              onClick={() => setFluxTab("flux")}
-              className={`flex-1 pb-2 text-xs font-semibold text-center transition-colors ${fluxTab === "flux" ? "text-primary border-b-2 border-primary" : "text-zinc-500 hover:text-zinc-300"}`}
-            >
-              Feed
-            </button>
-            <button 
-              onClick={() => setFluxTab("trending")}
-              className={`flex-1 pb-2 text-xs font-semibold text-center transition-colors ${fluxTab === "trending" ? "text-primary border-b-2 border-primary" : "text-zinc-500 hover:text-zinc-300"}`}
-            >
-              Trending
-            </button>
-            <button 
-              onClick={() => setFluxTab("updates")}
-              className={`flex-1 pb-2 text-xs font-semibold text-center transition-colors ${fluxTab === "updates" ? "text-primary border-b-2 border-primary" : "text-zinc-500 hover:text-zinc-300"}`}
-            >
-              Updates
-            </button>
+          {/* Event metadata quick-stats */}
+          <div className="flex-shrink-0 grid grid-cols-2 gap-2 mb-4">
+            <div className="bg-zinc-900/60 border border-zinc-800/60 rounded-lg p-2.5 flex flex-col gap-0.5">
+              <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-mono-data">Location</span>
+              <span className="text-xs text-zinc-200 font-semibold truncate">{event.country || '—'}</span>
+            </div>
+            <div className="bg-zinc-900/60 border border-zinc-800/60 rounded-lg p-2.5 flex flex-col gap-0.5">
+              <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-mono-data">Importance</span>
+              <span className="text-xs text-primary font-bold">{event.importance_score.toFixed(1)} / 10</span>
+            </div>
+            <div className="bg-zinc-900/60 border border-zinc-800/60 rounded-lg p-2.5 flex flex-col gap-0.5">
+              <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-mono-data">Trust Avg</span>
+              <span className="text-xs text-emerald-400 font-bold">{avgTrustScore}%</span>
+            </div>
+            <div className="bg-zinc-900/60 border border-zinc-800/60 rounded-lg p-2.5 flex flex-col gap-0.5">
+              <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-mono-data">Lean</span>
+              <span className="text-xs text-zinc-200 font-semibold capitalize">{biasLabel.toLowerCase()}</span>
+            </div>
           </div>
 
-          {/* Feed Content */}
-          <div className="flex-1 overflow-y-auto pr-1 no-scrollbar space-y-4 text-xs">
-            {fluxTab === "flux" && (
-              <>
-                <div className="border-b border-outline-variant/30 pb-3 space-y-1">
-                  <div className="flex justify-between items-center text-[10px] text-zinc-500 font-mono-data">
-                    <span className="text-primary font-bold">X \ @IntelAlert</span>
-                    <span>3m ago</span>
-                  </div>
-                  <p className="text-zinc-300 leading-snug">Philippine coast guard updates satellite logs regarding maritime routes shifts.</p>
-                </div>
-                
-                <div className="border-b border-outline-variant/30 pb-3 space-y-1">
-                  <div className="flex justify-between items-center text-[10px] text-zinc-500 font-mono-data">
-                    <span className="text-tertiary font-bold">Bloomberg RSS</span>
-                    <span>18m ago</span>
-                  </div>
-                  <p className="text-zinc-300 leading-snug">Tech equity indexes dip slightly on maritime logistics realignment reports.</p>
-                </div>
-
-                <div className="border-b border-outline-variant/30 pb-3 space-y-1">
-                  <div className="flex justify-between items-center text-[10px] text-zinc-500 font-mono-data">
-                    <span className="text-secondary font-bold font-mono-data">OSINT Core</span>
-                    <span>1h ago</span>
-                  </div>
-                  <p className="text-zinc-300 leading-snug">Automatic Identification System (AIS) reports show cargo vessels rerouting around perimeter.</p>
-                </div>
-              </>
-            )}
-
-            {fluxTab === "trending" && (
-              <div className="space-y-3">
-                <div className="flex justify-between items-center py-1.5 border-b border-zinc-900">
-                  <span className="text-zinc-300">#IndoPacificSecurity</span>
-                  <span className="text-primary font-bold">94% Importance</span>
-                </div>
-                <div className="flex justify-between items-center py-1.5 border-b border-zinc-900">
-                  <span className="text-zinc-300">#SupplyChainRealignment</span>
-                  <span className="text-primary font-bold">88% Importance</span>
-                </div>
-                <div className="flex justify-between items-center py-1.5 border-b border-zinc-900">
-                  <span className="text-zinc-300">#MaritimeDomainAwareness</span>
-                  <span className="text-primary font-bold">82% Importance</span>
-                </div>
+          {/* Article List */}
+          <div className="flex-1 overflow-y-auto pr-1 no-scrollbar space-y-3">
+            {event.articles.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-32 text-center gap-2">
+                <Newspaper className="w-6 h-6 text-zinc-700" />
+                <p className="text-xs text-zinc-500">No source wires linked to this event.</p>
               </div>
-            )}
-
-            {fluxTab === "updates" && (
-              <div className="space-y-3 text-zinc-400">
-                <p className="flex items-start gap-1.5">
-                  <span className="text-primary font-bold">•</span>
-                  <span>Dossier verified and ingested successfully by backend core.</span>
-                </p>
-                <p className="flex items-start gap-1.5">
-                  <span className="text-primary font-bold">•</span>
-                  <span>Elasticsearch search indices synchronized.</span>
-                </p>
-              </div>
+            ) : (
+              event.articles.map((art, idx) => {
+                const percent = Math.round((art.source.credibility_score || 0.85) * 100);
+                const trustColor = percent >= 80 ? 'text-emerald-400' : percent >= 60 ? 'text-amber-400' : 'text-rose-400';
+                return (
+                  <a
+                    key={art.id}
+                    href={art.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block bg-zinc-900/50 border border-zinc-800/50 hover:border-primary/40 hover:bg-zinc-900/80 rounded-lg p-3 transition-all duration-200"
+                  >
+                    {/* Source + trust badge row */}
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 font-mono-data font-bold uppercase tracking-wide truncate max-w-[55%]">
+                        {art.source.name}
+                      </span>
+                      <span className={`text-[9px] font-bold flex items-center gap-1 ${trustColor}`}>
+                        <CheckCircle className="w-2.5 h-2.5" />
+                        {percent}%
+                      </span>
+                    </div>
+                    {/* Title */}
+                    <p className="text-[11px] font-semibold text-zinc-200 group-hover:text-white leading-snug line-clamp-3 mb-2 transition-colors">
+                      {art.title}
+                    </p>
+                    {/* Date + link indicator */}
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] text-zinc-600 font-mono-data">
+                        {art.published_at ? new Date(art.published_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: '2-digit' }) : 'N/A'}
+                      </span>
+                      <span className="text-[9px] text-primary flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        View Wire <ExternalLink className="w-2.5 h-2.5" />
+                      </span>
+                    </div>
+                  </a>
+                );
+              })
             )}
           </div>
         </aside>

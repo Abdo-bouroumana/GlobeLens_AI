@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <!-- Background and Glow Gradients -->
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#030712" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="cyberRing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="50%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#d946ef" />
+    </linearGradient>
+    <linearGradient id="lensReflect" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Outer Ambient Glow -->
+  <circle cx="50%" cy="50%" r="48" fill="url(#bgGlow)" />
+
+  <!-- Outer Tech Ring with gaps -->
+  <circle cx="50%" cy="50%" r="38" fill="none" stroke="url(#cyberRing)" stroke-width="2.5" stroke-dasharray="16 8 4 8 30 10" />
+
+  <!-- Grid lines (Globe Latitudes & Longitudes) -->
+  <path d="M 50 15 A 35 35 0 0 0 50 85" fill="none" stroke="#6366f1" stroke-width="1" stroke-opacity="0.4" />
+  <path d="M 50 15 A 20 35 0 0 0 50 85" fill="none" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.5" />
+  <path d="M 50 15 A 20 35 0 0 1 50 85" fill="none" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.5" />
+  <path d="M 50 15 A 35 35 0 0 1 50 85" fill="none" stroke="#6366f1" stroke-width="1" stroke-opacity="0.4" />
+  <line x1="15" y1="50" x2="85" y2="50" stroke="#6366f1" stroke-width="1" stroke-opacity="0.4" />
+  <path d="M 18.5 35 Q 50 42 81.5 35" fill="none" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.4" />
+  <path d="M 18.5 65 Q 50 58 81.5 65" fill="none" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.4" />
+
+  <!-- Central Camera Lens / Aperture Ring -->
+  <circle cx="50%" cy="50%" r="18" fill="#080c16" stroke="url(#cyberRing)" stroke-width="2" />
+  <circle cx="50%" cy="50%" r="12" fill="#020617" stroke="#22d3ee" stroke-width="1" />
+  <circle cx="50%" cy="50%" r="7" fill="#0ea5e9" />
+
+  <!-- Lens Aperture Blades -->
+  <path d="M 45 35 L 53 33 L 49 41 Z" fill="#6366f1" opacity="0.7" />
+  <path d="M 58 43 L 60 51 L 52 49 Z" fill="#6366f1" opacity="0.7" />
+  <path d="M 53 58 L 45 60 L 49 52 Z" fill="#6366f1" opacity="0.7" />
+  <path d="M 40 50 L 38 42 L 46 44 Z" fill="#6366f1" opacity="0.7" />
+
+  <!-- Core Cyber Dot -->
+  <circle cx="50%" cy="50%" r="3" fill="#ffffff" />
+
+  <!-- Lens Flare Reflection -->
+  <path d="M 38 38 A 12 12 0 0 1 62 38" fill="none" stroke="url(#lensReflect)" stroke-width="2.5" stroke-linecap="round" />
+</svg>

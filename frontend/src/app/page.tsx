@@ -22,6 +22,8 @@ import {
   BookOpen
 } from "lucide-react";
 import SearchBar from "./components/SearchBar";
+import PillNav from "./components/PillNav";
+import MapFilterPanel from "./components/MapFilterPanel";
 
 // Dynamically import the Map component to prevent window undefined SSR issues
 const Map = dynamic(() => import("./components/Map"), { ssr: false });
@@ -51,6 +53,9 @@ export default function HomePage() {
   
   // Views toggle: "map" vs "standard"
   const [viewMode, setViewMode] = useState<"map" | "standard">("map");
+
+  // Map topic filter (category selector panel)
+  const [mapTopicFilter, setMapTopicFilter] = useState<string | null>(null);
 
   // Standard Feed State
   const [currentPage, setCurrentPage] = useState(1);
@@ -168,43 +173,45 @@ export default function HomePage() {
     return (
       <div className="bg-background text-on-background min-h-screen flex flex-col font-body-md relative overflow-hidden">
         {/* TopNavBar */}
-        <header className="flex justify-between items-center px-margin-desktop w-full h-16 bg-surface/80 backdrop-blur-md border-b border-outline-variant z-50">
-          <div className="flex items-center gap-gutter">
-            <span 
-              className="font-headline-lg text-headline-lg font-bold text-primary tracking-tight cursor-pointer"
-              onClick={() => { setViewMode("map"); setSearchEmpty(false); setSearchActive(false); }}
-            >
-              GlobeLens AI
-            </span>
-            <nav className="hidden md:flex items-center gap-stack-lg h-full pt-1">
-              <button 
-                onClick={() => { 
-                  setViewMode("standard"); 
-                  setSearchEmpty(false); 
+        <header className="flex justify-between items-center px-margin-desktop w-full h-16 bg-[#080c16]/80 backdrop-blur-md border-b border-indigo-950/40 z-50">
+          <PillNav
+            logo="/logo.svg"
+            logoAlt="GlobeLens AI Logo"
+            items={[
+              { 
+                label: 'Standard', 
+                href: '/?view=standard',
+                onClick: (e) => {
+                  e.preventDefault();
+                  setViewMode("standard");
+                  setSearchEmpty(false);
                   if (typeof window !== "undefined") {
                     window.history.pushState(null, "", "?view=standard");
                   }
-                }}
-                className={`font-body-md text-body-md transition-colors pb-1 ${viewMode === "standard" ? "text-primary font-bold border-b-2 border-primary" : "text-on-surface-variant font-medium hover:text-primary"}`}
-              >
-                Standard
-              </button>
-              <button 
-                onClick={() => { 
-                  setViewMode("map"); 
-                  setSearchEmpty(false); 
+                }
+              },
+              { 
+                label: 'Map', 
+                href: '/?view=map',
+                onClick: (e) => {
+                  e.preventDefault();
+                  setViewMode("map");
+                  setSearchEmpty(false);
                   if (typeof window !== "undefined") {
                     window.history.pushState(null, "", "?view=map");
                   }
-                }}
-                className={`font-body-md text-body-md transition-colors pb-1 ${viewMode === "map" ? "text-primary font-bold border-b-2 border-primary" : "text-on-surface-variant font-medium hover:text-primary"}`}
-              >
-                Map
-              </button>
-              <a className="font-body-md text-body-md text-on-surface-variant font-medium hover:text-primary transition-colors pb-1" href="/admin/dashboard">Admin</a>
-              <a className="font-body-md text-body-md text-on-surface-variant font-medium hover:text-primary transition-colors pb-1" href="/fact-checker">Fact Checker</a>
-            </nav>
-          </div>
+                }
+              },
+              { label: 'Admin', href: '/admin/dashboard' },
+              { label: 'Fact Checker', href: '/fact-checker' }
+            ]}
+            activeHref={viewMode === "standard" ? "/?view=standard" : "/?view=map"}
+            baseColor="#080c16"
+            pillColor="#0c101b"
+            hoveredPillTextColor="#22d3ee"
+            pillTextColor="#94a3b8"
+            initialLoadAnimation={false}
+          />
           <div className="flex items-center gap-4">
             <SearchBar 
               onSelectEvent={setSelectedEvent} 
@@ -287,40 +294,42 @@ export default function HomePage() {
     <div className="bg-[#030712] text-on-background h-screen w-screen overflow-hidden flex flex-col font-body-md">
       {/* TopNavBar */}
       <header className="flex justify-between items-center px-margin-desktop w-full h-16 sticky top-0 z-50 bg-[#080c16]/80 backdrop-blur-lg border-b border-indigo-950/40 flex-shrink-0">
-        <div className="flex items-center gap-stack-lg">
-          <span 
-            className="font-headline-lg text-headline-lg font-extrabold bg-gradient-to-r from-cyber-cyan via-indigo-300 to-cyber-indigo bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(6,182,212,0.25)] tracking-tight cursor-pointer"
-            onClick={() => { setViewMode("map"); setSearchEmpty(false); setSearchActive(false); }}
-          >
-            GlobeLens AI
-          </span>
-          <nav className="hidden md:flex items-center gap-stack-lg h-full pt-1">
-            <button 
-              onClick={() => {
+        <PillNav
+          logo="/logo.svg"
+          logoAlt="GlobeLens AI Logo"
+          items={[
+            { 
+              label: 'Standard', 
+              href: '/?view=standard',
+              onClick: (e) => {
+                e.preventDefault();
                 setViewMode("standard");
                 if (typeof window !== "undefined") {
                   window.history.pushState(null, "", "?view=standard");
                 }
-              }} 
-              className={`font-body-md text-body-md transition-all pb-1 hover:text-cyber-cyan duration-200 ${viewMode === "standard" ? "text-cyber-cyan font-bold border-b-2 border-cyber-cyan" : "text-on-surface-variant font-medium hover:text-primary"}`}
-            >
-              Standard
-            </button>
-            <button 
-              onClick={() => {
+              }
+            },
+            { 
+              label: 'Map', 
+              href: '/?view=map',
+              onClick: (e) => {
+                e.preventDefault();
                 setViewMode("map");
                 if (typeof window !== "undefined") {
                   window.history.pushState(null, "", "?view=map");
                 }
-              }} 
-              className={`font-body-md text-body-md transition-all pb-1 hover:text-cyber-cyan duration-200 ${viewMode === "map" ? "text-cyber-cyan font-bold border-b-2 border-cyber-cyan" : "text-on-surface-variant font-medium hover:text-primary"}`}
-            >
-              Map
-            </button>
-            <a className="font-body-md text-body-md text-on-surface-variant font-medium hover:text-cyber-cyan transition-all duration-200 pb-1" href="/admin/dashboard">Admin</a>
-            <a className="font-body-md text-body-md text-on-surface-variant font-medium hover:text-cyber-cyan transition-all duration-200 pb-1" href="/fact-checker">Fact Checker</a>
-          </nav>
-        </div>
+              }
+            },
+            { label: 'Admin', href: '/admin/dashboard' },
+            { label: 'Fact Checker', href: '/fact-checker' }
+          ]}
+          activeHref={viewMode === "standard" ? "/?view=standard" : "/?view=map"}
+          baseColor="#080c16"
+          pillColor="#0c101b"
+          hoveredPillTextColor="#22d3ee"
+          pillTextColor="#94a3b8"
+          initialLoadAnimation={true}
+        />
         <div className="flex items-center gap-4">
           <SearchBar 
             onSelectEvent={setSelectedEvent} 
@@ -338,14 +347,24 @@ export default function HomePage() {
             <Map 
               events={events} 
               selectedEvent={selectedEvent} 
-              onSelectEvent={setSelectedEvent} 
+              onSelectEvent={setSelectedEvent}
+              activeTopicFilter={mapTopicFilter}
             />
           </div>
 
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:48px_48px] pointer-events-none z-20 mix-blend-overlay"></div>
 
+          {/* ── Category Filter Panel (left side overlay) ── */}
+          <div className="absolute top-4 left-4 z-30 bg-[#0d1117]/85 backdrop-blur-xl border border-white/[0.07] rounded-2xl px-3 py-4 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+            <MapFilterPanel
+              events={events}
+              activeTopic={mapTopicFilter}
+              onSelectTopic={setMapTopicFilter}
+            />
+          </div>
+
           {searchActive && (
-            <div className="absolute top-4 left-4 z-30 bg-zinc-950/90 backdrop-blur-md border border-zinc-800 rounded-xl px-4 py-2 text-xs flex items-center gap-3 shadow-lg">
+            <div className="absolute top-4 left-[200px] z-30 bg-zinc-950/90 backdrop-blur-md border border-zinc-800 rounded-xl px-4 py-2 text-xs flex items-center gap-3 shadow-lg">
               <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span>
               <span className="text-white font-medium">Filter Active: {events.length} results matching query</span>
               <button 
@@ -605,7 +624,7 @@ function renderDossierPanel(
   };
 
   return (
-    <div className="absolute top-4 right-4 bottom-4 w-full sm:w-[480px] z-40 bg-[#080c16]/95 backdrop-blur-2xl border border-indigo-500/20 rounded-2xl shadow-[0_0_50px_rgba(6,182,212,0.15)] p-6 flex flex-col justify-between overflow-y-auto no-scrollbar animate-fade-in-up">
+    <div className="fixed top-20 right-4 bottom-4 w-[calc(100%-2rem)] sm:w-[480px] z-40 bg-[#080c16]/95 backdrop-blur-2xl border border-indigo-500/20 rounded-2xl shadow-[0_0_50px_rgba(6,182,212,0.15)] p-6 flex flex-col justify-between overflow-y-auto no-scrollbar animate-fade-in-up">
       <div>
         {/* Header */}
         <div className="flex justify-between items-start mb-6 border-b border-indigo-950/40 pb-4">

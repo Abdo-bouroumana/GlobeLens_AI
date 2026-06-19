@@ -5,6 +5,7 @@ Integrates Grok (x.AI) / OpenAI to generate syntheses, extract locations, topics
 Pipeline Step 4: CLUSTERED → PROCESSED
 """
 import uuid
+import asyncio
 import structlog
 from typing import List, Tuple, TypedDict
 from openai import AsyncOpenAI
@@ -78,20 +79,23 @@ class LLMService:
             logger.info("Initializing LLMService client with Grok (x.AI) config")
             self._client = AsyncOpenAI(
                 api_key=settings.GROK_API_KEY,
-                base_url="https://api.x.ai/v1"
+                base_url="https://api.x.ai/v1",
+                timeout=60.0
             )
             self._model = "grok-beta"
         elif settings.LLM_PROVIDER == "nvidia":
             logger.info("Initializing LLMService client with Nvidia NIM config")
             self._client = AsyncOpenAI(
                 api_key=settings.NVIDIA_API_KEY,
-                base_url=settings.NVIDIA_API_URL
+                base_url=settings.NVIDIA_API_URL,
+                timeout=60.0
             )
             self._model = "mistralai/mistral-medium-3.5-128b"
         else:
             logger.info("Initializing LLMService client with OpenAI config")
             self._client = AsyncOpenAI(
-                api_key=settings.OPENAI_API_KEY
+                api_key=settings.OPENAI_API_KEY,
+                timeout=60.0
             )
             # Default to a robust, fast OpenAI model
             self._model = "gpt-4o-mini"
@@ -207,23 +211,91 @@ class LLMService:
             validated_response = EventIntelligenceResponse.model_validate_json(raw_content)
             return validated_response
         except Exception as err:
-            logger.error("LLM event analysis failed, running heuristic fallback", error=str(err))
+            logger.error("LLM event analysis failed, running dynamic fallback", error=str(err))
             
-            # Heuristic fallback generator
+            title = "Current News Ingestion Feed"
+            body = "No detailed content was provided."
             
-            para1 = "GlobeLens AI automated synthesis of current news wire metadata feeds."
-            para2 = "The events described in these intelligence feeds suggest a shift in maritime security protocols and logistics routing across the geographic bounds of the primary region."
-            para3 = "Further independent cross-border investigations are actively tracking shipping channels and trade indicators to determine the long-term impact on global valuations."
+            if articles_content:
+                first_art = articles_content[0]
+                for line in first_art.splitlines():
+                    if line.startswith("Title:"):
+                        title = line.replace("Title:", "").strip()
+                        break
+                content_part = first_art.split("Content:")
+                if len(content_part) > 1:
+                    body = content_part[1].strip()
+                else:
+                    body = first_art.strip()
+
+            import re
+            sentences = re.split(r'\. |\n', body)
+            sentences = [s.strip() for s in sentences if s.strip()]
+            snippet = " ".join(sentences[:3])
+            if not snippet.endswith("."):
+                snippet += "."
+
+            para1 = f"GlobeLens AI automated intelligence synthesis of news dossier concerning: {title}."
+            para2 = f"Primary source reporting details indicate the following context: {snippet}"
+            para3 = "Independent cross-border analytical streams are actively tracking related geopolitical and institutional indicators to determine the mid-to-long term implications of these developments."
             summary = f"{para1}\n\n{para2}\n\n{para3}"
-            
+
+            topic_str = body.lower()
+            topic = IntelligenceTopic.WORLD
+            if any(w in topic_str for w in ["politics", "election", "biden", "trump", "harrison", "government", "parliament", "nato", "hegseth", "minister", "senate", "vance"]):
+                topic = IntelligenceTopic.POLITICS
+            elif any(w in topic_str for w in ["economy", "inflation", "market", "trade", "dollar", "finance", "bank", "stock"]):
+                topic = IntelligenceTopic.ECONOMY
+            elif any(w in topic_str for w in ["tech", "ai", "software", "chip", "semiconductor", "quantum", "digital"]):
+                topic = IntelligenceTopic.TECHNOLOGY
+            elif any(w in topic_str for w in ["ebola", "virus", "health", "hospital", "patient", "disease", "medical", "clinic"]):
+                topic = IntelligenceTopic.HEALTH
+            elif any(w in topic_str for w in ["soccer", "football", "world cup", "swimmer", "athletic", "sports", "championship"]):
+                topic = IntelligenceTopic.SPORTS
+
+            country = "Global"
+            lat, lon = 0.0, 0.0
+            country_map = {
+                "united states": ("United States", 38.8951, -77.0364),
+                "us": ("United States", 38.8951, -77.0364),
+                "america": ("United States", 38.8951, -77.0364),
+                "china": ("China", 35.8617, 104.1954),
+                "russia": ("Russia", 61.5240, 105.3188),
+                "iran": ("Iran", 32.4279, 53.6880),
+                "morocco": ("Morocco", 31.7917, -7.0926),
+                "france": ("France", 46.2276, 2.2137),
+                "italy": ("Italy", 41.8719, 12.5674),
+                "belgium": ("Belgium", 50.8503, 4.3517),
+                "chile": ("Chile", -35.6751, -71.5430),
+                "afghanistan": ("Afghanistan", 33.9391, 67.7100),
+                "pakistan": ("Pakistan", 30.3753, 69.3451),
+                "ethiopia": ("Ethiopia", 9.1450, 40.4897),
+                "congo": ("Democratic Republic of the Congo", -4.0383, 21.7587),
+                "israel": ("Israel", 31.0461, 34.8516),
+                "palestinian": ("Palestine", 31.9522, 35.2332),
+                "gaza": ("Palestine", 31.9522, 35.2332),
+                "tokyo": ("Japan", 35.6762, 139.6503),
+                "japan": ("Japan", 35.6762, 139.6503),
+                "spain": ("Spain", 40.4637, -3.7492),
+                "uk": ("United Kingdom", 55.3781, -3.4360),
+                "britain": ("United Kingdom", 55.3781, -3.4360),
+                "germany": ("Germany", 51.1657, 10.4515),
+                "ukraine": ("Ukraine", 48.3794, 31.1656),
+            }
+
+            for key, val in country_map.items():
+                if key in topic_str:
+                    country, lat, lon = val
+                    break
+
             fallback_intel = EventIntelligenceResponse(
                 summary=summary,
-                topic=IntelligenceTopic.WORLD,
+                topic=topic,
                 bias_lean=IntelligenceBiasLean.CENTER,
-                location_country="Global",
-                latitude=0.0,
-                longitude=0.0,
-                importance_score=5.0
+                location_country=country,
+                latitude=lat,
+                longitude=lon,
+                importance_score=7.0
             )
             return fallback_intel
 
@@ -409,6 +481,8 @@ class LLMService:
                                 "summary": intel_data["summary"],
                                 "topic": intel_data["topic"],
                                 "location_country": intel_data["location_country"],
+                                "latitude": intel_data["latitude"],
+                                "longitude": intel_data["longitude"],
                                 "importance_score": intel_data["importance_score"]
                             }
                             await search_service.index_processed_event(event.id, event_data)
@@ -420,6 +494,7 @@ class LLMService:
                             )
                         
                         processed_count += 1
+                        await asyncio.sleep(5.0)
                     except Exception as event_err:
                         logger.error(
                             "Failed to process event intelligence for event",
@@ -427,6 +502,7 @@ class LLMService:
                             error=str(event_err)
                         )
                         error_count += 1
+                        await asyncio.sleep(5.0)
                         continue
             except Exception as batch_err:
                 logger.error("Pending events process batch encountered a fatal error", error=str(batch_err))

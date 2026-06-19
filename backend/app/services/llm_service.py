@@ -303,33 +303,69 @@ class LLMService:
         """
         Analyze the credibility of a scraped article or text claim.
         Instructs the LLM to return a structured credibility assessment.
+        Supports real-time search grounding if Tavily API is configured.
         """
+        search_context = ""
+        if settings.TAVILY_API_KEY:
+            try:
+                from app.services.tavily_service import TavilyService
+                tavily = TavilyService()
+                search_results = await tavily.search_web(text_content)
+                if search_results:
+                    search_context = "\n\n=== REAL-TIME WEB SEARCH RESULTS (GROUND TRUTH REFERENCES) ===\n"
+                    for idx, result in enumerate(search_results, 1):
+                        search_context += f"Reference [{idx}]:\n"
+                        search_context += f"  Title: {result.get('title')}\n"
+                        search_context += f"  URL: {result.get('url')}\n"
+                        search_context += f"  Snippet: {result.get('content')}\n\n"
+            except Exception as search_err:
+                logger.error("Failed to execute search grounding", error=str(search_err))
+
         system_prompt = (
             "You are an objective, cross-border fact-checker. "
             "Your task is to analyze the provided article content or text claim and evaluate its credibility. "
             "You must return a JSON object that strictly adheres to the following JSON Schema.\n\n"
+        )
+        if search_context:
+            system_prompt += (
+                "You have been provided with real-time web search results (Ground Truth References) related to the claim or article. "
+                "Use this context as the ground truth to evaluate whether the claims are Corroborated, Disputed, or Unverified. "
+                "The 'independent_cross_references' field should specify the number of unique, independent domain references supporting the claim. "
+                "You can also use 'historical_matches' to represent actual related news events found in the search references.\n\n"
+            )
+        else:
+            system_prompt += (
+                "Ground your reasoning in objective global news context and check the internal structure/bias. "
+                "Evaluate if claims are Corroborated, Disputed, or Unverified based on available metadata.\n\n"
+            )
+
+        system_prompt += (
             "Required JSON Schema:\n"
             "{\n"
-            "  \"credibility_score\": \"int (Overall trustworthiness from 0 to 100)\",\n"
-            "  \"trust_risks\": [\"string (Specific risks identified, e.g. Loaded Language, Unverified Authorship)\"],\n"
-            "  \"independent_cross_references\": \"int (Estimated independent corroboration source count)\",\n"
+            "  \"credibility_score\": \"int (Overall trustworthiness from 0 to 100 based on the search references or context)\",\n"
+            "  \"trust_risks\": [\"string (Specific risks identified, e.g. Loaded Language, Unverified Authorship, Contradicts Search Results)\"],\n"
+            "  \"independent_cross_references\": \"int (Estimated independent corroboration source count from search references)\",\n"
             "  \"claims\": [\n"
             "    {\"text\": \"string (Extracted key claim)\", \"status\": \"string (Exactly one of: Corroborated, Disputed, Unverified)\"}\n"
             "  ],\n"
             "  \"historical_matches\": [\n"
             "    {\"title\": \"string (Historical news event name)\", \"last_active\": \"string (Relative time, e.g. '2 days ago')\", \"match_percentage\": \"int (0-100)\"}\n"
             "  ],\n"
-            "  \"summary\": \"string (A brief 2-3 sentence report summary of the analyzed claim or article context)\"\n"
+            "  \"summary\": \"string (A brief 2-3 sentence report summary explaining the credibility verdict grounded in the search references if available)\"\n"
             "}"
         )
 
         user_prompt = f"Perform credibility analysis and fact-checking on the following content:\n\n{text_content}"
+        if search_context:
+            user_prompt += search_context
 
         logger.info(
             "Calling Chat Completions API for claim credibility check",
             provider=settings.LLM_PROVIDER,
-            model=self._model
+            model=self._model,
+            grounded=bool(search_context)
         )
+
 
         try:
             if settings.LLM_PROVIDER == "gemini":
@@ -514,3 +550,161 @@ class LLMService:
             failed=error_count
         )
         return processed_count, error_count
+
+    async def answer_chatbot_question(self, query: str) -> Tuple[str, str, bool]:
+        """
+        Answers a user query.
+        1. Searches Elasticsearch index for events.
+        2. If events are found, calls the LLM with the DB context.
+        3. If the LLM returns 'NOT_FOUND_IN_DB' or no DB events exist, queries Tavily for web search results and answers grounded in web context.
+        Returns: Tuple[reply_text, source_str, in_database_bool]
+        """
+        from app.core.elasticsearch import es_client
+        from app.core.config import settings
+        from app.services.tavily_service import TavilyService
+
+        logger.info("Chatbot query received", query=query)
+
+        # 1. Query Elasticsearch index
+        es_results = []
+        max_score = 0.0
+        try:
+            es_res = await es_client.search(
+                index=settings.ELASTICSEARCH_INDEX_EVENTS,
+                body={
+                    "query": {
+                        "multi_match": {
+                            "query": query,
+                            "fields": ["title^3", "summary^2"],
+                            "fuzziness": "AUTO",
+                        }
+                    },
+                    "size": 5,
+                },
+            )
+            es_results = es_res["hits"]["hits"]
+            max_score = es_res["hits"].get("max_score", 0.0) or 0.0
+            logger.info("Elasticsearch search completed in chatbot", hits_count=len(es_results), max_score=max_score)
+        except Exception as es_err:
+            logger.error("Elasticsearch query failed in chatbot", error=str(es_err))
+
+        # 2. If matching documents exist with score >= 2.0, try DB grounding
+        if es_results and max_score >= 2.0:
+            db_context = ""
+            for idx, hit in enumerate(es_results, 1):
+                source = hit["_source"]
+                db_context += f"Event [{idx}]:\n"
+                db_context += f"  Title: {source.get('title')}\n"
+                db_context += f"  Summary: {source.get('summary')}\n"
+                db_context += f"  Country: {source.get('location_country')}\n\n"
+
+            system_prompt = (
+                "You are AI News-Scout, the official news analyst assistant for GlobeLens AI.\n"
+                "Your job is to answer the user's question using ONLY the provided database events context.\n"
+                "Do not assume, extrapolate, or use external knowledge. Be objective, direct, and conversational.\n"
+                "If the provided database context does not contain enough relevant information to answer the question, "
+                "or if the question is about a topic not present in the context, you MUST reply with EXACTLY the phrase: NOT_FOUND_IN_DB\n"
+                "Do not write anything else if the information is not found."
+            )
+            user_prompt = f"Database Events Context:\n{db_context}\n\nUser Question: {query}"
+
+            logger.info("Attempting DB-grounded chatbot answer", model=self._model)
+            try:
+                if settings.LLM_PROVIDER == "gemini":
+                    if not self._client:
+                        import google.generativeai as genai
+                        genai.configure(api_key=settings.GEMINI_API_KEY)
+                        self._client = genai
+                    
+                    model = self._client.GenerativeModel(
+                        model_name=self._model,
+                        system_instruction=system_prompt
+                    )
+                    generation_config = {"temperature": 0.1}
+                    response = await model.generate_content_async(
+                        user_prompt,
+                        generation_config=generation_config
+                    )
+                    reply = response.text.strip()
+                else:
+                    response = await self._client.chat.completions.create(
+                        model=self._model,
+                        messages=[
+                            {"role": "system", "content": system_prompt},
+                            {"role": "user", "content": user_prompt}
+                        ],
+                        temperature=0.1
+                    )
+                    reply = response.choices[0].message.content.strip()
+
+                if "NOT_FOUND_IN_DB" not in reply:
+                    logger.info("Successfully generated DB-grounded response")
+                    return reply, "database", True
+                else:
+                    logger.info("LLM reported information not present in DB context. Falling back to Tavily.")
+
+            except Exception as llm_err:
+                logger.error("DB-grounded chatbot LLM call failed", error=str(llm_err))
+
+        # 3. Fallback to Tavily Search Grounding
+        logger.info("Executing Tavily live search for chatbot fallback", query=query)
+        try:
+            tavily = TavilyService()
+            search_results = await tavily.search_web(query)
+            
+            if search_results:
+                web_context = ""
+                for idx, result in enumerate(search_results, 1):
+                    web_context += f"Reference [{idx}]:\n"
+                    web_context += f"  Title: {result.get('title')}\n"
+                    web_context += f"  URL: {result.get('url')}\n"
+                    web_context += f"  Snippet: {result.get('content')}\n\n"
+
+                system_prompt = (
+                    "You are AI News-Scout, the official news analyst assistant for GlobeLens AI.\n"
+                    "The user's query could not be answered using the GlobeLens database events. You have searched the web to gather live information.\n"
+                    "Write a clear, concise, and helpful response to the user's question based on the provided live web search context. "
+                    "Make sure to ground all details in the search context and keep the tone professional and helpful."
+                )
+                user_prompt = f"Live Web Context:\n{web_context}\n\nUser Question: {query}"
+
+                logger.info("Attempting web-grounded chatbot answer", model=self._model)
+                if settings.LLM_PROVIDER == "gemini":
+                    if not self._client:
+                        import google.generativeai as genai
+                        genai.configure(api_key=settings.GEMINI_API_KEY)
+                        self._client = genai
+                    
+                    model = self._client.GenerativeModel(
+                        model_name=self._model,
+                        system_instruction=system_prompt
+                    )
+                    generation_config = {"temperature": 0.3}
+                    response = await model.generate_content_async(
+                        user_prompt,
+                        generation_config=generation_config
+                    )
+                    reply = response.text.strip()
+                else:
+                    response = await self._client.chat.completions.create(
+                        model=self._model,
+                        messages=[
+                            {"role": "system", "content": system_prompt},
+                            {"role": "user", "content": user_prompt}
+                        ],
+                        temperature=0.3
+                    )
+                    reply = response.choices[0].message.content.strip()
+
+                prefix = "I could not find matching events in the GlobeLens database. However, I searched the web for live updates:\n\n"
+                return prefix + reply, "web", False
+
+        except Exception as search_err:
+            logger.error("Web-grounded chatbot logic failed", error=str(search_err))
+
+        return (
+            "I could not find any relevant events in the GlobeLens database or on the live web matching your query.",
+            "database",
+            False
+        )
+

@@ -19,11 +19,14 @@ import {
   Bookmark,
   RefreshCw,
   Clock,
-  BookOpen
+  BookOpen,
+  Bot
 } from "lucide-react";
 import SearchBar from "./components/SearchBar";
 import PillNav from "./components/PillNav";
 import MapFilterPanel from "./components/MapFilterPanel";
+import ChatbotPanel from "./components/ChatbotPanel";
+
 
 // Dynamically import the Map component to prevent window undefined SSR issues
 const Map = dynamic(() => import("./components/Map"), { ssr: false });
@@ -56,6 +59,10 @@ export default function HomePage() {
 
   // Map topic filter (category selector panel)
   const [mapTopicFilter, setMapTopicFilter] = useState<string | null>(null);
+
+  // Chatbot Open State
+  const [chatbotOpen, setChatbotOpen] = useState(false);
+
 
   // Standard Feed State
   const [currentPage, setCurrentPage] = useState(1);
@@ -347,9 +354,13 @@ export default function HomePage() {
             <Map 
               events={events} 
               selectedEvent={selectedEvent} 
-              onSelectEvent={setSelectedEvent}
+              onSelectEvent={(evt) => {
+                setSelectedEvent(evt);
+                if (evt) setChatbotOpen(false);
+              }}
               activeTopicFilter={mapTopicFilter}
             />
+
           </div>
 
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:48px_48px] pointer-events-none z-20 mix-blend-overlay"></div>
@@ -378,7 +389,31 @@ export default function HomePage() {
 
           {/* Dossier Side Panel */}
           {selectedEvent && renderDossierPanel(selectedEvent, setSelectedEvent, getTopicBadgeStyle)}
+
+          {/* Chatbot Trigger Floating Button */}
+          {!chatbotOpen && !selectedEvent && (
+            <button
+              onClick={() => {
+                setChatbotOpen(true);
+                setSelectedEvent(null);
+              }}
+              className="absolute bottom-6 right-6 z-30 p-4 rounded-full bg-gradient-to-r from-cyber-indigo to-indigo-650 hover:from-indigo-650 hover:to-indigo-750 text-white shadow-[0_4px_20px_rgba(99,102,241,0.4)] hover:shadow-[0_4px_25px_rgba(99,102,241,0.6)] hover:scale-105 transition-all duration-300 flex items-center gap-2 group border border-indigo-500/30"
+            >
+              <Bot className="w-6 h-6 animate-pulse" />
+              <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 ease-out font-mono-data text-xs font-bold tracking-wider uppercase whitespace-nowrap">
+                Consult News-Scout
+              </span>
+            </button>
+          )}
+
+          {/* Chatbot Panel Overlay */}
+          {chatbotOpen && (
+            <div className="absolute top-4 right-4 bottom-4 w-96 z-30 animate-in slide-in-from-right duration-350 ease-out">
+              <ChatbotPanel onClose={() => setChatbotOpen(false)} />
+            </div>
+          )}
         </main>
+
       ) : (
         /* 2. STANDARD FEED VIEW (home_feed_globelens_ai port) */
         <div className="flex-grow w-full overflow-y-auto no-scrollbar flex flex-col bg-surface-container-lowest">

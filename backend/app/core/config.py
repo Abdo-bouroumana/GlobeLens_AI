@@ -49,6 +49,8 @@ class Settings(BaseSettings):
     AZURE_EMBEDDING_ENDPOINT: Optional[str] = None
     NVIDIA_API_KEY: Optional[str] = None
     NVIDIA_API_URL: str = "https://integrate.api.nvidia.com/v1"
+    TAVILY_API_KEY: Optional[str] = None
+
 
     # ── Embedding ─────────────────────────────────────────────────────────────
     EMBEDDING_MODEL: str = "text-embedding-3-small"

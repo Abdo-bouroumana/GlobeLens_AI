@@ -23,6 +23,8 @@ from app.controllers.search_controller import router as search_router
 from app.controllers.fact_check_controller import router as fact_check_router
 from app.controllers.comment_controller import router as comment_router
 from app.controllers.admin_controller import router as admin_router
+from app.controllers.chatbot_controller import router as chatbot_router
+
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -107,6 +109,8 @@ app.include_router(search_router,     prefix=f"{API_PREFIX}/search",      tags=[
 app.include_router(fact_check_router, prefix=f"{API_PREFIX}/fact-check",  tags=["Fact-Check"])
 app.include_router(comment_router,    prefix=f"{API_PREFIX}/comments",    tags=["Comments"])
 app.include_router(admin_router,      prefix=f"{API_PREFIX}/admin",       tags=["Admin"])
+app.include_router(chatbot_router,    prefix=f"{API_PREFIX}/chatbot",     tags=["Chatbot"])
+
 
 
 # ── Health Check Endpoint ─────────────────────────────────────────────────────

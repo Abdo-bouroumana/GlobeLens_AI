@@ -171,6 +171,8 @@ services:
       AZURE_EMBEDDING_ENDPOINT: ${AZURE_EMBEDDING_ENDPOINT:-}
       NVIDIA_API_KEY: ${NVIDIA_API_KEY:-}
       NVIDIA_API_URL: ${NVIDIA_API_URL:-https://integrate.api.nvidia.com/v1}
+      TAVILY_API_KEY: ${TAVILY_API_KEY:-}
+
 
       # ── Embedding Model ──
       EMBEDDING_MODEL: ${EMBEDDING_MODEL:-text-embedding-3-small}

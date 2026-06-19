@@ -38,6 +38,8 @@ const Map = dynamic(() => import("../../components/Map"), { ssr: false });
 
 // API Client configuration
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+import GlobelensLogo from "../../components/GlobelensLogo";
+
 
 interface HealthState {
   status: "healthy" | "degraded" | "loading" | "error";

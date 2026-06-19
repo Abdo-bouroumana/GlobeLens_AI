@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { gsap } from 'gsap';
 import './PillNav.css';
+import GlobelensLogo from './GlobelensLogo';
+
 
 interface NavItem {
   label: string;
@@ -46,7 +48,8 @@ const PillNav = ({
   const circleRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const tlRefs = useRef<(gsap.core.Timeline | null)[]>([]);
   const activeTweenRefs = useRef<(gsap.core.Tween | null)[]>([]);
-  const logoImgRef = useRef<HTMLImageElement>(null);
+  const logoImgRef = useRef<HTMLDivElement>(null);
+
   const logoTweenRef = useRef<gsap.core.Tween | null>(null);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
@@ -261,7 +264,9 @@ const PillNav = ({
               logoRef.current = el;
             }}
           >
-            <img src={logo} alt={logoAlt} ref={logoImgRef} />
+            <div ref={logoImgRef} className="w-full h-full flex items-center justify-center">
+              <GlobelensLogo size="100%" hideWordmark />
+            </div>
           </Link>
         ) : (
           <a
@@ -273,9 +278,12 @@ const PillNav = ({
               logoRef.current = el as any;
             }}
           >
-            <img src={logo} alt={logoAlt} ref={logoImgRef} />
+            <div ref={logoImgRef} className="w-full h-full flex items-center justify-center">
+              <GlobelensLogo size="100%" hideWordmark />
+            </div>
           </a>
         )}
+
 
         <div className="pill-nav-items desktop-only" ref={navItemsRef}>
           <ul className="pill-list" role="menubar">

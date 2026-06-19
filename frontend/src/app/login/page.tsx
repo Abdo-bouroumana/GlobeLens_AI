@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Mail, Key, ArrowRight, Shield, Globe, Send, ArrowLeft } from "lucide-react";
+import GlobelensLogo from "../components/GlobelensLogo";
+
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -132,11 +134,12 @@ export default function LoginPage() {
 
         {/* Top Branding */}
         <div className="relative z-10 flex items-center gap-3 text-white">
-          <Globe className="w-8 h-8 text-cyber-cyan animate-pulse shadow-[0_0_12px_rgba(6,182,212,0.4)]" />
+          <GlobelensLogo size="36px" hideWordmark={true} />
           <span className="font-headline-lg text-headline-lg font-extrabold tracking-tight bg-gradient-to-r from-cyber-cyan via-indigo-200 to-cyber-indigo bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(6,182,212,0.15)]">
             GlobeLens AI
           </span>
         </div>
+
 
         {/* Bottom Editorial Anchor */}
         <div className="relative z-10 max-w-xl space-y-4">
@@ -156,11 +159,12 @@ export default function LoginPage() {
 
         {/* Mobile Logo */}
         <div className="absolute top-8 left-8 flex lg:hidden items-center gap-2 text-white">
-          <Globe className="w-6 h-6 text-cyber-cyan animate-pulse" />
+          <GlobelensLogo size="28px" hideWordmark={true} />
           <span className="font-extrabold tracking-tight bg-gradient-to-r from-cyber-cyan to-cyber-indigo bg-clip-text text-transparent">
             GlobeLens
           </span>
         </div>
+
 
         {/* Interaction Form Container (Glass panel HUD) */}
         <div className="w-full max-w-[420px] relative glass-panel rounded-2xl p-6 sm:p-8 border border-indigo-950/60 shadow-2xl transition-all duration-300 hover:border-cyber-indigo/25">

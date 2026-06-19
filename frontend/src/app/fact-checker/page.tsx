@@ -16,7 +16,10 @@ import {
   UserCheck
 } from "lucide-react";
 
+import GlobelensLogo from "../components/GlobelensLogo";
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 
 interface ClaimItem {
   text: string;
@@ -167,9 +170,14 @@ export default function FactCheckerPage() {
       {/* TopNavBar */}
       <nav className="flex justify-between items-center px-margin-desktop w-full h-16 sticky top-0 z-50 bg-[#080c16]/80 backdrop-blur-lg border-b border-indigo-950/40 flex-shrink-0">
         <div className="flex items-center gap-stack-lg">
-          <span className="font-extrabold text-headline-lg bg-gradient-to-r from-cyber-cyan via-indigo-300 to-cyber-indigo bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(6,182,212,0.25)] tracking-tight cursor-pointer" onClick={() => router.push("/")}>
-            GlobeLens AI
-          </span>
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push("/")}>
+            <GlobelensLogo size="36px" hideWordmark />
+            <span className="font-extrabold text-headline-lg bg-gradient-to-r from-cyber-cyan via-indigo-300 to-cyber-indigo bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(6,182,212,0.25)] tracking-tight">
+              GlobeLens AI
+            </span>
+          </div>
+
+
           <div className="hidden md:flex gap-stack-lg items-center ml-8 pt-1">
             <a className="font-body-md text-body-md text-on-surface-variant font-medium hover:text-cyber-cyan transition-colors" href="/?view=standard">Standard</a>
             <a className="font-body-md text-body-md text-on-surface-variant font-medium hover:text-cyber-cyan transition-colors" href="/?view=map">Map</a>
